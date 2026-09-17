@@ -1,0 +1,163 @@
+@import url("/themes/solid-light-purple/theme-variables.css");
+
+.solid-primary-black-text {
+  color: var(--solid-primary-black);
+}
+
+.solid-primary-title {
+  color: var(--solid-title) !important;
+}
+
+.secondary-dark-color {
+  color: var(--secondary-dark-color) !important;
+}
+
+.solid-secondary-text-color {
+  color: var(--solid-secondary-text-color) !important;
+}
+
+@layer solid-theme {
+
+  ::-webkit-input-placeholder {
+    color: #6b7280;
+  }
+
+  :-moz-placeholder {
+    color: #6b7280;
+  }
+
+  ::-moz-placeholder {
+    color: #6b7280;
+  }
+
+  :-ms-input-placeholder {
+    color: #6b7280;
+  }
+}
+
+@layer solid-theme {
+
+  .solid-active-view {
+    background-color: #F5F5F5;
+    border-radius: 4px;
+    padding: 12px;
+  }
+
+  /* .auth-container.center {
+    border-radius: 1.25rem;
+    border: 1px solid #E0E0E0;
+    background: rgba(255, 255, 255, 0.10);
+    box-shadow: 0px 4px 4px 0px rgba(49, 106, 215, 0.05);
+    backdrop-filter: blur(25px);
+    padding: 54px;
+  } */
+
+  /* .solid-auth-theme-wrapper.center {
+    background-image: url('./solid-login-light.png');
+  } */
+
+  .auth-container {
+    border: 1px solid #E0E0E0;
+    background: rgba(255, 255, 255, 0.10);
+  }
+
+  .solid-center-layout .solid-logo-title,
+  .solid-auth-title,
+  .solid-auth-input-label {
+    color: var(--auth-title-color);
+  }
+
+  .solid-auth-input-label.right {
+    color: #fff ;
+  }
+
+  .solid-auth-subtitle,
+  .solid-auth-subtitle a {
+    color: var(--auth-subtitle-color) !important;
+  }
+
+  /* .solid-auth-subtitle.left,
+  .solid-auth-subtitle.left a {
+    color: #fff !important;
+  } */
+
+  .solid-custom-title {
+    color: var(--solid-form-title);
+  }
+
+
+  .solid-global-search-element {
+    border: 1px solid #d1d5db;
+  }
+
+  .custom-filter-button {
+    border-left: 1px solid #d1d5db;
+  }
+
+  .solid-layout-accordion label {
+    color: #000;
+  }
+
+  .primary-filter-fieldset {
+    background-color: #F8F7FC;
+  }
+
+  .nested-custom-filter .primary-filter-fieldset {
+    background-color: #FFF;
+  }
+
+  .form-field-label {
+    font-size: 12px;
+    color: var(--muted-foreground);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin: 0;
+  }
+
+
+  .solid-custom-editor .ql-toolbar.ql-snow {
+    border: 1px solid #d1d5db;
+  }
+
+  .solid-custom-editor .ql-container.ql-snow {
+    border: 1px solid #d1d5db;
+  }
+
+  .active-menu-image {
+    background-color: #EFF1F4;
+  }
+
+  .solid-kanban-board-wrapper {
+    border-top: 1px solid var(--primary-light-color);
+  }
+
+  .solid-kanban-card,
+  .solid-media-card {
+    border: none;
+    background: transparent;
+  }
+
+  .solid-kanban-card:hover,
+  .solid-media-card:hover {
+    border: none;
+    background: transparent;
+  }
+
+
+  .solid-mimetype-chip {
+    background: #F0F0F0;
+  }
+
+  .kanban-image-preview,
+  .kanban-media-image-preview,
+  .kanban-media-view-card {
+    background-color: #fff;
+  }
+
+  .kanban-count-badge {
+    background: #F6FAFF;
+    color: var(--primary-color);
+  }
+}

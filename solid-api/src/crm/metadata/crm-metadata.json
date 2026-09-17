@@ -1,0 +1,1409 @@
+{
+  "moduleMetadata": {
+    "name": "crm",
+    "displayName": "LeadTrack CRM",
+    "description": "Sales pipeline, lead ownership, follow-up tasks, reminders and reporting.",
+    "defaultDataSource": "default",
+    "menuIconUrl": null,
+    "menuSequenceNumber": 20,
+    "isSystem": false,
+    "models": [
+      {
+        "singularName": "crmUser",
+        "pluralName": "crmUsers",
+        "displayName": "CRM User",
+        "description": "LeadTrack user profile extending the SolidX user model.",
+        "dataSource": "default",
+        "dataSourceType": "postgres",
+        "isChild": true,
+        "parentModelUserKey": "user",
+        "userKeyFieldUserKey": "crmUserKey",
+        "enableAuditTracking": false,
+        "enableSoftDelete": false,
+        "fields": [
+          {
+            "name": "crmUserKey",
+            "displayName": "CRM User Key",
+            "type": "computed",
+            "ormType": "varchar",
+            "computedFieldValueType": "string",
+            "computedFieldValueProvider": "ConcatEntityComputedFieldProvider",
+            "computedFieldValueProviderCtxt": "{\"fields\":[\"email\"],\"separator\":\"-\",\"slugify\":true}",
+            "required": true,
+            "unique": true,
+            "index": true,
+            "isUserKey": true,
+            "enableAuditTracking": false
+          },
+          {
+            "name": "userType",
+            "displayName": "Role",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "Admin:Admin",
+              "SalesRepresentative:Sales Representative"
+            ],
+            "selectionValueType": "string",
+            "defaultValue": "SalesRepresentative",
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": false
+          }
+        ]
+      },
+      {
+        "singularName": "lead",
+        "pluralName": "leads",
+        "displayName": "Lead",
+        "description": "A sales prospect assigned to a CRM user.",
+        "dataSource": "default",
+        "dataSourceType": "postgres",
+        "tableName": "crm_lead",
+        "userKeyFieldUserKey": "phone",
+        "enableAuditTracking": true,
+        "enableSoftDelete": true,
+        "fields": [
+          {
+            "name": "name",
+            "displayName": "Contact Name",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 120,
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "company",
+            "displayName": "Company",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 120,
+            "required": false,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "industry",
+            "displayName": "Industry",
+            "type": "shortText",
+            "ormType": "varchar",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "email",
+            "displayName": "Email",
+            "type": "email",
+            "ormType": "varchar",
+            "required": false,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "phone",
+            "displayName": "Phone",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 20,
+            "required": true,
+            "unique": false,
+            "index": false,
+            "isUserKey": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "dealValue",
+            "displayName": "Deal Value",
+            "type": "decimal",
+            "ormType": "decimal",
+            "min": 0,
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "currency",
+            "displayName": "Currency",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "INR:INR",
+              "USD:USD",
+              "EUR:EUR",
+              "GBP:GBP",
+              "AED:AED"
+            ],
+            "selectionValueType": "string",
+            "defaultValue": "INR",
+            "required": true,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "source",
+            "displayName": "Lead Source",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "PhoneCall:Phone Call",
+              "Email:Email",
+              "LinkedIn:LinkedIn",
+              "WhatsApp:WhatsApp",
+              "Referral:Referral",
+              "Other:Other"
+            ],
+            "selectionValueType": "string",
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "expectedCloseDate",
+            "displayName": "Expected Close Date",
+            "type": "date",
+            "ormType": "date",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "stage",
+            "displayName": "Pipeline Stage",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "New:New",
+              "FirstContactPending:First Contact Pending",
+              "FollowUp:Follow up",
+              "MeetingSet:Meeting Set",
+              "MeetingPending:Meeting Pending",
+              "OpportunityGenerated:Opportunity Generated",
+              "Dead:Dead",
+              "WrongLeadInfo:Wrong Lead Info"
+            ],
+            "selectionValueType": "string",
+            "defaultValue": "New",
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "owner",
+            "displayName": "Owner",
+            "type": "relation",
+            "ormType": "integer",
+            "relationType": "many-to-one",
+            "relationCreateInverse": false,
+            "relationCoModelSingularName": "crmUser",
+            "relationModelModuleName": "crm",
+            "relationCascade": null,
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "remarks",
+            "displayName": "Remarks",
+            "type": "longText",
+            "ormType": "text",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "tasks",
+            "displayName": "Follow-up Tasks",
+            "type": "relation",
+            "ormType": "integer",
+            "relationType": "one-to-many",
+            "relationCoModelFieldName": "lead",
+            "relationCreateInverse": true,
+            "relationCoModelSingularName": "followUpTask",
+            "relationModelModuleName": "crm",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          }
+        ]
+      },
+      {
+        "singularName": "followUpTask",
+        "pluralName": "followUpTasks",
+        "displayName": "Follow-up Task",
+        "description": "A scheduled sales activity for a lead.",
+        "dataSource": "default",
+        "dataSourceType": "postgres",
+        "tableName": "crm_follow_up_task",
+        "userKeyFieldUserKey": "title",
+        "enableAuditTracking": true,
+        "enableSoftDelete": true,
+        "fields": [
+          {
+            "name": "lead",
+            "displayName": "Lead",
+            "type": "relation",
+            "ormType": "integer",
+            "relationType": "many-to-one",
+            "relationCoModelFieldName": "tasks",
+            "relationCreateInverse": true,
+            "relationCoModelSingularName": "lead",
+            "relationModelModuleName": "crm",
+            "relationCascade": "cascade",
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "title",
+            "displayName": "Title",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 160,
+            "required": true,
+            "unique": false,
+            "index": false,
+            "isUserKey": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "channel",
+            "displayName": "Channel",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "Call:Call",
+              "Email:Email",
+              "LinkedIn:LinkedIn",
+              "WhatsApp:WhatsApp",
+              "Meeting:Meeting",
+              "Other:Other"
+            ],
+            "selectionValueType": "string",
+            "defaultValue": "Call",
+            "required": true,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "dueDate",
+            "displayName": "Due Date",
+            "type": "datetime",
+            "ormType": "timestamptz",
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "isCompleted",
+            "displayName": "Completed",
+            "type": "boolean",
+            "ormType": "boolean",
+            "defaultValue": false,
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "completedAt",
+            "displayName": "Completed At",
+            "type": "datetime",
+            "ormType": "timestamptz",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "outcomeNotes",
+            "displayName": "Outcome Notes",
+            "type": "longText",
+            "ormType": "text",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "assignedTo",
+            "displayName": "Assigned To",
+            "type": "relation",
+            "ormType": "integer",
+            "relationType": "many-to-one",
+            "relationCreateInverse": false,
+            "relationCoModelSingularName": "crmUser",
+            "relationModelModuleName": "crm",
+            "required": false,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          }
+        ]
+      }
+    ]
+  },
+  "roles": [
+    {
+      "name": "Admin",
+      "permissions": [
+        "LeadController.*",
+        "FollowUpTaskController.*",
+        "CrmUserController.*",
+        "DashboardController.*",
+        "dashboard:crm-overview:*",
+        "ImportTransactionController.*",
+        "ExportTemplateController.*"
+      ]
+    },
+    {
+      "name": "SalesRepresentative",
+      "permissions": [
+        "LeadController.*",
+        "FollowUpTaskController.*",
+        "DashboardController.getDefinition",
+        "DashboardController.getWidgetData",
+        "DashboardController.getDashboardData",
+        "DashboardController.getVariableOptions",
+        "DashboardController.getLayout",
+        "DashboardController.saveLayout",
+        "dashboard:crm-overview:*",
+        "ImportTransactionController.*",
+        "ExportTemplateController.*"
+      ]
+    }
+  ],
+  "users": [],
+  "actions": [
+    {
+      "displayName": "CRM Dashboard",
+      "name": "crm-dashboard-action",
+      "type": "custom",
+      "domain": "",
+      "context": "",
+      "customComponent": "/admin/core/crm/dashboard/crm-overview",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "crm-dashboard-action",
+      "moduleUserKey": "crm",
+      "modelUserKey": "lead"
+    },
+    {
+      "displayName": "Leads",
+      "name": "lead-list-action",
+      "type": "solid",
+      "domain": "",
+      "context": "",
+      "customComponent": "",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "lead-list-view",
+      "moduleUserKey": "crm",
+      "modelUserKey": "lead"
+    },
+    {
+      "displayName": "Pipeline",
+      "name": "lead-kanban-action",
+      "type": "solid",
+      "domain": "",
+      "context": "",
+      "customComponent": "",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "lead-kanban-view",
+      "moduleUserKey": "crm",
+      "modelUserKey": "lead"
+    },
+    {
+      "displayName": "Follow-ups",
+      "name": "follow-up-task-list-action",
+      "type": "solid",
+      "domain": "",
+      "context": "",
+      "customComponent": "",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "follow-up-task-list-view",
+      "moduleUserKey": "crm",
+      "modelUserKey": "followUpTask"
+    },
+    {
+      "displayName": "CRM Users",
+      "name": "crm-user-list-action",
+      "type": "solid",
+      "domain": "",
+      "context": "",
+      "customComponent": "",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "crm-user-list-view",
+      "moduleUserKey": "crm",
+      "modelUserKey": "crmUser"
+    }
+  ],
+  "menus": [
+    {
+      "displayName": "CRM",
+      "name": "crm-root-menu",
+      "sequenceNumber": 1,
+      "actionUserKey": "crm-dashboard-action",
+      "moduleUserKey": "crm",
+      "parentMenuItemUserKey": "",
+      "iconName": "leaderboard"
+    },
+    {
+      "displayName": "Dashboard",
+      "name": "crm-dashboard-menu",
+      "sequenceNumber": 1,
+      "actionUserKey": "crm-dashboard-action",
+      "moduleUserKey": "crm",
+      "parentMenuItemUserKey": "crm-root-menu",
+      "iconName": "dashboard"
+    },
+    {
+      "displayName": "Pipeline",
+      "name": "lead-kanban-menu",
+      "sequenceNumber": 2,
+      "actionUserKey": "lead-kanban-action",
+      "moduleUserKey": "crm",
+      "parentMenuItemUserKey": "crm-root-menu",
+      "iconName": "view_kanban"
+    },
+    {
+      "displayName": "Leads",
+      "name": "lead-list-menu",
+      "sequenceNumber": 3,
+      "actionUserKey": "lead-list-action",
+      "moduleUserKey": "crm",
+      "parentMenuItemUserKey": "crm-root-menu",
+      "iconName": "person_search"
+    },
+    {
+      "displayName": "Follow-ups",
+      "name": "follow-up-task-menu",
+      "sequenceNumber": 4,
+      "actionUserKey": "follow-up-task-list-action",
+      "moduleUserKey": "crm",
+      "parentMenuItemUserKey": "crm-root-menu",
+      "iconName": "event"
+    },
+    {
+      "displayName": "Users",
+      "name": "crm-user-menu",
+      "sequenceNumber": 5,
+      "actionUserKey": "crm-user-list-action",
+      "moduleUserKey": "crm",
+      "parentMenuItemUserKey": "crm-root-menu",
+      "iconName": "group"
+    }
+  ],
+  "views": [
+    {
+      "name": "lead-list-view",
+      "displayName": "Leads",
+      "type": "list",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "lead",
+      "layout": {
+        "type": "list",
+        "attrs": {
+          "pagination": true,
+          "pageSizeOptions": [
+            10,
+            25,
+            50
+          ],
+          "enableGlobalSearch": true,
+          "create": true,
+          "edit": true,
+          "delete": true,
+          "allowedViews": [
+            "list",
+            "kanban"
+          ],
+          "predefinedSearches": [
+            {
+              "name": "Contact or Company",
+              "description": "Search contact name or company",
+              "filters": {
+                "$or": [
+                  {
+                    "name": {
+                      "$containsi": "{{search}}"
+                    }
+                  },
+                  {
+                    "company": {
+                      "$containsi": "{{search}}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "children": [
+          {
+            "type": "field",
+            "attrs": {
+              "name": "name",
+              "sortable": true,
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "company",
+              "sortable": true,
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "stage",
+              "sortable": true,
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "owner",
+              "sortable": true,
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "source",
+              "sortable": true,
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "dealValue",
+              "sortable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "currency"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "expectedCloseDate",
+              "sortable": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "lead-kanban-view",
+      "displayName": "Sales Pipeline",
+      "type": "kanban",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "lead",
+      "layout": {
+        "type": "kanban",
+        "attrs": {
+          "swimlanesCount": 8,
+          "recordsInSwimlane": 25,
+          "enableGlobalSearch": true,
+          "create": true,
+          "edit": true,
+          "delete": true,
+          "groupBy": "stage",
+          "draggable": true,
+          "allowedViews": [
+            "list",
+            "kanban"
+          ]
+        },
+        "children": [
+          {
+            "type": "card",
+            "attrs": {
+              "name": "Lead Card",
+              "cardWidget": "LeadKanbanCardWidget"
+            },
+            "children": [
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "name",
+                  "isSearchable": true
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "company",
+                  "isSearchable": true
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "dealValue"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "currency"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "owner"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "lead-form-view",
+      "displayName": "Lead",
+      "type": "form",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "lead",
+      "layout": {
+        "type": "form",
+        "attrs": {
+          "name": "lead-form",
+          "label": "Lead",
+          "className": "grid"
+        },
+        "children": [
+          {
+            "type": "sheet",
+            "attrs": {
+              "name": "lead-sheet"
+            },
+            "children": [
+              {
+                "type": "notebook",
+                "attrs": {
+                  "name": "lead-notebook"
+                },
+                "children": [
+                  {
+                    "type": "page",
+                    "attrs": {
+                      "name": "details",
+                      "label": "Details"
+                    },
+                    "children": [
+                      {
+                        "type": "row",
+                        "attrs": {
+                          "name": "details-row"
+                        },
+                        "children": [
+                          {
+                            "type": "column",
+                            "attrs": {
+                              "name": "details-left",
+                              "className": "col-12 md:col-6"
+                            },
+                            "children": [
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "name"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "company"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "industry"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "email"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "phone"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "source"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "column",
+                            "attrs": {
+                              "name": "details-right",
+                              "className": "col-12 md:col-6"
+                            },
+                            "children": [
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "stage"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "owner"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "dealValue"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "currency"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "expectedCloseDate"
+                                }
+                              },
+                              {
+                                "type": "field",
+                                "attrs": {
+                                  "name": "remarks"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "page",
+                    "attrs": {
+                      "name": "followups",
+                      "label": "Follow-ups"
+                    },
+                    "children": [
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "tasks",
+                          "inlineCreate": "true"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "page",
+                    "attrs": {
+                      "name": "activity",
+                      "label": "Activity"
+                    },
+                    "children": [
+                      {
+                        "type": "p",
+                        "body": "Field history and manual notes are available through SolidX Audit/Chatter for this audited record.",
+                        "attrs": {}
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "follow-up-task-list-view",
+      "displayName": "Follow-ups",
+      "type": "list",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "followUpTask",
+      "layout": {
+        "type": "list",
+        "attrs": {
+          "pagination": true,
+          "enableGlobalSearch": true,
+          "create": true,
+          "edit": true,
+          "delete": true
+        },
+        "children": [
+          {
+            "type": "field",
+            "attrs": {
+              "name": "title",
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "lead",
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "channel"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "dueDate",
+              "sortable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "assignedTo"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "isCompleted",
+              "sortable": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "follow-up-task-form-view",
+      "displayName": "Follow-up",
+      "type": "form",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "followUpTask",
+      "layout": {
+        "type": "form",
+        "attrs": {
+          "name": "followup-form",
+          "label": "Follow-up",
+          "className": "grid"
+        },
+        "children": [
+          {
+            "type": "sheet",
+            "attrs": {
+              "name": "followup-sheet"
+            },
+            "children": [
+              {
+                "type": "row",
+                "attrs": {
+                  "name": "followup-row"
+                },
+                "children": [
+                  {
+                    "type": "column",
+                    "attrs": {
+                      "name": "followup-column",
+                      "className": "col-12"
+                    },
+                    "children": [
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "lead"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "title"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "channel"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "dueDate"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "assignedTo"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "isCompleted"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "outcomeNotes"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "crm-user-list-view",
+      "displayName": "CRM Users",
+      "type": "list",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "crmUser",
+      "layout": {
+        "type": "list",
+        "attrs": {
+          "pagination": true,
+          "enableGlobalSearch": true,
+          "create": true,
+          "edit": true,
+          "delete": false
+        },
+        "children": [
+          {
+            "type": "field",
+            "attrs": {
+              "name": "fullName",
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "email",
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "userType",
+              "sortable": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "crm-user-form-view",
+      "displayName": "CRM User",
+      "type": "form",
+      "context": "{}",
+      "moduleUserKey": "crm",
+      "modelUserKey": "crmUser",
+      "layout": {
+        "type": "form",
+        "attrs": {
+          "name": "crm-user-form",
+          "label": "CRM User",
+          "className": "grid"
+        },
+        "children": [
+          {
+            "type": "sheet",
+            "attrs": {
+              "name": "crm-user-sheet"
+            },
+            "children": [
+              {
+                "type": "row",
+                "attrs": {
+                  "name": "crm-user-row"
+                },
+                "children": [
+                  {
+                    "type": "column",
+                    "attrs": {
+                      "name": "crm-user-column",
+                      "className": "col-12"
+                    },
+                    "children": [
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "fullName"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "email"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "mobile"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "userType"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "emailTemplates": [
+    {
+      "name": "crm-follow-up-reminder",
+      "displayName": "CRM Follow-up Reminder",
+      "body": "crm-follow-up-reminder.handlebars.html",
+      "subject": "Follow-up due: {{task.title}}",
+      "description": "Reminder for due and overdue CRM follow-up tasks.",
+      "active": true,
+      "type": "text"
+    }
+  ],
+  "smsTemplates": [],
+  "pushNotificationTemplates": [],
+  "mediaStorageProviders": [],
+  "savedFilters": [],
+  "securityRules": [
+    {
+      "name": "sales-representative-own-leads",
+      "description": "Sales representatives can access only leads they own.",
+      "roleUserKey": "SalesRepresentative",
+      "modelMetadataUserKey": "lead",
+      "securityRuleConfig": {
+        "filters": {
+          "owner": {
+            "id": {
+              "$eq": "$activeUserId"
+            }
+          }
+        }
+      },
+      "securityRuleConfigProvider": null
+    },
+    {
+      "name": "sales-representative-own-follow-ups",
+      "description": "Sales representatives can access only follow-ups belonging to their leads.",
+      "roleUserKey": "SalesRepresentative",
+      "modelMetadataUserKey": "followUpTask",
+      "securityRuleConfig": {
+        "filters": {
+          "lead": {
+            "owner": {
+              "id": {
+                "$eq": "$activeUserId"
+              }
+            }
+          }
+        }
+      },
+      "securityRuleConfigProvider": null
+    }
+  ],
+  "listOfValues": [],
+  "dashboards": [
+    {
+      "dashboardSchemaVersion": 1,
+      "name": "crm-overview",
+      "displayName": "CRM Overview",
+      "description": "Security-aware sales pipeline dashboard.",
+      "moduleUserKey": "crm",
+      "variables": [],
+      "widgets": [
+        {
+          "id": "pipeline-funnel",
+          "name": "Pipeline Funnel",
+          "type": "barChart",
+          "dataProvider": "PipelineFunnelProvider",
+          "providerContext": {}
+        },
+        {
+          "id": "pipeline-value",
+          "name": "Pipeline Value",
+          "type": "table",
+          "dataProvider": "PipelineValueProvider",
+          "providerContext": {}
+        },
+        {
+          "id": "leads-by-source",
+          "name": "Leads by Source",
+          "type": "pieChart",
+          "dataProvider": "LeadsBySourceProvider",
+          "providerContext": {}
+        },
+        {
+          "id": "rep-leaderboard",
+          "name": "Rep Leaderboard",
+          "type": "barChart",
+          "dataProvider": "RepLeaderboardProvider",
+          "providerContext": {}
+        },
+        {
+          "id": "overdue-followups",
+          "name": "Overdue Follow-ups",
+          "type": "table",
+          "dataProvider": "OverdueFollowUpsProvider",
+          "providerContext": {}
+        },
+        {
+          "id": "leads-created-trend",
+          "name": "Leads Created Over Time",
+          "type": "lineChart",
+          "dataProvider": "LeadsCreatedTrendProvider",
+          "providerContext": {}
+        }
+      ],
+      "defaultLayout": {
+        "engine": "gridstack",
+        "columns": 12,
+        "items": [
+          {
+            "widgetId": "pipeline-funnel",
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 4
+          },
+          {
+            "widgetId": "pipeline-value",
+            "x": 6,
+            "y": 0,
+            "w": 6,
+            "h": 4
+          },
+          {
+            "widgetId": "leads-by-source",
+            "x": 0,
+            "y": 4,
+            "w": 4,
+            "h": 4
+          },
+          {
+            "widgetId": "rep-leaderboard",
+            "x": 4,
+            "y": 4,
+            "w": 4,
+            "h": 4
+          },
+          {
+            "widgetId": "overdue-followups",
+            "x": 8,
+            "y": 4,
+            "w": 4,
+            "h": 4
+          },
+          {
+            "widgetId": "leads-created-trend",
+            "x": 0,
+            "y": 8,
+            "w": 12,
+            "h": 4
+          }
+        ]
+      }
+    }
+  ],
+  "scheduledJobs": [
+    {
+      "scheduleName": "CRM Follow-up Reminders",
+      "isActive": true,
+      "frequency": "Daily",
+      "startTime": null,
+      "endTime": null,
+      "startDate": null,
+      "endDate": null,
+      "dayOfMonth": 0,
+      "dayOfWeek": "[\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\",\"Saturday\",\"Sunday\"]",
+      "job": "FollowUpReminderJob",
+      "moduleUserKey": "crm",
+      "cronExpression": "0 8 * * *"
+    }
+  ],
+  "testing": {
+    "roles": [],
+    "users": [
+      {
+        "username": "crmAdmin",
+        "email": "admin@leadtrack.local",
+        "password": "Test@1234",
+        "fullName": "CRM Admin",
+        "userType": "Admin",
+        "roles": [
+          "Admin"
+        ]
+      },
+      {
+        "username": "crmSales",
+        "email": "sales@leadtrack.local",
+        "password": "Test@1234",
+        "fullName": "Sales Representative",
+        "userType": "SalesRepresentative",
+        "roles": [
+          "SalesRepresentative"
+        ]
+      }
+    ],
+    "data": [
+      {
+        "modelUserKey": "lead",
+        "recUserKeyValue": "+919810000001",
+        "data": {
+          "name": "Aarav Mehta",
+          "company": "Northstar Labs",
+          "industry": "Technology",
+          "email": "aarav@example.test",
+          "phone": "+919810000001",
+          "dealValue": 850000,
+          "currency": "INR",
+          "source": "PhoneCall",
+          "stage": "New",
+          "ownerUserKey": "sales@leadtrack.local",
+          "remarks": "Requested a product overview."
+        }
+      },
+      {
+        "modelUserKey": "lead",
+        "recUserKeyValue": "+919810000002",
+        "data": {
+          "name": "Diya Shah",
+          "company": "Juniper Retail",
+          "industry": "Retail",
+          "email": "diya@example.test",
+          "phone": "+919810000002",
+          "dealValue": 420000,
+          "currency": "INR",
+          "source": "Email",
+          "stage": "FollowUp",
+          "ownerUserKey": "sales@leadtrack.local",
+          "remarks": "Pricing follow-up due."
+        }
+      },
+      {
+        "modelUserKey": "lead",
+        "recUserKeyValue": "+919810000003",
+        "data": {
+          "name": "Kabir Rao",
+          "company": "Atlas Logistics",
+          "industry": "Logistics",
+          "email": "kabir@example.test",
+          "phone": "+919810000003",
+          "dealValue": 1250000,
+          "currency": "INR",
+          "source": "Referral",
+          "stage": "MeetingPending",
+          "ownerUserKey": "sales@leadtrack.local",
+          "remarks": "Decision-maker meeting scheduled."
+        }
+      },
+      {
+        "modelUserKey": "followUpTask",
+        "recUserKeyValue": "Call Aarav re product overview",
+        "data": {
+          "leadUserKey": "+919810000001",
+          "title": "Call Aarav re product overview",
+          "channel": "Call",
+          "dueDate": "2026-09-18T05:30:00.000Z",
+          "isCompleted": false,
+          "assignedToUserKey": "sales@leadtrack.local"
+        }
+      },
+      {
+        "modelUserKey": "followUpTask",
+        "recUserKeyValue": "Send Diya revised pricing",
+        "data": {
+          "leadUserKey": "+919810000002",
+          "title": "Send Diya revised pricing",
+          "channel": "Email",
+          "dueDate": "2026-09-17T09:30:00.000Z",
+          "isCompleted": false,
+          "assignedToUserKey": "sales@leadtrack.local"
+        }
+      }
+    ],
+    "scenarios": []
+  },
+  "permissions": [
+    "LeadController.*",
+    "FollowUpTaskController.*",
+    "CrmUserController.*",
+    "DashboardController.*",
+    "DashboardController.getDefinition",
+    "DashboardController.getWidgetData",
+    "DashboardController.getDashboardData",
+    "DashboardController.getVariableOptions",
+    "DashboardController.getLayout",
+    "DashboardController.saveLayout",
+    "ImportTransactionController.*",
+    "ExportTemplateController.*",
+    "dashboard:crm-overview:*"
+  ]
+}

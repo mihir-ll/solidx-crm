@@ -1,0 +1,167 @@
+@import url("/themes/solid-dark-purple/theme-variables.css");
+
+.solid-primary-black-text {
+  color: var(--solid-primary-black);
+}
+
+@layer solid-theme {
+
+  .pi {
+    font-size: 1rem;
+  }
+
+  ::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  :-moz-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  ::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  :-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+@layer solid-theme {
+
+  .solid-active-view {
+    background-color: var(--purple-700);
+    border-radius: 4px;
+    padding: 12px;
+  }
+
+  /* auth container */
+  .solid-auth-theme-wrapper.center {
+    background-color: #000000;
+    overflow: hidden;
+  }
+
+  .solid-auth-theme-wrapper.center::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    border-radius: 26.25rem;
+    background: radial-gradient(50% 50% at 50% 50%, #CFA3E9 0%, #AE68DF 24%, #3D186B 72.38%, #000 100%);
+    width: 400px;
+    height: 400px;
+  }
+
+  .solid-auth-theme-wrapper.center::after {
+    content: '';
+    position: absolute;
+    bottom: -350px;
+    right: -150px;
+    width: 600px;
+    height: 600px;
+    transform: rotate(106.916deg);
+    background: radial-gradient(52.51% 52.51% at 50% 8.11%, #D6B0EC 0%, #AB63DE 34.43%, #552194 60.07%, #000 100%);
+  }
+
+  /* .auth-container.center {
+    border-radius: 1.25rem;
+    border: 1px solid #303030;
+    background: rgba(44, 41, 41, 0.22);
+    box-shadow: 0px 4px 4px 0px rgba(49, 106, 215, 0.05);
+    backdrop-filter: blur(25px);
+    padding: 54px;
+  } */
+
+  .auth-container {
+    border: 1px solid #303030;
+    background: rgba(44, 41, 41, 0.22);
+  }
+
+  .solid-logo-title,
+  .solid-auth-title,
+  .solid-auth-input-label {
+    color: var(--auth-title-color) !important;
+  }
+
+  .solid-auth-subtitle,
+  .solid-auth-subtitle a {
+    color: var(--auth-subtitle-color) !important;
+  }
+
+  .solid-global-search-element {
+    border: 1px solid var(--primary-light-color);
+  }
+
+  .custom-filter-button {
+    border-left: 1px solid var(--primary-light-color);
+  }
+
+  .solid-layout-accordion label {
+    color: #FFFFFF;
+  }
+
+  .form-field-label {
+    font-size: 12px;
+    color: var(--muted-foreground);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin: 0;
+  }
+
+  .solid-custom-editor .ql-toolbar.ql-snow {
+    border: 1px solid var(--primary-light-color) !important;
+  }
+
+  /* .solid-custom-editor .ql-toolbar.ql-snow span{
+    color: #FFF !important;
+  } */
+  .solid-custom-editor .ql-container.ql-snow {
+    border: 1px solid var(--primary-light-color) !important;
+  }
+
+  .solid-file-reader path:first-child {
+    fill: var(--solid-file-wrapper) !important;
+  }
+
+  .active-menu-image {
+    background-color: var(--solid-login-bg-color);
+  }
+
+
+  .solid-kanban-board-wrapper {
+    border-top: 1px solid var(--primary-light-color);
+  }
+
+  .kanban-group-heading {
+    color: #fff;
+  }
+
+  .solid-kanban-card,
+  .solid-media-card {
+    border: none;
+    background: transparent;
+  }
+
+  .solid-kanban-card:hover,
+  .solid-media-card:hover {
+    border: none;
+    background: transparent;
+  }
+
+  .solid-mimetype-chip {
+    background: var(--gray-700);
+  }
+
+  .kanban-image-preview,
+  .kanban-media-image-preview,
+  .kanban-media-view-card {
+    background-color: var(--surface-hover);
+  }
+
+  .kanban-count-badge {
+    background: var(--primary-light-color);
+    color: var(--primary-color);
+  }
+}

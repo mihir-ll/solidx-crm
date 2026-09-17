@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DEFAULT_DATABASE_USER:-leadtrack}
+      POSTGRES_PASSWORD: ${DEFAULT_DATABASE_PASSWORD:?set DEFAULT_DATABASE_PASSWORD}
+      POSTGRES_DB: ${DEFAULT_DATABASE_NAME:-leadtrack}
+    volumes:
+      - leadtrack-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DEFAULT_DATABASE_USER:-leadtrack} -d ${DEFAULT_DATABASE_NAME:-leadtrack}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ../solid-api
+    restart: unless-stopped
+    env_file: ../solid-api/.env
+    environment:
+      DEFAULT_DATABASE_HOST: postgres
+      DEFAULT_DATABASE_PORT: 5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ui:
+    build:
+      context: ../solid-ui
+      args:
+        VITE_BACKEND_API_URL: /api
+        VITE_API_URL: /api
+        VITE_SOLID_APP_TITLE: LeadTrack CRM
+    restart: unless-stopped
+
+  gateway:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [api, ui]
+
+volumes:
+  leadtrack-postgres:

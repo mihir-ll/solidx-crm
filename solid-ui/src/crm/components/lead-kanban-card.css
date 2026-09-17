@@ -1,0 +1,11 @@
+.lead-card { width: 100%; border: 1px solid color-mix(in srgb, var(--primary-color, #6366f1) 20%, transparent); border-radius: .75rem; padding: .9rem; background: var(--surface-card, #fff); box-shadow: 0 8px 22px rgba(15, 23, 42, .08); }
+.lead-card__header, .lead-card footer { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.lead-card__stage, .lead-card__source { border-radius: 999px; padding: .22rem .55rem; font-size: .68rem; font-weight: 700; background: var(--primary-50, #eef2ff); color: var(--primary-700, #4338ca); }
+.lead-card__source { background: var(--surface-100, #f1f5f9); color: var(--text-color-secondary, #64748b); }
+.lead-card h3 { margin: .8rem 0 .15rem; font-size: 1rem; }
+.lead-card__company { margin: 0; color: var(--text-color-secondary, #64748b); font-size: .82rem; }
+.lead-card__value { margin: .9rem 0; font-size: 1.1rem; font-weight: 800; }
+.lead-card footer { border-top: 1px solid var(--surface-border, #e2e8f0); padding-top: .65rem; color: var(--text-color-secondary, #64748b); font-size: .7rem; }
+.lead-card--opportunitygenerated { border-color: #10b981; }
+.lead-card--dead, .lead-card--wrongleadinfo { opacity: .72; }
+@media (max-width: 640px) { .lead-card { padding: .75rem; } .lead-card footer { align-items: flex-start; flex-direction: column; } }
