@@ -17,24 +17,24 @@ import {
   SolidRequestContextDecorator,
   SolidRequestContextDto,
 } from '@solidxai/core';
-import { CreateCrmUserDto } from '../dtos/create-crm-user.dto';
-import { UpdateCrmUserDto } from '../dtos/update-crm-user.dto';
-import { CrmUserService } from '../services/crm-user.service';
+import { CreateLeadTrackUserDto } from '../dtos/create-leadtrack-user.dto';
+import { UpdateLeadTrackUserDto } from '../dtos/update-leadtrack-user.dto';
+import { LeadTrackUserService } from '../services/leadtrack-user.service';
 
-@ApiTags('CRM')
+@ApiTags('LeadTrack')
 @ApiBearerAuth('jwt')
-@Controller('crm-user')
-export class CrmUserController {
-  constructor(private readonly service: CrmUserService) {}
+@Controller('leadtrack-user')
+export class LeadTrackUserController {
+  constructor(private readonly service: LeadTrackUserService) {}
   @Post() @UseInterceptors(AnyFilesInterceptor()) create(
-    @Body() dto: CreateCrmUserDto,
+    @Body() dto: CreateLeadTrackUserDto,
     @UploadedFiles() files: Express.Multer.File[],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {
     return this.service.create(dto, files, ctxt);
   }
   @Post('bulk') @UseInterceptors(AnyFilesInterceptor()) insertMany(
-    @Body() dtos: CreateCrmUserDto[],
+    @Body() dtos: CreateLeadTrackUserDto[],
     @UploadedFiles() files: Express.Multer.File[][] = [],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {
@@ -42,7 +42,7 @@ export class CrmUserController {
   }
   @Put(':id') @UseInterceptors(AnyFilesInterceptor()) update(
     @Param('id') id: number,
-    @Body() dto: UpdateCrmUserDto,
+    @Body() dto: UpdateLeadTrackUserDto,
     @UploadedFiles() files: Express.Multer.File[],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {
@@ -50,7 +50,7 @@ export class CrmUserController {
   }
   @Patch(':id') @UseInterceptors(AnyFilesInterceptor()) partialUpdate(
     @Param('id') id: number,
-    @Body() dto: UpdateCrmUserDto,
+    @Body() dto: UpdateLeadTrackUserDto,
     @UploadedFiles() files: Express.Multer.File[],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {

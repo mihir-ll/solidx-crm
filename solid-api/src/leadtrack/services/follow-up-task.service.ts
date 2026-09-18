@@ -13,6 +13,6 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
     repo: FollowUpTaskRepository,
     moduleRef: ModuleRef,
   ) {
-    super(entityManager, repo, 'followUpTask', 'crm', moduleRef);
+    super(entityManager, repo, 'followUpTask', 'leadtrack', moduleRef);
   }
 }

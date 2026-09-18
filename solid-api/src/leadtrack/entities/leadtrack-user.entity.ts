@@ -4,11 +4,12 @@ import { User } from '@solidxai/core';
 
 @ChildEntity()
 @Exclude()
-export class CrmUser extends User {
+export class LeadTrackUser extends User {
   @Index({ unique: true })
   @Expose()
-  @Column({ type: 'varchar' })
-  crmUserKey: string;
+  // Preserve the existing physical column while exposing LeadTrack naming in code.
+  @Column({ name: 'crmUserKey', type: 'varchar' })
+  leadTrackUserKey: string;
 
   @Expose()
   @Column({ type: 'varchar', default: 'SalesRepresentative' })

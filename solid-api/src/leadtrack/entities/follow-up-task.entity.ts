@@ -8,7 +8,7 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { CrmUser } from './crm-user.entity';
+import { LeadTrackUser } from './leadtrack-user.entity';
 import { Lead } from './lead.entity';
 
 @Entity('crm_follow_up_task')
@@ -41,9 +41,9 @@ export class FollowUpTask extends CommonEntity {
   @Column({ type: 'text', nullable: true })
   outcomeNotes?: string;
 
-  @ManyToOne(() => CrmUser, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => LeadTrackUser, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()
-  assignedTo?: CrmUser;
+  assignedTo?: LeadTrackUser;
 
   @BeforeInsert()
   @BeforeUpdate()

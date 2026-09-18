@@ -7,7 +7,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { CrmUser } from './crm-user.entity';
+import { LeadTrackUser } from './leadtrack-user.entity';
 import { FollowUpTask } from './follow-up-task.entity';
 
 export type LeadStage =
@@ -58,9 +58,9 @@ export class Lead extends CommonEntity {
   stage: LeadStage = 'New';
 
   @Index()
-  @ManyToOne(() => CrmUser, { nullable: false, onDelete: 'RESTRICT' })
+  @ManyToOne(() => LeadTrackUser, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn()
-  owner: CrmUser;
+  owner: LeadTrackUser;
 
   @Column({ type: 'text', nullable: true })
   remarks?: string;

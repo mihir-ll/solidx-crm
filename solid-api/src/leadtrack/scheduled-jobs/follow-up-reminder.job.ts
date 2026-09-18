@@ -30,7 +30,7 @@ export class FollowUpReminderJob implements IScheduledJob {
       if (!recipient) continue;
       await mail.sendEmailUsingTemplate(
         recipient,
-        'crm-follow-up-reminder',
+        'leadtrack-follow-up-reminder',
         { task, lead: task.lead, dueDate: task.dueDate.toISOString() },
         true,
         [],

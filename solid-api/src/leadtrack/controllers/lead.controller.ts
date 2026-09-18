@@ -21,7 +21,7 @@ import { CreateLeadDto } from '../dtos/create-lead.dto';
 import { UpdateLeadDto } from '../dtos/update-lead.dto';
 import { LeadService } from '../services/lead.service';
 
-@ApiTags('CRM')
+@ApiTags('LeadTrack')
 @ApiBearerAuth('jwt')
 @Controller('lead')
 export class LeadController {

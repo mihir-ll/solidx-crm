@@ -3,16 +3,16 @@ import { ModuleRef } from '@nestjs/core';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { CRUDService } from '@solidxai/core';
 import { EntityManager } from 'typeorm';
-import { Lead } from '../entities/lead.entity';
-import { LeadRepository } from '../repositories/lead.repository';
+import { LeadTrackUser } from '../entities/leadtrack-user.entity';
+import { LeadTrackUserRepository } from '../repositories/leadtrack-user.repository';
 
 @Injectable()
-export class LeadService extends CRUDService<Lead> {
+export class LeadTrackUserService extends CRUDService<LeadTrackUser> {
   constructor(
     @InjectEntityManager() entityManager: EntityManager,
-    repo: LeadRepository,
+    repo: LeadTrackUserRepository,
     moduleRef: ModuleRef,
   ) {
-    super(entityManager, repo, 'lead', 'crm', moduleRef);
+    super(entityManager, repo, 'leadTrackUser', 'leadtrack', moduleRef);
   }
 }

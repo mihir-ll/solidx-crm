@@ -5,15 +5,15 @@ import {
   SolidBaseRepository,
 } from '@solidxai/core';
 import { DataSource } from 'typeorm';
-import { CrmUser } from '../entities/crm-user.entity';
+import { LeadTrackUser } from '../entities/leadtrack-user.entity';
 
 @Injectable()
-export class CrmUserRepository extends SolidBaseRepository<CrmUser> {
+export class LeadTrackUserRepository extends SolidBaseRepository<LeadTrackUser> {
   constructor(
     dataSource: DataSource,
     requestContextService: RequestContextService,
     securityRuleRepository: SecurityRuleRepository,
   ) {
-    super(CrmUser, dataSource, requestContextService, securityRuleRepository);
+    super(LeadTrackUser, dataSource, requestContextService, securityRuleRepository);
   }
 }

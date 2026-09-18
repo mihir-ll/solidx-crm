@@ -21,7 +21,7 @@ import { CreateFollowUpTaskDto } from '../dtos/create-follow-up-task.dto';
 import { UpdateFollowUpTaskDto } from '../dtos/update-follow-up-task.dto';
 import { FollowUpTaskService } from '../services/follow-up-task.service';
 
-@ApiTags('CRM')
+@ApiTags('LeadTrack')
 @ApiBearerAuth('jwt')
 @Controller('follow-up-task')
 export class FollowUpTaskController {
