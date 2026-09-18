@@ -3,9 +3,9 @@ import { CreateUserDto } from '@solidxai/core';
 import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateLeadTrackUserDto extends CreateUserDto {
-  @ApiProperty({ enum: ['Admin', 'SalesRepresentative'] })
-  @IsString()
-  @IsNotEmpty()
-  @IsIn(['Admin', 'SalesRepresentative'])
-  userType: 'Admin' | 'SalesRepresentative';
+    @IsIn(['Admin', 'SalesRepresentative'])
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({ enum: ['Admin', 'SalesRepresentative'] })
+    userType: string = "SalesRepresentative";
 }

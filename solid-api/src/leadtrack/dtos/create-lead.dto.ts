@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
@@ -10,50 +10,119 @@ import {
   IsOptional,
   IsString,
   MaxLength,
-  Min,
+  Min, ValidateNested, IsArray,
 } from 'class-validator';
+import { emptyStringToNullTransformer } from '@solidxai/core';
+import { UpdateFollowUpTaskDto } from './update-follow-up-task.dto';
 
 export class CreateLeadDto {
-  @ApiProperty() @IsString() @IsNotEmpty() @MaxLength(120) name: string;
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  @MaxLength(120)
-  company?: string;
-  @ApiPropertyOptional() @IsOptional() @IsString() industry?: string;
-  @ApiPropertyOptional() @IsOptional() @IsEmail() email?: string;
-  @ApiProperty() @IsString() @IsNotEmpty() @MaxLength(20) phone: string;
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  @Min(0)
-  dealValue?: number;
-  @ApiPropertyOptional({ default: 'INR' })
-  @IsOptional()
-  @IsIn(['INR', 'USD', 'EUR', 'GBP', 'AED'])
-  currency = 'INR';
-  @ApiProperty()
-  @IsIn(['PhoneCall', 'Email', 'LinkedIn', 'WhatsApp', 'Referral', 'Other'])
-  source: string;
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  expectedCloseDate?: Date;
-  @ApiPropertyOptional({ default: 'New' })
-  @IsOptional()
-  @IsIn([
-    'New',
-    'FirstContactPending',
-    'FollowUp',
-    'MeetingSet',
-    'MeetingPending',
-    'OpportunityGenerated',
-    'Dead',
-    'WrongLeadInfo',
-  ])
-  stage = 'New';
-  @ApiProperty() @Type(() => Number) @IsInt() ownerId: number;
-  @ApiPropertyOptional() @IsOptional() @IsString() remarks?: string;
+    @MaxLength(120)
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    name: string;
+
+    @ApiPropertyOptional()
+    @MaxLength(120)
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    company?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    industry?: string;
+
+    @ApiPropertyOptional()
+    @MaxLength(254)
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    @IsEmail()
+    email?: string;
+
+    @MaxLength(20)
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    phone: string;
+
+    @ApiPropertyOptional()
+    @Type(() => Number)
+    @IsOptional()
+    @IsNumber()
+    @ApiProperty()
+    dealValue?: number;
+
+    @ApiPropertyOptional({ default: 'INR' })
+    @IsIn(['INR', 'USD', 'EUR', 'GBP', 'AED'])
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    currency: string = "INR";
+
+    @IsIn(['PhoneCall', 'Email', 'LinkedIn', 'WhatsApp', 'Referral', 'Other'])
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    source: string;
+
+    @ApiPropertyOptional()
+    @Type(() => Date)
+    @IsOptional()
+    @IsDate()
+    @ApiProperty()
+    expectedCloseDate?: Date;
+
+    @ApiPropertyOptional({ default: 'New' })
+    @IsIn([
+        'New',
+        'FirstContactPending',
+        'FollowUp',
+        'MeetingSet',
+        'MeetingPending',
+        'OpportunityGenerated',
+        'Dead',
+        'WrongLeadInfo',
+    ])
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    stage: string = "New";
+
+    @Type(() => Number)
+    @IsOptional()
+    @IsInt()
+    @ApiProperty()
+    ownerId: number;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    remarks?: string;
+
+    @IsOptional()
+    @ApiProperty()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => UpdateFollowUpTaskDto)
+    tasks: UpdateFollowUpTaskDto[];
+
+    @IsOptional()
+    @IsArray()
+    @ApiProperty()
+    tasksIds: number[];
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    tasksCommand: string;
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    ownerUserKey: string;
 }

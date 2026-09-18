@@ -2,12 +2,14 @@ import type { SolidKanbanCardWidgetProps } from "@solidxai/core-ui";
 import "./lead-kanban-card.css";
 
 const stageLabels: Record<string, string> = {
-  FirstContactPending: "First Contact Pending",
-  FollowUp: "Follow up",
-  MeetingSet: "Meeting Set",
-  MeetingPending: "Meeting Pending",
-  OpportunityGenerated: "Opportunity Generated",
-  WrongLeadInfo: "Wrong Lead Info",
+  new: "New",
+  firstContactPending: "First Contact Pending",
+  followUp: "Follow up",
+  meetingSet: "Meeting Set",
+  meetingPending: "Meeting Pending",
+  opportunityGenerated: "Opportunity Generated",
+  wrongLeadInfo: "Wrong Lead Info",
+  dead: "Dead"
 };
 
 const sourceLabels: Record<string, string> = {
@@ -15,14 +17,14 @@ const sourceLabels: Record<string, string> = {
 };
 
 const stageClassNames: Record<string, string> = {
-  New: "lead-kanban-card--new",
-  FirstContactPending: "lead-kanban-card--first-contact-pending",
-  FollowUp: "lead-kanban-card--follow-up",
-  MeetingSet: "lead-kanban-card--meeting-set",
-  MeetingPending: "lead-kanban-card--meeting-pending",
-  OpportunityGenerated: "lead-kanban-card--opportunity-generated",
-  Dead: "lead-kanban-card--dead",
-  WrongLeadInfo: "lead-kanban-card--wrong-lead-info",
+  new: "lead-kanban-card--new",
+  firstContactPending: "lead-kanban-card--first-contact-pending",
+  followUp: "lead-kanban-card--follow-up",
+  meetingSet: "lead-kanban-card--meeting-set",
+  meetingPending: "lead-kanban-card--meeting-pending",
+  opportunityGenerated: "lead-kanban-card--opportunity-generated",
+  dead: "lead-kanban-card--dead",
+  wrongLeadInfo: "lead-kanban-card--wrong-lead-info",
 };
 
 const formatMoney = (value: unknown, currency = "INR") => {

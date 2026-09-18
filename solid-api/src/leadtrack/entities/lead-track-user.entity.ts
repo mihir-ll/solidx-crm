@@ -5,12 +5,13 @@ import { User } from '@solidxai/core';
 @ChildEntity()
 @Exclude()
 export class LeadTrackUser extends User {
-  @Index({ unique: true })
-  @Expose()
-  @Column({ type: 'varchar' })
-  leadTrackUserKey: string;
+    @Expose()
+    @Index({ unique: true })
+    @Column({ type: "varchar" })
+    leadTrackUserKey: string;
 
-  @Expose()
-  @Column({ type: 'varchar', default: 'SalesRepresentative' })
-  userType: 'Admin' | 'SalesRepresentative' = 'SalesRepresentative';
+    @Expose()
+    @Index()
+    @Column({ type: "varchar", default: "SalesRepresentative" })
+    userType: string = "SalesRepresentative";
 }
