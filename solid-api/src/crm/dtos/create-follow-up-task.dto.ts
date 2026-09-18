@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -22,7 +22,7 @@ export class CreateFollowUpTaskDto {
   @ApiPropertyOptional({ default: false })
   @IsOptional()
   @IsBoolean()
-  isCompleted = false;
+  isCompleted : boolean;
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Date)

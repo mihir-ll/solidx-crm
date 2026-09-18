@@ -391,7 +391,28 @@
       ]
     }
   ],
-  "users": [],
+  "users": [
+    {
+      "username": "crmAdmin",
+      "email": "admin@leadtrack.local",
+      "password": "Test@1234",
+      "fullName": "CRM Admin",
+      "userType": "Admin",
+      "roles": [
+        "Admin"
+      ]
+    },
+    {
+      "username": "crmSales",
+      "email": "sales@leadtrack.local",
+      "password": "Test@1234",
+      "fullName": "Sales Representative",
+      "userType": "SalesRepresentative",
+      "roles": [
+        "SalesRepresentative"
+      ]
+    }
+  ],
   "actions": [
     {
       "displayName": "CRM Dashboard",
@@ -705,7 +726,9 @@
         "attrs": {
           "name": "lead-form",
           "label": "Lead",
-          "className": "grid"
+          "className": "grid",
+          "workflowField": "stage",
+          "workflowFieldUpdateEnabled": true
         },
         "children": [
           {
@@ -788,13 +811,10 @@
                               {
                                 "type": "field",
                                 "attrs": {
-                                  "name": "stage"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "owner"
+                                  "name": "owner",
+                                  "isSearchable": true,
+                                  "searchField": "owner.name",
+                                  "coModelFieldToDisplay": "fullName"
                                 }
                               },
                               {
@@ -842,20 +862,6 @@
                         }
                       }
                     ]
-                  },
-                  {
-                    "type": "page",
-                    "attrs": {
-                      "name": "activity",
-                      "label": "Activity"
-                    },
-                    "children": [
-                      {
-                        "type": "p",
-                        "body": "Field history and manual notes are available through SolidX Audit/Chatter for this audited record.",
-                        "attrs": {}
-                      }
-                    ]
                   }
                 ]
               }
@@ -892,7 +898,9 @@
             "type": "field",
             "attrs": {
               "name": "lead",
-              "isSearchable": true
+              "isSearchable": true,
+              "searchField": "lead.name",
+              "coModelFieldToDisplay": "name"
             }
           },
           {
@@ -911,7 +919,10 @@
           {
             "type": "field",
             "attrs": {
-              "name": "assignedTo"
+              "name": "assignedTo",
+              "isSearchable": true,
+              "searchField": "assignedTo.fullName",
+              "coModelFieldToDisplay": "fullName"
             }
           },
           {
@@ -961,7 +972,8 @@
                       {
                         "type": "field",
                         "attrs": {
-                          "name": "lead"
+                          "name": "lead",
+                          "coModelFieldToDisplay": "name"
                         }
                       },
                       {
@@ -985,7 +997,8 @@
                       {
                         "type": "field",
                         "attrs": {
-                          "name": "assignedTo"
+                          "name": "assignedTo",
+                          "coModelFieldToDisplay": "fullName"
                         }
                       },
                       {
@@ -1080,8 +1093,8 @@
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "crm-user-column",
-                      "className": "col-12"
+                      "name": "crm-user-identity-column",
+                      "className": "col-12 md:col-6"
                     },
                     "children": [
                       {
@@ -1090,6 +1103,33 @@
                           "name": "fullName"
                         }
                       },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "username"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "password"
+                        }
+                      },
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "confirmPassword"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "attrs": {
+                      "name": "crm-user-contact-column",
+                      "className": "col-12 md:col-6"
+                    },
+                    "children": [
                       {
                         "type": "field",
                         "attrs": {
@@ -1326,7 +1366,7 @@
           "currency": "INR",
           "source": "PhoneCall",
           "stage": "New",
-          "ownerUserKey": "sales@leadtrack.local",
+          "ownerUserKey": "crmSales",
           "remarks": "Requested a product overview."
         }
       },
