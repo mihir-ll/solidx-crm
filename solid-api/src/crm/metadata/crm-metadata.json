@@ -751,95 +751,272 @@
                     },
                     "children": [
                       {
-                        "type": "row",
+                        "type": "group",
                         "attrs": {
-                          "name": "details-row"
+                          "name": "contact-information",
+                          "label": "CONTACT INFORMATION",
+                          "className": "lead-form-section"
                         },
                         "children": [
                           {
-                            "type": "column",
+                            "type": "row",
                             "attrs": {
-                              "name": "details-left",
-                              "className": "col-12 md:col-6"
+                              "name": "contact-info-row-1"
                             },
                             "children": [
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "name"
-                                }
+                                  "name": "contact-name-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "name"
+                                    }
+                                  }
+                                ]
                               },
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "company"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "industry"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "email"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "phone"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "source"
-                                }
+                                  "name": "phone-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "phone"
+                                    }
+                                  }
+                                ]
                               }
                             ]
                           },
                           {
-                            "type": "column",
+                            "type": "row",
                             "attrs": {
-                              "name": "details-right",
-                              "className": "col-12 md:col-6"
+                              "name": "contact-info-row-2"
                             },
                             "children": [
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "owner",
-                                  "isSearchable": true,
-                                  "searchField": "owner.name",
-                                  "coModelFieldToDisplay": "fullName"
-                                }
+                                  "name": "email-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "email"
+                                    }
+                                  }
+                                ]
                               },
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "dealValue"
-                                }
+                                  "name": "company-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "group",
+                        "attrs": {
+                          "name": "company-information",
+                          "label": "COMPANY INFORMATION",
+                          "className": "lead-form-section"
+                        },
+                        "children": [
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "company-info-row-1"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "industry-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "company"
+                                    }
+                                  }
+                                ]
                               },
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "currency"
-                                }
+                                  "name": "source-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "industry"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "group",
+                        "attrs": {
+                          "name": "sales-information",
+                          "label": "SALES INFORMATION",
+                          "className": "lead-form-section"
+                        },
+                        "children": [
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "sales-info-row-1"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "owner-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "owner",
+                                      "isSearchable": true,
+                                      "searchField": "owner.name",
+                                      "coModelFieldToDisplay": "fullName"
+                                    }
+                                  }
+                                ]
                               },
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "expectedCloseDate"
-                                }
+                                  "name": "deal-value-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "source"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "sales-info-row-2"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "currency-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "currency"
+                                    }
+                                  }
+                                ]
                               },
                               {
-                                "type": "field",
+                                "type": "column",
                                 "attrs": {
-                                  "name": "remarks"
-                                }
+                                  "name": "expected-close-date-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "dealValue"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "sales-info-row-2"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "currency-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "expectedCloseDate"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "group",
+                        "attrs": {
+                          "name": "additional-information",
+                          "label": "ADDITIONAL INFORMATION",
+                          "className": "lead-form-section"
+                        },
+                        "children": [
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "additional-info-row-1"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "remarks-column",
+                                  "className": "col-12"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "remarks"
+                                    }
+                                  }
+                                ]
                               }
                             ]
                           }
@@ -1079,21 +1256,23 @@
         },
         "children": [
           {
-            "type": "sheet",
+            "type": "group",
             "attrs": {
-              "name": "crm-user-sheet"
+              "name": "basic-info",
+              "label": "Basic Info",
+              "className": "user-form-section"
             },
             "children": [
               {
                 "type": "row",
                 "attrs": {
-                  "name": "crm-user-row"
+                  "name": "crm-user-row-identity"
                 },
                 "children": [
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "crm-user-identity-column",
+                      "name": "crm-user-full-name-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1102,31 +1281,36 @@
                         "attrs": {
                           "name": "fullName"
                         }
-                      },
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "username"
-                        }
-                      },
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "password"
-                        }
-                      },
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "confirmPassword"
-                        }
                       }
                     ]
                   },
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "crm-user-contact-column",
+                      "name": "crm-user-username-column",
+                      "className": "col-12 md:col-6"
+                    },
+                    "children": [
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "username"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "row",
+                "attrs": {
+                  "name": "crm-user-row-contact"
+                },
+                "children": [
+                  {
+                    "type": "column",
+                    "attrs": {
+                      "name": "crm-user-email-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1135,13 +1319,87 @@
                         "attrs": {
                           "name": "email"
                         }
-                      },
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column",
+                    "attrs": {
+                      "name": "crm-user-mobile-column",
+                      "className": "col-12 md:col-6"
+                    },
+                    "children": [
                       {
                         "type": "field",
                         "attrs": {
                           "name": "mobile"
                         }
-                      },
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "row",
+                "attrs": {
+                  "name": "crm-user-row-password"
+                },
+                "children": [
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "crm-user-password-column",
+                      "className": "col-12 md:col-6"
+                    },
+                    "children": [
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "password"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "crm-user-confirm-password-column",
+                      "className": "col-12 md:col-6"
+                    },
+                    "children": [
+                      {
+                        "type": "field",
+                        "attrs": {
+                          "name": "confirmPassword"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "attrs": {
+              "name": "roles",
+              "label": "Roles",
+              "className": "user-role-section"
+            },
+            "children": [
+              {
+                "type": "row",
+                "attrs": {
+                  "name": "crm-user-row-role"
+                },
+                "children": [
+                  {
+                    "type": "column",
+                    "attrs": {
+                      "name": "crm-user-role-column",
+                      "className": "col-12 md:col-6"
+                    },
+                    "children": [
                       {
                         "type": "field",
                         "attrs": {
