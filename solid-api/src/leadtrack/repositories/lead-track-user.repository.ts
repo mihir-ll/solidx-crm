@@ -5,7 +5,7 @@ import {
   SolidBaseRepository,
 } from '@solidxai/core';
 import { DataSource } from 'typeorm';
-import { LeadTrackUser } from '../entities/leadtrack-user.entity';
+import { LeadTrackUser } from '../entities/lead-track-user.entity';
 
 @Injectable()
 export class LeadTrackUserRepository extends SolidBaseRepository<LeadTrackUser> {

@@ -8,10 +8,10 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { LeadTrackUser } from './leadtrack-user.entity';
+import { LeadTrackUser } from './lead-track-user.entity';
 import { Lead } from './lead.entity';
 
-@Entity('crm_follow_up_task')
+@Entity('leadtrack_follow_up_task')
 export class FollowUpTask extends CommonEntity {
   @Index()
   @ManyToOne(() => Lead, (lead) => lead.tasks, {

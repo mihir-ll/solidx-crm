@@ -7,7 +7,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { LeadTrackUser } from './leadtrack-user.entity';
+import { LeadTrackUser } from './lead-track-user.entity';
 import { FollowUpTask } from './follow-up-task.entity';
 
 export type LeadStage =
@@ -20,7 +20,7 @@ export type LeadStage =
   | 'Dead'
   | 'WrongLeadInfo';
 
-@Entity('crm_lead')
+@Entity('leadtrack_lead')
 export class Lead extends CommonEntity {
   @Index()
   @Column({ type: 'varchar', length: 120 })

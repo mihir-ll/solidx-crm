@@ -7,8 +7,7 @@ import { User } from '@solidxai/core';
 export class LeadTrackUser extends User {
   @Index({ unique: true })
   @Expose()
-  // Preserve the existing physical column while exposing LeadTrack naming in code.
-  @Column({ name: 'crmUserKey', type: 'varchar' })
+  @Column({ type: 'varchar' })
   leadTrackUserKey: string;
 
   @Expose()

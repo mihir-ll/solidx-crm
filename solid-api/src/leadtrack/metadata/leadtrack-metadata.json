@@ -60,7 +60,7 @@
         "description": "A sales prospect assigned to a LeadTrack user.",
         "dataSource": "default",
         "dataSourceType": "postgres",
-        "tableName": "crm_lead",
+        "tableName": "leadtrack_lead",
         "userKeyFieldUserKey": "phone",
         "enableAuditTracking": true,
         "enableSoftDelete": true,
@@ -249,7 +249,7 @@
         "description": "A scheduled sales activity for a lead.",
         "dataSource": "default",
         "dataSourceType": "postgres",
-        "tableName": "crm_follow_up_task",
+        "tableName": "leadtrack_follow_up_task",
         "userKeyFieldUserKey": "title",
         "enableAuditTracking": true,
         "enableSoftDelete": true,
@@ -468,14 +468,14 @@
     },
     {
       "displayName": "LeadTrack Users",
-      "name": "leadtrack-user-list-action",
+      "name": "lead-track-user-list-action",
       "type": "solid",
       "domain": "",
       "context": "",
       "customComponent": "",
       "customIsModal": false,
       "serverEndpoint": "",
-      "viewUserKey": "leadtrack-user-list-view",
+      "viewUserKey": "lead-track-user-list-view",
       "moduleUserKey": "leadtrack",
       "modelUserKey": "leadTrackUser"
     }
@@ -539,16 +539,16 @@
       "displayName": "Users",
       "name": "users-root-menu",
       "sequenceNumber": 3,
-      "actionUserKey": "leadtrack-user-list-action",
+      "actionUserKey": "lead-track-user-list-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
       "iconName": "group"
     },
     {
       "displayName": "LeadTrack User",
-      "name": "leadtrack-user-menu",
+      "name": "lead-track-user-menu",
       "sequenceNumber": 1,
-      "actionUserKey": "leadtrack-user-list-action",
+      "actionUserKey": "lead-track-user-list-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "users-root-menu",
       "iconName": "person"
@@ -1326,7 +1326,7 @@
       }
     },
     {
-      "name": "leadtrack-user-list-view",
+      "name": "lead-track-user-list-view",
       "displayName": "LeadTrack Users",
       "type": "list",
       "context": "{}",
@@ -1367,7 +1367,7 @@
       }
     },
     {
-      "name": "leadtrack-user-form-view",
+      "name": "lead-track-user-form-view",
       "displayName": "LeadTrack User",
       "type": "form",
       "context": "{}",
@@ -1376,7 +1376,7 @@
       "layout": {
         "type": "form",
         "attrs": {
-          "name": "leadtrack-user-form",
+          "name": "lead-track-user-form",
           "label": "LeadTrack User",
           "className": "grid"
         },
@@ -1392,13 +1392,13 @@
               {
                 "type": "row",
                 "attrs": {
-                  "name": "leadtrack-user-row-identity"
+                  "name": "lead-track-user-row-identity"
                 },
                 "children": [
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "leadtrack-user-full-name-column",
+                      "name": "lead-track-user-full-name-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1413,7 +1413,7 @@
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "leadtrack-user-username-column",
+                      "name": "lead-track-user-username-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1430,13 +1430,13 @@
               {
                 "type": "row",
                 "attrs": {
-                  "name": "leadtrack-user-row-contact"
+                  "name": "lead-track-user-row-contact"
                 },
                 "children": [
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "leadtrack-user-email-column",
+                      "name": "lead-track-user-email-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1451,7 +1451,7 @@
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "leadtrack-user-mobile-column",
+                      "name": "lead-track-user-mobile-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1468,13 +1468,13 @@
               {
                 "type": "row",
                 "attrs": {
-                  "name": "leadtrack-user-row-password"
+                  "name": "lead-track-user-row-password"
                 },
                 "children": [
                   {
                     "type": "row",
                     "attrs": {
-                      "name": "leadtrack-user-password-column",
+                      "name": "lead-track-user-password-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1489,7 +1489,7 @@
                   {
                     "type": "row",
                     "attrs": {
-                      "name": "leadtrack-user-confirm-password-column",
+                      "name": "lead-track-user-confirm-password-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
@@ -1516,13 +1516,13 @@
               {
                 "type": "row",
                 "attrs": {
-                  "name": "leadtrack-user-row-role"
+                  "name": "lead-track-user-row-role"
                 },
                 "children": [
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "leadtrack-user-role-column",
+                      "name": "lead-track-user-role-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [

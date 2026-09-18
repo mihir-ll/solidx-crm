@@ -17,13 +17,13 @@ import {
   SolidRequestContextDecorator,
   SolidRequestContextDto,
 } from '@solidxai/core';
-import { CreateLeadTrackUserDto } from '../dtos/create-leadtrack-user.dto';
-import { UpdateLeadTrackUserDto } from '../dtos/update-leadtrack-user.dto';
-import { LeadTrackUserService } from '../services/leadtrack-user.service';
+import { CreateLeadTrackUserDto } from '../dtos/create-lead-track-user.dto';
+import { UpdateLeadTrackUserDto } from '../dtos/update-lead-track-user.dto';
+import { LeadTrackUserService } from '../services/lead-track-user.service';
 
 @ApiTags('LeadTrack')
 @ApiBearerAuth('jwt')
-@Controller('leadtrack-user')
+@Controller('lead-track-user')
 export class LeadTrackUserController {
   constructor(private readonly service: LeadTrackUserService) {}
   @Post() @UseInterceptors(AnyFilesInterceptor()) create(
