@@ -81,9 +81,14 @@ export default function LeadKanbanCardWidget({
             <h3 title={displayText(rowData?.name, "Unnamed lead")}>
               {displayText(rowData?.name, "Unnamed lead")}
             </h3>
-            <p title={displayText(rowData?.company, "Independent")}>
+            <div>
+            <p className="text-sm" title={displayText(rowData?.company, "Independent")}>
               {displayText(rowData?.company, "Independent")}
             </p>
+            <p className="text-xs" title={displayText(rowData?.industry, "Unknown")}>
+              {displayText(rowData?.industry, "Unknown")}
+            </p>
+            </div>
           </div>
 
           <div className="lead-kanban-card__meta">
