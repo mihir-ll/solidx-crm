@@ -67,11 +67,16 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @ApiProperty()
     expectedCloseDate: Date;
 
-    @IsNotEmpty()
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
+    @ApiProperty()
+    stageId: number;
+
     @IsOptional()
     @IsString()
     @ApiProperty()
-    stage: string;
+    stageUserKey: string;
 
     @IsOptional()
     @IsInt()

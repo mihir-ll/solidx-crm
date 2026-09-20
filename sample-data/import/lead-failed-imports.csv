@@ -1,2 +1,2 @@
 Contact Name,Company,Industry,Email,Phone,Deal Value,Currency,Lead Source,Expected Close Date,Pipeline Stage,Owner,Remarks,Error
-Nikhil Kapoor,Example Invalid Company,Unknown,nikhil.kapoor@example.test,919810000112,100000,INR,Other,2026-10-05,WrongLeadInfo,arjun.patel@leadtrack.test,Contact confirmed that the enquiry was submitted in error.,Validation errors in Pipeline Stage is invalid i.e Field value is invalid
+Nikhil Kapoor,Example Invalid Company,Unknown,nikhil.kapoor@example.test,919810000112,100000,INR,Other,2026-10-05,Unknown Stage,arjun.patel@leadtrack.test,Contact confirmed that the enquiry was submitted in error.,Pipeline Stage resolution failed because the related stage does not exist

@@ -76,21 +76,16 @@ export class CreateLeadDto {
     @ApiProperty()
     expectedCloseDate?: Date;
 
-    @ApiPropertyOptional({ default: 'New' })
-    @IsIn([
-        'New',
-        'FirstContactPending',
-        'FollowUp',
-        'MeetingSet',
-        'MeetingPending',
-        'OpportunityGenerated',
-        'Dead',
-        'WrongLeadInfo',
-    ])
-    @IsNotEmpty()
-    @IsString()
     @ApiProperty()
-    stage: string = "New";
+    @Type(() => Number)
+    @IsInt()
+    @IsOptional()
+    stageId: number;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    stageUserKey?: string;
 
     @Type(() => Number)
     @IsOptional()

@@ -9,16 +9,7 @@ import {
 } from 'typeorm';
 import { LeadTrackUser } from './lead-track-user.entity';
 import { FollowUpTask } from './follow-up-task.entity';
-
-export type LeadStage =
-  | 'New'
-  | 'FirstContactPending'
-  | 'FollowUp'
-  | 'MeetingSet'
-  | 'MeetingPending'
-  | 'OpportunityGenerated'
-  | 'Dead'
-  | 'WrongLeadInfo';
+import { LeadStage } from './lead-stage.entity';
 
 @Entity('leadtrack_lead')
 @Index(["email", "deletedTracker"], { unique: true })
@@ -55,8 +46,12 @@ export class Lead extends CommonEntity {
     expectedCloseDate?: Date;
 
     @Index()
-    @Column({ type: "varchar", default: "New" })
-    stage: string = "New";
+    @ManyToOne(() => LeadStage, (stage) => stage.leads, {
+        nullable: true,
+        onDelete: 'RESTRICT',
+    })
+    @JoinColumn()
+    stage: LeadStage;
 
     @Index()
     @ManyToOne(() => LeadTrackUser, { nullable: false, onDelete: 'RESTRICT' })

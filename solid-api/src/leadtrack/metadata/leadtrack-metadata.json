@@ -54,6 +54,77 @@
         ]
       },
       {
+        "singularName": "leadStage",
+        "pluralName": "leadStages",
+        "displayName": "Lead Stage",
+        "description": "An ordered stage in the LeadTrack sales pipeline.",
+        "dataSource": "default",
+        "dataSourceType": "postgres",
+        "tableName": "leadtrack_lead_stage",
+        "userKeyFieldUserKey": "name",
+        "enableAuditTracking": true,
+        "enableSoftDelete": false,
+        "fields": [
+          {
+            "name": "name",
+            "displayName": "Stage Name",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 80,
+            "required": true,
+            "unique": true,
+            "index": true,
+            "isUserKey": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "code",
+            "displayName": "Stage Code",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 80,
+            "required": true,
+            "unique": true,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "sequence",
+            "displayName": "Sequence",
+            "type": "int",
+            "ormType": "integer",
+            "min": 0,
+            "defaultValue": 10,
+            "required": true,
+            "unique": false,
+            "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "isTerminal",
+            "displayName": "Terminal Stage",
+            "type": "boolean",
+            "ormType": "boolean",
+            "defaultValue": false,
+            "required": true,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "isWon",
+            "displayName": "Won Stage",
+            "type": "boolean",
+            "ormType": "boolean",
+            "defaultValue": false,
+            "required": true,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          }
+        ]
+      },
+      {
         "singularName": "lead",
         "pluralName": "leads",
         "displayName": "Lead",
@@ -181,20 +252,13 @@
           {
             "name": "stage",
             "displayName": "Pipeline Stage",
-            "type": "selectionStatic",
-            "ormType": "varchar",
-            "selectionStaticValues": [
-              "new:New",
-              "firstContactPending:First Contact Pending",
-              "followUp:Follow up",
-              "meetingSet:Meeting Set",
-              "meetingPending:Meeting Pending",
-              "opportunityGenerated:Opportunity Generated",
-              "dead:Dead",
-              "wrongLeadInfo:Wrong Lead Info"
-            ],
-            "selectionValueType": "string",
-            "defaultValue": "New",
+            "type": "relation",
+            "ormType": "integer",
+            "relationType": "many-to-one",
+            "relationCreateInverse": false,
+            "relationCoModelSingularName": "leadStage",
+            "relationModelModuleName": "leadtrack",
+            "relationCascade": null,
             "required": true,
             "unique": false,
             "index": true,
@@ -669,7 +733,9 @@
             "attrs": {
               "name": "stage",
               "sortable": true,
-              "isSearchable": true
+              "isSearchable": true,
+              "searchField": "stage.name",
+              "coModelFieldToDisplay": "name"
             }
           },
           {
@@ -728,6 +794,7 @@
           "edit": true,
           "delete": true,
           "groupBy": "stage",
+          "swimlanesOrderBy": "sequence:asc",
           "draggable": true,
           "allowedViews": [
             "list",
@@ -742,6 +809,13 @@
               "cardWidget": "LeadKanbanCardWidget"
             },
             "children": [
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "stage",
+                  "coModelFieldToDisplay": "name"
+                }
+              },
               {
                 "type": "field",
                 "attrs": {
@@ -793,6 +867,7 @@
           "label": "Lead",
           "className": "grid",
           "workflowField": "stage",
+          "workflowFieldDataProvider": "LeadStageWorkflowFieldDataProvider",
           "workflowFieldUpdateEnabled": true
         },
         "children": [
@@ -2029,7 +2104,7 @@
           "dealValue": 850000,
           "currency": "INR",
           "source": "PhoneCall",
-          "stage": "New",
+          "stageUserKey": "New",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Requested a product overview."
         }
@@ -2046,7 +2121,7 @@
           "dealValue": 420000,
           "currency": "INR",
           "source": "Email",
-          "stage": "FollowUp",
+          "stageUserKey": "Follow up",
           "ownerUserKey": "sales@leadtrack.local",
           "remarks": "Pricing follow-up due."
         }
@@ -2063,7 +2138,7 @@
           "dealValue": 1250000,
           "currency": "INR",
           "source": "Referral",
-          "stage": "MeetingPending",
+          "stageUserKey": "Meeting Pending",
           "ownerUserKey": "sales@leadtrack.local",
           "remarks": "Decision-maker meeting scheduled."
         }
@@ -2097,6 +2172,7 @@
   },
   "permissions": [
     "LeadController.*",
+    "LeadStageController.*",
     "FollowUpTaskController.*",
     "LeadTrackUserController.*",
     "DashboardController.*",

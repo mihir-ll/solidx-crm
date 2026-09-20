@@ -1,17 +1,6 @@
 import type { SolidKanbanCardWidgetProps } from "@solidxai/core-ui";
 import "./lead-kanban-card.css";
 
-const stageLabels: Record<string, string> = {
-  new: "New",
-  firstContactPending: "First Contact Pending",
-  followUp: "Follow up",
-  meetingSet: "Meeting Set",
-  meetingPending: "Meeting Pending",
-  opportunityGenerated: "Opportunity Generated",
-  wrongLeadInfo: "Wrong Lead Info",
-  dead: "Dead"
-};
-
 const sourceLabels: Record<string, string> = {
   PhoneCall: "Phone Call",
 };
@@ -56,9 +45,14 @@ const displayText = (value: unknown, fallback = "Not set") =>
 
 export default function LeadKanbanCardWidget({
   rowData,
+  group,
 }: SolidKanbanCardWidgetProps) {
-  const stageKey = displayText(rowData?.stage, "New");
-  const stage = stageLabels[stageKey] ?? stageKey;
+  const stageRecord =
+    rowData?.stage && typeof rowData.stage === "object"
+      ? rowData.stage
+      : undefined;
+  const stageKey = displayText(stageRecord?.code, "new");
+  const stage = displayText(stageRecord?.name, group?.label ?? "Unassigned");
   const sourceKey = displayText(rowData?.source, "Other");
   const source = sourceLabels[sourceKey] ?? sourceKey;
   const owner =
@@ -69,7 +63,7 @@ export default function LeadKanbanCardWidget({
     <div className="lead-kanban-card-shell">
       <article
         className={`lead-kanban-card ${
-          stageClassNames[stageKey] ?? stageClassNames.New
+          stageClassNames[stageKey] ?? ""
         }`}
       >
         <div className="lead-kanban-card__status-bar">
