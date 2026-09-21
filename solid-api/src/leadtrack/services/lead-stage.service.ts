@@ -6,6 +6,8 @@ import { EntityManager } from 'typeorm';
 import { LeadStage } from '../entities/lead-stage.entity';
 import { LeadStageRepository } from '../repositories/lead-stage.repository';
 
+const FIRST_STAGE_CODE = 'new';
+
 @Injectable()
 export class LeadStageService extends CRUDService<LeadStage> {
   constructor(
@@ -40,7 +42,7 @@ export class LeadStageService extends CRUDService<LeadStage> {
       const current = await this.stageEntityManager
         .getRepository(LeadStage)
         .findOneBy({ id });
-      if (current?.code === 'New') {
+      if (current?.code === FIRST_STAGE_CODE) {
         throw new BadRequestException('The New stage must remain first.');
       }
     }
@@ -60,7 +62,7 @@ export class LeadStageService extends CRUDService<LeadStage> {
     const stage = await this.stageEntityManager
       .getRepository(LeadStage)
       .findOneBy({ id });
-    if (stage?.code === 'New') {
+    if (stage?.code === FIRST_STAGE_CODE) {
       throw new BadRequestException('The New stage cannot be deleted.');
     }
     const result = await super.delete(id, ctxt);
@@ -99,17 +101,17 @@ export class LeadStageService extends CRUDService<LeadStage> {
     const stages = await repo.find({ order: { sequence: 'ASC', id: 'ASC' } });
     const moved = stages.find((stage) => stage.id === stageId);
     if (!moved) return;
-    if (moved.code === 'New' && afterStageId != null) {
+    if (moved.code === FIRST_STAGE_CODE && afterStageId != null) {
       throw new BadRequestException('The New stage must remain first.');
     }
 
-    const firstStage = stages.find((stage) => stage.code === 'New');
+    const firstStage = stages.find((stage) => stage.code === FIRST_STAGE_CODE);
     const ordered = stages.filter(
       (stage) => stage.id !== stageId && stage.id !== firstStage?.id,
     );
     if (firstStage && firstStage.id !== moved.id) ordered.unshift(firstStage);
     if (afterStageId == null) {
-      if (moved.code === 'New') ordered.unshift(moved);
+      if (moved.code === FIRST_STAGE_CODE) ordered.unshift(moved);
       else ordered.push(moved);
     } else {
       const index = ordered.findIndex((stage) => stage.id === afterStageId);
@@ -131,8 +133,8 @@ export class LeadStageService extends CRUDService<LeadStage> {
     const repo = this.stageEntityManager.getRepository(LeadStage);
     const stages = await repo.find({ order: { sequence: 'ASC', id: 'ASC' } });
     stages.sort((left, right) => {
-      if (left.code === 'New') return -1;
-      if (right.code === 'New') return 1;
+      if (left.code === FIRST_STAGE_CODE) return -1;
+      if (right.code === FIRST_STAGE_CODE) return 1;
       return left.sequence - right.sequence || left.id - right.id;
     });
     for (let index = 0; index < stages.length; index++) {

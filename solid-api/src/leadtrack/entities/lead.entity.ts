@@ -46,8 +46,8 @@ export class Lead extends CommonEntity {
   @Column({ type: 'date', nullable: true })
   expectedCloseDate?: Date;
 
-  @Column({ name: 'stage', type: 'varchar', default: 'New' })
-  legacyStage = 'New';
+  @Column({ name: 'stage', type: 'varchar', default: 'new' })
+  legacyStage = 'new';
 
   @Index()
   @ManyToOne(() => LeadStage, (stage) => stage.leads, {

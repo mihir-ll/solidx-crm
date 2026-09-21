@@ -89,7 +89,7 @@ export class PipelineValueProvider
       .addSelect('COALESCE(SUM(lead.dealValue), 0)', 'value')
       .innerJoin('lead.stage', 'stage')
       .andWhere('stage.code NOT IN (:...terminal)', {
-        terminal: ['Dead', 'WrongLeadInfo'],
+        terminal: ['dead', 'wrongLeadInfo'],
       })
       .groupBy('lead.currency')
       .getRawMany();
@@ -165,7 +165,7 @@ export class RepLeaderboardProvider
       .innerJoin('lead.stage', 'stage')
       .select('owner.fullName', 'name')
       .addSelect('COUNT(lead.id)', 'value')
-      .andWhere('stage.code = :stage', { stage: 'OpportunityGenerated' })
+      .andWhere('stage.code = :stage', { stage: 'opportunityGenerated' })
       .groupBy('owner.id')
       .addGroupBy('owner.fullName')
       .orderBy('COUNT(lead.id)', 'DESC')

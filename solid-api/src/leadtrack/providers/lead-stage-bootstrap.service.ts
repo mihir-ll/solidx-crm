@@ -3,15 +3,17 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { LeadStage } from '../entities/lead-stage.entity';
 
+const FIRST_STAGE_CODE = 'new';
+
 const DEFAULT_STAGES = [
-  ['New', 'New'],
-  ['FirstContactPending', 'First Contact Pending'],
-  ['FollowUp', 'Follow up'],
-  ['MeetingSet', 'Meeting Set'],
-  ['MeetingPending', 'Meeting Pending'],
-  ['OpportunityGenerated', 'Opportunity Generated'],
-  ['Dead', 'Dead'],
-  ['WrongLeadInfo', 'Wrong Lead Info'],
+  ['new', 'New'],
+  ['firstContactPending', 'First Contact Pending'],
+  ['followUp', 'Follow up'],
+  ['meetingSet', 'Meeting Set'],
+  ['meetingPending', 'Meeting Pending'],
+  ['opportunityGenerated', 'Opportunity Generated'],
+  ['dead', 'Dead'],
+  ['wrongLeadInfo', 'Wrong Lead Info'],
 ] as const;
 
 @Injectable()
@@ -37,12 +39,16 @@ export class LeadStageBootstrapService implements OnApplicationBootstrap {
         }
       }
 
+      for (const [code, name] of DEFAULT_STAGES) {
+        await repo.update({ name }, { code });
+      }
+
       const orderedStages = await repo.find({
         order: { sequence: 'ASC', id: 'ASC' },
       });
       orderedStages.sort((left, right) => {
-        if (left.code === 'New') return -1;
-        if (right.code === 'New') return 1;
+        if (left.code === FIRST_STAGE_CODE) return -1;
+        if (right.code === FIRST_STAGE_CODE) return 1;
         return left.sequence - right.sequence || left.id - right.id;
       });
       for (let index = 0; index < orderedStages.length; index++) {
@@ -56,14 +62,14 @@ export class LeadStageBootstrapService implements OnApplicationBootstrap {
         UPDATE leadtrack_lead AS lead
         SET stage_id = stage.id
         FROM leadtrack_lead_stage AS stage
-        WHERE lead.stage_id IS NULL AND stage.code = lead.stage
+        WHERE lead.stage_id IS NULL AND LOWER(stage.code) = LOWER(lead.stage)
       `);
 
       await trx.query(`
         UPDATE leadtrack_lead AS lead
         SET stage_id = stage.id
         FROM leadtrack_lead_stage AS stage
-        WHERE lead.stage_id IS NULL AND stage.code = 'New'
+        WHERE lead.stage_id IS NULL AND stage.code = '${FIRST_STAGE_CODE}'
       `);
     });
   }
