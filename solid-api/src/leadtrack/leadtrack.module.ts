@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FollowUpTaskController } from './controllers/follow-up-task.controller';
 import { LeadController } from './controllers/lead.controller';
+import { LeadStageController } from './controllers/lead-stage.controller';
 import { FollowUpTask } from './entities/follow-up-task.entity';
 import { Lead } from './entities/lead.entity';
 import { LeadStage } from './entities/lead-stage.entity';
@@ -23,8 +24,8 @@ import { LeadService } from './services/lead.service';
 import { LeadStageService } from './services/lead-stage.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ Lead, FollowUpTask])],
-  controllers: [ LeadController, FollowUpTaskController],
+  imports: [TypeOrmModule.forFeature([LeadStage, Lead, FollowUpTask])],
+  controllers: [LeadStageController, LeadController, FollowUpTaskController],
   providers: [
     LeadRepository,
     LeadStageRepository,

@@ -25,9 +25,6 @@ const displayText = (value: unknown, fallback = "Not set") =>
 export default function LeadKanbanCardWidget({
   rowData,
 }: SolidKanbanCardWidgetProps) {
-  const stageRecord =
-    rowData?.stage && typeof rowData.stage === "object" ? rowData.stage : null;
-  const stage = displayText(stageRecord?.name, "Unassigned stage");
   const sourceKey = displayText(rowData?.source, "Other");
   const source = sourceLabels[sourceKey] ?? sourceKey;
   const owner =
