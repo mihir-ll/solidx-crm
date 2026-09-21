@@ -400,7 +400,11 @@
   "roles": [
     {
       "name": "Admin",
-      "permissions": []
+      "permissions": [
+        "LeadActivityReportController.getSummary",
+        "LeadActivityReportController.getActivity",
+        "LeadActivityReportController.exportCsv"
+      ]
     },
     {
       "name": "SalesRepresentative",
@@ -434,6 +438,9 @@
         "DashboardController.getLayout",
         "DashboardController.saveLayout",
         "dashboard:leadtrack-overview:*",
+        "LeadActivityReportController.getSummary",
+        "LeadActivityReportController.getActivity",
+        "LeadActivityReportController.exportCsv",
         "ImportTransactionController.create",
         "ImportTransactionController.insertMany",
         "ImportTransactionController.update",
@@ -476,6 +483,19 @@
       "viewUserKey": "",
       "moduleUserKey": "leadtrack",
       "modelUserKey": "lead"
+    },
+    {
+      "displayName": "Activity Report",
+      "name": "leadTrackActivity-report-action",
+      "type": "custom",
+      "domain": "",
+      "context": "",
+      "customComponent": "/admin/core/leadtrack/reports/activity",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "",
+      "moduleUserKey": "leadtrack",
+      "modelUserKey": ""
     },
     {
       "displayName": "Leads",
@@ -574,6 +594,15 @@
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
       "iconName": "leaderboard"
+    },
+    {
+      "displayName": "Reports",
+      "name": "leadTrackReports-menu-item",
+      "sequenceNumber": 3,
+      "actionUserKey": "leadTrackActivity-report-action",
+      "moduleUserKey": "leadtrack",
+      "parentMenuItemUserKey": "",
+      "iconName": "assessment"
     },
     {
       "displayName": "Pipeline",
@@ -1938,6 +1967,9 @@
     "DashboardController.getLayout",
     "DashboardController.saveLayout",
     "dashboard:leadtrack-overview:*",
+    "LeadActivityReportController.getSummary",
+    "LeadActivityReportController.getActivity",
+    "LeadActivityReportController.exportCsv",
     "LeadStageController.findMany",
     "LeadStageController.findOne"
   ]

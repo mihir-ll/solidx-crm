@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FollowUpTaskController } from './controllers/follow-up-task.controller';
+import { LeadActivityReportController } from './controllers/lead-activity-report.controller';
 import { LeadController } from './controllers/lead.controller';
 import { LeadStageController } from './controllers/lead-stage.controller';
 import { FollowUpTask } from './entities/follow-up-task.entity';
@@ -20,12 +21,18 @@ import { LeadRepository } from './repositories/lead.repository';
 import { LeadStageRepository } from './repositories/lead-stage.repository';
 import { FollowUpReminderJob } from './scheduled-jobs/follow-up-reminder.job';
 import { FollowUpTaskService } from './services/follow-up-task.service';
+import { LeadActivityReportService } from './services/lead-activity-report.service';
 import { LeadService } from './services/lead.service';
 import { LeadStageService } from './services/lead-stage.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([LeadStage, Lead, FollowUpTask])],
-  controllers: [LeadStageController, LeadController, FollowUpTaskController],
+  controllers: [
+    LeadStageController,
+    LeadController,
+    FollowUpTaskController,
+    LeadActivityReportController,
+  ],
   providers: [
     LeadRepository,
     LeadStageRepository,
@@ -34,6 +41,7 @@ import { LeadStageService } from './services/lead-stage.service';
     LeadStageService,
     LeadStageBootstrapService,
     FollowUpTaskService,
+    LeadActivityReportService,
     PipelineFunnelProvider,
     PipelineValueProvider,
     LeadsBySourceProvider,
