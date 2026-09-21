@@ -9,51 +9,6 @@
     "isSystem": false,
     "models": [
       {
-        "singularName": "leadTrackUser",
-        "pluralName": "leadTrackUsers",
-        "displayName": "LeadTrack User",
-        "description": "LeadTrack user profile extending the SolidX user model.",
-        "dataSource": "default",
-        "dataSourceType": "postgres",
-        "isChild": true,
-        "parentModelUserKey": "user",
-        "userKeyFieldUserKey": "leadTrackUserKey",
-        "enableAuditTracking": false,
-        "enableSoftDelete": false,
-        "fields": [
-          {
-            "name": "leadTrackUserKey",
-            "displayName": "User Key",
-            "type": "computed",
-            "ormType": "varchar",
-            "computedFieldValueType": "string",
-            "computedFieldValueProvider": "ConcatEntityComputedFieldProvider",
-            "computedFieldValueProviderCtxt": "{\"fields\":[\"email\"],\"separator\":\"-\",\"slugify\":true}",
-            "required": true,
-            "unique": true,
-            "index": true,
-            "isUserKey": true,
-            "enableAuditTracking": false
-          },
-          {
-            "name": "userType",
-            "displayName": "Role",
-            "type": "selectionStatic",
-            "ormType": "varchar",
-            "selectionStaticValues": [
-              "Admin:Admin",
-              "SalesRepresentative:Sales Representative"
-            ],
-            "selectionValueType": "string",
-            "defaultValue": "SalesRepresentative",
-            "required": true,
-            "unique": false,
-            "index": true,
-            "enableAuditTracking": false
-          }
-        ]
-      },
-      {
         "singularName": "leadStage",
         "pluralName": "leadStages",
         "displayName": "Lead Stage",
@@ -136,7 +91,7 @@
         "singularName": "lead",
         "pluralName": "leads",
         "displayName": "Lead",
-        "description": "A sales prospect assigned to a LeadTrack user.",
+        "description": "A sales prospect assigned to a Solid user.",
         "dataSource": "default",
         "dataSourceType": "postgres",
         "tableName": "leadtrack_lead",
@@ -181,9 +136,10 @@
             "displayName": "Email",
             "type": "email",
             "ormType": "varchar",
-            "required": false,
-            "unique": false,
+            "required": true,
+            "unique": true,
             "index": true,
+            "isUserKey": true,
             "enableAuditTracking": true
           },
           {
@@ -195,7 +151,6 @@
             "required": true,
             "unique": false,
             "index": false,
-            "isUserKey": true,
             "enableAuditTracking": true
           },
           {
@@ -280,8 +235,8 @@
             "ormType": "integer",
             "relationType": "many-to-one",
             "relationCreateInverse": false,
-            "relationCoModelSingularName": "leadTrackUser",
-            "relationModelModuleName": "leadtrack",
+            "relationCoModelSingularName": "user",
+            "relationModelModuleName": "solid-core",
             "relationCascade": null,
             "relationFieldFixedFilter": "{\"userType\":{\"$eq\":\"SalesRepresentative\"}}",
             "required": true,
@@ -392,13 +347,14 @@
             "type": "selectionStatic",
             "ormType": "varchar",
             "selectionStaticValues": [
-              "pending:Pending",
-              "completed:Completed",
-              "cancelled:Cancelled",
-              "inProgress:In Progress"
+              "pending: Pending",
+              "inProgress: In Progress",
+              "completed: Completed",
+              "cancelled: Cancelled",
+              "overDue:Over Due"
             ],
             "selectionValueType": "string",
-            "defaultValue": "Call",
+            "defaultValue": "Pending",
             "required": true,
             "unique": false,
             "index": false,
@@ -431,8 +387,8 @@
             "ormType": "integer",
             "relationType": "many-to-one",
             "relationCreateInverse": false,
-            "relationCoModelSingularName": "leadTrackUser",
-            "relationModelModuleName": "leadtrack",
+            "relationCoModelSingularName": "user",
+            "relationModelModuleName": "solid-core",
             "required": false,
             "unique": false,
             "index": true,
@@ -449,7 +405,6 @@
         "LeadController.*",
         "LeadStageController.*",
         "FollowUpTaskController.*",
-        "LeadTrackUserController.*",
         "DashboardController.*",
         "dashboard:leadtrack-overview:*",
         "ImportTransactionController.*",
@@ -499,8 +454,6 @@
       "email": "admin@leadtrack.local",
       "password": "Test@1234",
       "fullName": "LeadTrack Admin",
-      "isExtensionUser": true,
-      "userType": "Admin",
       "roles": [
         "Admin"
       ]
@@ -510,8 +463,6 @@
       "email": "sales@leadtrack.local",
       "password": "Test@1234",
       "fullName": "Sales Representative",
-      "isExtensionUser": true,
-      "userType": "SalesRepresentative",
       "roles": [
         "SalesRepresentative"
       ]
@@ -520,14 +471,14 @@
   "actions": [
     {
       "displayName": "Dashboard",
-      "name": "leadtrack-dashboard-action",
+      "name": "leadTrackOverview-dashboard-action",
       "type": "custom",
       "domain": "",
       "context": "",
       "customComponent": "/admin/core/leadtrack/dashboard/leadtrack-overview",
       "customIsModal": false,
       "serverEndpoint": "",
-      "viewUserKey": "leadtrack-dashboard-action",
+      "viewUserKey": "",
       "moduleUserKey": "leadtrack",
       "modelUserKey": "lead"
     },
@@ -559,14 +510,14 @@
     },
     {
       "displayName": "Follow-ups",
-      "name": "follow-up-task-list-action",
+      "name": "followUpTask-list-action",
       "type": "solid",
       "domain": "",
       "context": "",
       "customComponent": "",
       "customIsModal": false,
       "serverEndpoint": "",
-      "viewUserKey": "follow-up-task-list-view",
+      "viewUserKey": "followUpTask-list-view",
       "moduleUserKey": "leadtrack",
       "modelUserKey": "followUpTask"
     },
@@ -584,49 +535,60 @@
       "modelUserKey": "leadStage"
     },
     {
-      "displayName": "LeadTrack Users",
-      "name": "lead-track-user-list-action",
+      "displayName": "Lead Stages",
+      "name": "lead-stage-list-action",
       "type": "solid",
       "domain": "",
       "context": "",
       "customComponent": "",
-      "customIsModal": false,
+      "customIsModal": true,
       "serverEndpoint": "",
-      "viewUserKey": "lead-track-user-list-view",
+      "viewUserKey": "lead-stage-list-view",
       "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser"
+      "modelUserKey": "leadStage"
+    },
+    {
+      "displayName": "Lead Tree View Action",
+      "name": "lead-tree-action",
+      "type": "solid",
+      "domain": "",
+      "context": "",
+      "customComponent": "",
+      "customIsModal": true,
+      "serverEndpoint": "",
+      "viewUserKey": "lead-tree-view",
+      "moduleUserKey": "leadtrack",
+      "modelUserKey": "lead"
+    },
+    {
+      "displayName": "Follow-up Task Tree View Action",
+      "name": "followUpTask-tree-action",
+      "type": "solid",
+      "domain": "",
+      "context": "",
+      "customComponent": "",
+      "customIsModal": true,
+      "serverEndpoint": "",
+      "viewUserKey": "followUpTask-tree-view",
+      "moduleUserKey": "leadtrack",
+      "modelUserKey": "followUpTask"
     }
   ],
   "menus": [
     {
-      "displayName": "Analytics",
-      "name": "leadtrack-root-menu",
+      "displayName": "Dashboard",
+      "name": "leadTrackOverviewDashboard-menu-item",
       "sequenceNumber": 1,
-      "actionUserKey": "leadtrack-dashboard-action",
+      "actionUserKey": "leadTrackOverview-dashboard-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
-      "iconName": "leaderboard",
-      "roles": [
-        "SalesRepresentative"
-      ]
-    },
-    {
-      "displayName": "Dashboard",
-      "name": "leadtrack-dashboard-menu",
-      "sequenceNumber": 1,
-      "actionUserKey": "leadtrack-dashboard-action",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "leadtrack-root-menu",
-      "iconName": "dashboard",
-      "roles": [
-        "SalesRepresentative"
-      ]
+      "iconName": "dashboard"
     },
     {
       "displayName": "Sales",
-      "name": "sales-root-menu",
+      "name": "leadTrackSales-menu-item",
       "sequenceNumber": 2,
-      "actionUserKey": "lead-kanban-action",
+      "actionUserKey": "",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
       "iconName": "leaderboard",
@@ -636,75 +598,30 @@
     },
     {
       "displayName": "Pipeline",
-      "name": "lead-kanban-menu",
+      "name": "lead-kanban-menu-item",
       "sequenceNumber": 1,
       "actionUserKey": "lead-kanban-action",
       "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "sales-root-menu",
-      "iconName": "view_kanban",
-      "roles": [
-        "SalesRepresentative"
-      ]
+      "parentMenuItemUserKey": "leadTrackSales-menu-item",
+      "iconName": "view_kanban"
     },
     {
       "displayName": "Leads",
-      "name": "lead-list-menu",
+      "name": "lead-menu-item",
       "sequenceNumber": 2,
       "actionUserKey": "lead-list-action",
       "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "sales-root-menu",
-      "iconName": "person_search",
-      "roles": [
-        "SalesRepresentative"
-      ]
+      "parentMenuItemUserKey": "leadTrackSales-menu-item",
+      "iconName": "person_search"
     },
     {
       "displayName": "Follow-ups",
-      "name": "follow-up-task-menu",
+      "name": "followUpTask-menu-item",
       "sequenceNumber": 3,
-      "actionUserKey": "follow-up-task-list-action",
+      "actionUserKey": "followUpTask-list-action",
       "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "sales-root-menu",
-      "iconName": "event",
-      "roles": [
-        "SalesRepresentative"
-      ]
-    },
-    {
-      "displayName": "Users",
-      "name": "users-root-menu",
-      "sequenceNumber": 3,
-      "actionUserKey": "lead-track-user-list-action",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "",
-      "iconName": "group"
-    },
-    {
-      "displayName": "Configuration",
-      "name": "configuration-root-menu",
-      "sequenceNumber": 4,
-      "actionUserKey": "lead-stage-list-action",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "",
-      "iconName": "settings"
-    },
-    {
-      "displayName": "Lead Stages",
-      "name": "lead-stage-menu",
-      "sequenceNumber": 1,
-      "actionUserKey": "lead-stage-list-action",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "configuration-root-menu",
-      "iconName": "view_column"
-    },
-    {
-      "displayName": "LeadTrack User",
-      "name": "lead-track-user-menu",
-      "sequenceNumber": 1,
-      "actionUserKey": "lead-track-user-list-action",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "users-root-menu",
-      "iconName": "person"
+      "parentMenuItemUserKey": "leadTrackSales-menu-item",
+      "iconName": "event"
     }
   ],
   "views": [
@@ -783,7 +700,8 @@
             "attrs": {
               "name": "owner",
               "sortable": true,
-              "isSearchable": true
+              "isSearchable": true,
+              "coModelFieldToDisplay": "fullName"
             }
           },
           {
@@ -866,6 +784,13 @@
               {
                 "type": "field",
                 "attrs": {
+                  "name": "industry",
+                  "isSearchable": true
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
                   "name": "dealValue"
                 }
               },
@@ -878,7 +803,26 @@
               {
                 "type": "field",
                 "attrs": {
-                  "name": "owner"
+                  "name": "source"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "phone"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "email"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "owner",
+                  "coModelFieldToDisplay": "fullName"
                 }
               },
               {
@@ -1081,7 +1025,7 @@
                                     "attrs": {
                                       "name": "owner",
                                       "isSearchable": true,
-                                      "searchField": "owner.name",
+                                      "searchField": "owner.fullName",
                                       "coModelFieldToDisplay": "fullName"
                                     }
                                   }
@@ -1213,7 +1157,7 @@
                         "type": "field",
                         "attrs": {
                           "name": "tasks",
-                          "inlineCreate": "true"
+                          "inlineCreate": false
                         }
                       }
                     ]
@@ -1226,7 +1170,7 @@
       }
     },
     {
-      "name": "follow-up-task-list-view",
+      "name": "followUpTask-list-view",
       "displayName": "Follow-ups",
       "type": "list",
       "context": "{}",
@@ -1254,8 +1198,8 @@
             "attrs": {
               "name": "lead",
               "isSearchable": true,
-              "searchField": "lead.name",
-              "coModelFieldToDisplay": "name"
+              "searchField": "lead.email",
+              "coModelFieldToDisplay": "email"
             }
           },
           {
@@ -1279,19 +1223,12 @@
               "searchField": "assignedTo.fullName",
               "coModelFieldToDisplay": "fullName"
             }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "isCompleted",
-              "sortable": true
-            }
           }
         ]
       }
     },
     {
-      "name": "follow-up-task-form-view",
+      "name": "followUpTask-form-view",
       "displayName": "Follow-up",
       "type": "form",
       "context": "{}",
@@ -1330,7 +1267,9 @@
                         "type": "field",
                         "attrs": {
                           "name": "lead",
-                          "coModelFieldToDisplay": "name"
+                          "isSearchable": true,
+                          "searchField": "lead.email",
+                          "coModelFieldToDisplay": "email"
                         }
                       }
                     ]
@@ -1417,7 +1356,8 @@
                         "type": "field",
                         "attrs": {
                           "name": "assignedTo",
-                          "coModelFieldToDisplay": "fullName"
+                          "coModelFieldToDisplay": "fullName",
+                          "isSearchable": "true"
                         }
                       }
                     ]
@@ -1444,13 +1384,14 @@
                     "type": "column",
                     "attrs": {
                       "name": "status-column",
-                      "className": "col-12"
+                      "className": "col-12 md:col-6"
                     },
                     "children": [
                       {
                         "type": "field",
                         "attrs": {
-                          "name": "status"
+                          "name": "status",
+                          "isSearchable": "true"
                         }
                       }
                     ]
@@ -1586,26 +1527,33 @@
       }
     },
     {
-      "name": "lead-track-user-list-view",
-      "displayName": "LeadTrack Users",
+      "name": "lead-stage-list-view",
+      "displayName": "Lead Stages",
       "type": "list",
       "context": "{}",
       "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser",
+      "modelUserKey": "leadStage",
       "layout": {
-        "type": "list",
+        "type": "tree",
         "attrs": {
           "pagination": true,
+          "pageSizeOptions": [
+            10,
+            25,
+            50
+          ],
           "enableGlobalSearch": true,
           "create": true,
           "edit": true,
-          "delete": false
+          "delete": true,
+          "defaultSort": "sequence:asc"
         },
         "children": [
           {
             "type": "field",
             "attrs": {
-              "name": "fullName",
+              "name": "name",
+              "sortable": true,
               "isSearchable": true
             }
           },
@@ -1619,53 +1567,51 @@
           {
             "type": "field",
             "attrs": {
-              "name": "userType",
-              "sortable": true
+              "name": "company"
             }
           }
         ]
       }
     },
     {
-      "name": "lead-track-user-form-view",
-      "displayName": "LeadTrack User",
+      "name": "lead-stage-form-view",
+      "displayName": "Lead Stage",
       "type": "form",
       "context": "{}",
       "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser",
+      "modelUserKey": "leadStage",
       "layout": {
         "type": "form",
         "attrs": {
-          "name": "lead-track-user-form",
-          "label": "LeadTrack User",
+          "name": "lead-stage-form",
+          "label": "Lead Stage",
           "className": "grid"
         },
         "children": [
           {
-            "type": "group",
+            "type": "field",
             "attrs": {
-              "name": "basic-info",
-              "label": "Basic Info",
-              "className": "user-form-section"
+              "name": "stage-settings",
+              "label": "Stage Settings"
             },
             "children": [
               {
                 "type": "row",
                 "attrs": {
-                  "name": "lead-track-user-row-identity"
+                  "name": "stage-identity-row"
                 },
                 "children": [
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "lead-track-user-full-name-column",
+                      "name": "stage-name-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
                       {
                         "type": "field",
                         "attrs": {
-                          "name": "fullName"
+                          "name": "name"
                         }
                       }
                     ]
@@ -1673,14 +1619,14 @@
                   {
                     "type": "column",
                     "attrs": {
-                      "name": "lead-track-user-username-column",
+                      "name": "stage-after-column",
                       "className": "col-12 md:col-6"
                     },
                     "children": [
                       {
                         "type": "field",
                         "attrs": {
-                          "name": "username"
+                          "name": "afterStage"
                         }
                       }
                     ]
@@ -1766,37 +1712,29 @@
             ]
           },
           {
-            "type": "group",
+            "type": "field",
             "attrs": {
-              "name": "roles",
-              "label": "Roles",
-              "className": "user-role-section"
-            },
-            "children": [
-              {
-                "type": "row",
-                "attrs": {
-                  "name": "lead-track-user-row-role"
-                },
-                "children": [
-                  {
-                    "type": "column",
-                    "attrs": {
-                      "name": "lead-track-user-role-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "userType"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
+              "name": "dueDate"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "completedAt"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "outcomeNotes"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "assignedTo",
+              "coModelFieldToDisplay": "fullName"
+            }
           }
         ]
       }
@@ -1980,8 +1918,6 @@
         "email": "admin@leadtrack.local",
         "password": "Test@1234",
         "fullName": "LeadTrack Admin",
-        "isExtensionUser": true,
-        "userType": "Admin",
         "roles": [
           "Admin"
         ]
@@ -1991,8 +1927,6 @@
         "email": "sales@leadtrack.local",
         "password": "Test@1234",
         "fullName": "Sales Representative",
-        "isExtensionUser": true,
-        "userType": "SalesRepresentative",
         "roles": [
           "SalesRepresentative"
         ]
@@ -2028,8 +1962,8 @@
           "dealValue": 420000,
           "currency": "INR",
           "source": "Email",
-          "stageUserKey": "Follow up",
-          "ownerUserKey": "sales@leadtrack.local",
+          "stage": "FollowUp",
+          "ownerUserKey": "leadtrackSales",
           "remarks": "Pricing follow-up due."
         }
       },
@@ -2046,7 +1980,7 @@
           "currency": "INR",
           "source": "Referral",
           "stageUserKey": "Meeting Pending",
-          "ownerUserKey": "sales@leadtrack.local",
+          "ownerUserKey": "leadtrackSales",
           "remarks": "Decision-maker meeting scheduled."
         }
       },
@@ -2058,8 +1992,7 @@
           "title": "Call Aarav re product overview",
           "channel": "Call",
           "dueDate": "2026-09-18T05:30:00.000Z",
-          "isCompleted": false,
-          "assignedToUserKey": "sales@leadtrack.local"
+          "assignedToUserKey": "leadtrackSales"
         }
       },
       {
@@ -2070,8 +2003,7 @@
           "title": "Send Diya revised pricing",
           "channel": "Email",
           "dueDate": "2026-09-17T09:30:00.000Z",
-          "isCompleted": false,
-          "assignedToUserKey": "sales@leadtrack.local"
+          "assignedToUserKey": "leadtrackSales"
         }
       }
     ],
@@ -2111,8 +2043,6 @@
     "DashboardController.getVariableOptions",
     "DashboardController.getLayout",
     "DashboardController.saveLayout",
-    "ImportTransactionController.*",
-    "ExportTemplateController.*",
     "dashboard:leadtrack-overview:*"
   ]
 }

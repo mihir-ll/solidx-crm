@@ -1,4 +1,4 @@
-import { CommonEntity } from '@solidxai/core';
+import { CommonEntity, User } from '@solidxai/core';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -9,39 +9,39 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { LeadTrackUser } from './lead-track-user.entity';
 import { FollowUpTask } from './follow-up-task.entity';
 import { LeadStage } from './lead-stage.entity';
 
 @Entity('leadtrack_lead')
+@Index(["email", "deletedTracker"], { unique: true })
 export class Lead extends CommonEntity {
-  @Index()
-  @Column({ type: 'varchar', length: 120 })
-  name: string;
+    @Index()
+    @Column({ type: "varchar", length: 120 })
+    name: string;
 
-  @Index()
-  @Column({ type: 'varchar', length: 120, nullable: true })
-  company?: string;
+    @Index()
+    @Column({ type: "varchar", nullable: true, length: 120 })
+    company?: string;
 
-  @Column({ type: 'varchar', length: 120, nullable: true })
-  industry?: string;
+    @Column({ type: "varchar", nullable: true })
+    industry?: string;
 
-  @Index()
-  @Column({ type: 'varchar', nullable: true })
-  email?: string;
+    @Index()
+    @Column({ type: "varchar", length: 254, nullable: true })
+    email?: string;
 
-  @Column({ type: 'varchar', length: 20 })
-  phone: string;
+    @Column({ type: "varchar", length: 20 })
+    phone: string;
 
-  @Column({ type: 'decimal', precision: 15, scale: 2, nullable: true })
-  dealValue?: string;
+    @Column({ type: "decimal", nullable: true, precision: 15, scale: 2 })
+    dealValue?: number;
 
-  @Column({ type: 'varchar', length: 3, default: 'INR' })
-  currency = 'INR';
+    @Column({ type: "varchar", default: "INR" })
+    currency: string = "INR";
 
-  @Index()
-  @Column({ type: 'varchar' })
-  source: string;
+    @Index()
+    @Column({ type: "varchar" })
+    source: string;
 
   @Column({ type: 'date', nullable: true })
   expectedCloseDate?: Date;
@@ -57,13 +57,13 @@ export class Lead extends CommonEntity {
   @JoinColumn({ name: 'stage_id' })
   stage: LeadStage;
 
-  @Index()
-  @ManyToOne(() => LeadTrackUser, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn()
-  owner: LeadTrackUser;
+    @Index()
+    @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
+    @JoinColumn()
+    owner: User;
 
-  @Column({ type: 'text', nullable: true })
-  remarks?: string;
+    @Column({ type: "text", nullable: true })
+    remarks?: string;
 
   @OneToMany(() => FollowUpTask, (task) => task.lead)
   tasks: FollowUpTask[];

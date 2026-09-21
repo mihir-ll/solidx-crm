@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
@@ -10,8 +10,10 @@ import {
   IsOptional,
   IsString,
   MaxLength,
-  Min,
+  Min, ValidateNested, IsArray,
 } from 'class-validator';
+import { emptyStringToNullTransformer } from '@solidxai/core';
+import { UpdateFollowUpTaskDto } from './update-follow-up-task.dto';
 
 export class CreateLeadDto {
   @ApiProperty() @IsString() @IsNotEmpty() @MaxLength(120) name: string;
@@ -41,7 +43,7 @@ export class CreateLeadDto {
   @Type(() => Date)
   @IsDate()
   expectedCloseDate?: Date;
-  @ApiPropertyOptional({ description: 'Lead stage record ID' })
+   @ApiPropertyOptional({ description: 'Lead stage record ID' })
   @IsOptional()
   @Type(() => Number)
   @IsInt()

@@ -12,26 +12,58 @@ import {
 } from 'class-validator';
 
 export class CreateFollowUpTaskDto {
-  @ApiProperty() @Type(() => Number) @IsInt() leadId: number;
-  @ApiProperty() @IsString() @IsNotEmpty() @MaxLength(160) title: string;
-  @ApiPropertyOptional({ default: 'Call' })
-  @IsOptional()
-  @IsIn(['Call', 'Email', 'LinkedIn', 'WhatsApp', 'Meeting', 'Other'])
-  channel = 'Call';
-  @ApiProperty() @Type(() => Date) @IsDate() dueDate: Date;
-  @ApiPropertyOptional({ default: false })
-  @IsOptional()
-  @IsBoolean()
-  isCompleted : boolean;
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  completedAt?: Date;
-  @ApiPropertyOptional() @IsOptional() @IsString() outcomeNotes?: string;
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  assignedToId?: number;
+    @ApiProperty()
+    @Type(() => Number)
+    @IsInt()
+    leadId: number;
+
+    @MaxLength(160)
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    title: string;
+
+    @ApiPropertyOptional({ default: 'Call' })
+    @IsIn(['Call', 'Email', 'LinkedIn', 'WhatsApp', 'Meeting', 'Other'])
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty()
+    channel: string = "Call";
+
+    @Type(() => Date)
+    @IsNotEmpty()
+    @IsDate()
+    @ApiProperty()
+    dueDate: Date;
+
+    @ApiPropertyOptional({ default: false })
+    @IsNotEmpty()
+    @IsBoolean()
+    @ApiProperty()
+    isCompleted: boolean = false;
+
+    @ApiPropertyOptional()
+    @Type(() => Date)
+    @IsOptional()
+    @IsDate()
+    @ApiProperty()
+    completedAt?: Date;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    outcomeNotes?: string;
+
+    @ApiPropertyOptional()
+    @Type(() => Number)
+    @IsOptional()
+    @IsInt()
+    @ApiProperty()
+    assignedToId?: number;
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    assignedToUserKey: string;
 }
