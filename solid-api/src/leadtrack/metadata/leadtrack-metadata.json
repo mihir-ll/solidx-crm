@@ -9,55 +9,10 @@
     "isSystem": false,
     "models": [
       {
-        "singularName": "leadTrackUser",
-        "pluralName": "leadTrackUsers",
-        "displayName": "LeadTrack User",
-        "description": "LeadTrack user profile extending the SolidX user model.",
-        "dataSource": "default",
-        "dataSourceType": "postgres",
-        "isChild": true,
-        "parentModelUserKey": "user",
-        "userKeyFieldUserKey": "leadTrackUserKey",
-        "enableAuditTracking": false,
-        "enableSoftDelete": false,
-        "fields": [
-          {
-            "name": "leadTrackUserKey",
-            "displayName": "User Key",
-            "type": "computed",
-            "ormType": "varchar",
-            "computedFieldValueType": "string",
-            "computedFieldValueProvider": "ConcatEntityComputedFieldProvider",
-            "computedFieldValueProviderCtxt": "{\"fields\":[\"email\"],\"separator\":\"-\",\"slugify\":true}",
-            "required": true,
-            "unique": true,
-            "index": true,
-            "isUserKey": true,
-            "enableAuditTracking": false
-          },
-          {
-            "name": "userType",
-            "displayName": "Role",
-            "type": "selectionStatic",
-            "ormType": "varchar",
-            "selectionStaticValues": [
-              "Admin:Admin",
-              "SalesRepresentative:Sales Representative"
-            ],
-            "selectionValueType": "string",
-            "defaultValue": "SalesRepresentative",
-            "required": true,
-            "unique": false,
-            "index": true,
-            "enableAuditTracking": false
-          }
-        ]
-      },
-      {
         "singularName": "lead",
         "pluralName": "leads",
         "displayName": "Lead",
-        "description": "A sales prospect assigned to a LeadTrack user.",
+        "description": "A sales prospect assigned to a Solid user.",
         "dataSource": "default",
         "dataSourceType": "postgres",
         "tableName": "leadtrack_lead",
@@ -207,8 +162,8 @@
             "ormType": "integer",
             "relationType": "many-to-one",
             "relationCreateInverse": false,
-            "relationCoModelSingularName": "leadTrackUser",
-            "relationModelModuleName": "leadtrack",
+            "relationCoModelSingularName": "user",
+            "relationModelModuleName": "solid-core",
             "relationCascade": null,
             "required": true,
             "unique": false,
@@ -358,8 +313,8 @@
             "ormType": "integer",
             "relationType": "many-to-one",
             "relationCreateInverse": false,
-            "relationCoModelSingularName": "leadTrackUser",
-            "relationModelModuleName": "leadtrack",
+            "relationCoModelSingularName": "user",
+            "relationModelModuleName": "solid-core",
             "required": false,
             "unique": false,
             "index": true,
@@ -375,7 +330,6 @@
       "permissions": [
         "LeadController.*",
         "FollowUpTaskController.*",
-        "LeadTrackUserController.*",
         "DashboardController.*",
         "dashboard:leadtrack-overview:*",
         "ImportTransactionController.*",
@@ -405,7 +359,6 @@
       "email": "admin@leadtrack.local",
       "password": "Test@1234",
       "fullName": "LeadTrack Admin",
-      "userType": "Admin",
       "roles": [
         "Admin"
       ]
@@ -415,7 +368,6 @@
       "email": "sales@leadtrack.local",
       "password": "Test@1234",
       "fullName": "Sales Representative",
-      "userType": "SalesRepresentative",
       "roles": [
         "SalesRepresentative"
       ]
@@ -475,19 +427,6 @@
       "modelUserKey": "followUpTask"
     },
     {
-      "displayName": "LeadTrack Users",
-      "name": "leadTrackUser-list-action",
-      "type": "solid",
-      "domain": "",
-      "context": "",
-      "customComponent": "",
-      "customIsModal": false,
-      "serverEndpoint": "",
-      "viewUserKey": "leadTrackUser-list-view",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser"
-    },
-    {
       "displayName": "Lead Tree View Action",
       "name": "lead-tree-action",
       "type": "solid",
@@ -512,38 +451,16 @@
       "viewUserKey": "followUpTask-tree-view",
       "moduleUserKey": "leadtrack",
       "modelUserKey": "followUpTask"
-    },
-    {
-      "displayName": "LeadTrack User Tree View Action",
-      "name": "leadTrackUser-tree-action",
-      "type": "solid",
-      "domain": "",
-      "context": "",
-      "customComponent": "",
-      "customIsModal": true,
-      "serverEndpoint": "",
-      "viewUserKey": "leadTrackUser-tree-view",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser"
     }
   ],
   "menus": [
-    {
-      "displayName": "Analytics",
-      "name": "leadTrackAnalytics-menu-item",
-      "sequenceNumber": 1,
-      "actionUserKey": "",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "",
-      "iconName": "analytics"
-    },
     {
       "displayName": "Dashboard",
       "name": "leadTrackOverviewDashboard-menu-item",
       "sequenceNumber": 1,
       "actionUserKey": "leadTrackOverview-dashboard-action",
       "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "leadTrackAnalytics-menu-item",
+      "parentMenuItemUserKey": "",
       "iconName": "dashboard"
     },
     {
@@ -581,24 +498,6 @@
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
       "iconName": "event"
-    },
-    {
-      "displayName": "Users",
-      "name": "leadTrackUsers-menu-item",
-      "sequenceNumber": 3,
-      "actionUserKey": "",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "",
-      "iconName": "group"
-    },
-    {
-      "displayName": "LeadTrack Users",
-      "name": "leadTrackUser-menu-item",
-      "sequenceNumber": 1,
-      "actionUserKey": "leadTrackUser-list-action",
-      "moduleUserKey": "leadtrack",
-      "parentMenuItemUserKey": "leadTrackUsers-menu-item",
-      "iconName": "person"
     }
   ],
   "views": [
@@ -677,7 +576,8 @@
             "attrs": {
               "name": "owner",
               "sortable": true,
-              "isSearchable": true
+              "isSearchable": true,
+              "coModelFieldToDisplay": "fullName"
             }
           },
           {
@@ -759,6 +659,13 @@
               {
                 "type": "field",
                 "attrs": {
+                  "name": "industry",
+                  "isSearchable": true
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
                   "name": "dealValue"
                 }
               },
@@ -771,7 +678,26 @@
               {
                 "type": "field",
                 "attrs": {
-                  "name": "owner"
+                  "name": "source"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "phone"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "email"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "owner",
+                  "coModelFieldToDisplay": "fullName"
                 }
               }
             ]
@@ -968,7 +894,7 @@
                                     "attrs": {
                                       "name": "owner",
                                       "isSearchable": true,
-                                      "searchField": "owner.name",
+                                      "searchField": "owner.fullName",
                                       "coModelFieldToDisplay": "fullName"
                                     }
                                   }
@@ -1141,8 +1067,8 @@
             "attrs": {
               "name": "lead",
               "isSearchable": true,
-              "searchField": "lead.name",
-              "coModelFieldToDisplay": "name"
+              "searchField": "lead.email",
+              "coModelFieldToDisplay": "email"
             }
           },
           {
@@ -1165,13 +1091,6 @@
               "isSearchable": true,
               "searchField": "assignedTo.fullName",
               "coModelFieldToDisplay": "fullName"
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "isCompleted",
-              "sortable": true
             }
           }
         ]
@@ -1217,7 +1136,9 @@
                         "type": "field",
                         "attrs": {
                           "name": "lead",
-                          "isSearchable": "true"
+                          "isSearchable": true,
+                          "searchField": "lead.email",
+                          "coModelFieldToDisplay": "email"
                         }
                       }
                     ]
@@ -1375,222 +1296,6 @@
       }
     },
     {
-      "name": "leadTrackUser-list-view",
-      "displayName": "LeadTrack Users",
-      "type": "list",
-      "context": "{}",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser",
-      "layout": {
-        "type": "list",
-        "attrs": {
-          "pagination": true,
-          "enableGlobalSearch": true,
-          "create": true,
-          "edit": true,
-          "delete": false
-        },
-        "children": [
-          {
-            "type": "field",
-            "attrs": {
-              "name": "fullName",
-              "isSearchable": true
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "email",
-              "isSearchable": true
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "userType",
-              "sortable": true
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "leadTrackUser-form-view",
-      "displayName": "LeadTrack User",
-      "type": "form",
-      "context": "{}",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser",
-      "layout": {
-        "type": "form",
-        "attrs": {
-          "name": "lead-track-user-form",
-          "label": "LeadTrack User",
-          "className": "grid"
-        },
-        "children": [
-          {
-            "type": "group",
-            "attrs": {
-              "name": "basic-info",
-              "label": "Basic Info",
-              "className": "user-form-section"
-            },
-            "children": [
-              {
-                "type": "row",
-                "attrs": {
-                  "name": "lead-track-user-row-identity"
-                },
-                "children": [
-                  {
-                    "type": "column",
-                    "attrs": {
-                      "name": "lead-track-user-full-name-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "fullName"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "column",
-                    "attrs": {
-                      "name": "lead-track-user-username-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "username"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "row",
-                "attrs": {
-                  "name": "lead-track-user-row-contact"
-                },
-                "children": [
-                  {
-                    "type": "column",
-                    "attrs": {
-                      "name": "lead-track-user-email-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "email"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "column",
-                    "attrs": {
-                      "name": "lead-track-user-mobile-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "mobile"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "row",
-                "attrs": {
-                  "name": "lead-track-user-row-password"
-                },
-                "children": [
-                  {
-                    "type": "row",
-                    "attrs": {
-                      "name": "lead-track-user-password-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "password"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "row",
-                    "attrs": {
-                      "name": "lead-track-user-confirm-password-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "confirmPassword"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "attrs": {
-              "name": "roles",
-              "label": "Roles",
-              "className": "user-role-section"
-            },
-            "children": [
-              {
-                "type": "row",
-                "attrs": {
-                  "name": "lead-track-user-row-role"
-                },
-                "children": [
-                  {
-                    "type": "column",
-                    "attrs": {
-                      "name": "lead-track-user-role-column",
-                      "className": "col-12 md:col-6"
-                    },
-                    "children": [
-                      {
-                        "type": "field",
-                        "attrs": {
-                          "name": "userType"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "name": "lead-tree-view",
       "displayName": "Lead",
       "type": "tree",
@@ -1681,7 +1386,8 @@
           {
             "type": "field",
             "attrs": {
-              "name": "owner"
+              "name": "owner",
+              "coModelFieldToDisplay": "fullName"
             }
           },
           {
@@ -1730,7 +1436,8 @@
           {
             "type": "field",
             "attrs": {
-              "name": "lead"
+              "name": "lead",
+              "coModelFieldToDisplay": "email"
             }
           },
           {
@@ -1754,12 +1461,6 @@
           {
             "type": "field",
             "attrs": {
-              "name": "isCompleted"
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
               "name": "completedAt"
             }
           },
@@ -1772,50 +1473,8 @@
           {
             "type": "field",
             "attrs": {
-              "name": "assignedTo"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "leadTrackUser-tree-view",
-      "displayName": "LeadTrack User",
-      "type": "tree",
-      "context": "{}",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "leadTrackUser",
-      "layout": {
-        "type": "tree",
-        "attrs": {
-          "pagination": true,
-          "pageSizeOptions": [
-            10,
-            25,
-            50
-          ],
-          "enableGlobalSearch": true,
-          "create": true,
-          "edit": true,
-          "delete": true
-        },
-        "children": [
-          {
-            "type": "field",
-            "attrs": {
-              "name": "id"
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "leadTrackUserKey"
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "userType"
+              "name": "assignedTo",
+              "coModelFieldToDisplay": "fullName"
             }
           }
         ]
@@ -2000,7 +1659,6 @@
         "email": "admin@leadtrack.local",
         "password": "Test@1234",
         "fullName": "LeadTrack Admin",
-        "userType": "Admin",
         "roles": [
           "Admin"
         ]
@@ -2010,7 +1668,6 @@
         "email": "sales@leadtrack.local",
         "password": "Test@1234",
         "fullName": "Sales Representative",
-        "userType": "SalesRepresentative",
         "roles": [
           "SalesRepresentative"
         ]
@@ -2047,7 +1704,7 @@
           "currency": "INR",
           "source": "Email",
           "stage": "FollowUp",
-          "ownerUserKey": "sales@leadtrack.local",
+          "ownerUserKey": "leadtrackSales",
           "remarks": "Pricing follow-up due."
         }
       },
@@ -2064,7 +1721,7 @@
           "currency": "INR",
           "source": "Referral",
           "stage": "MeetingPending",
-          "ownerUserKey": "sales@leadtrack.local",
+          "ownerUserKey": "leadtrackSales",
           "remarks": "Decision-maker meeting scheduled."
         }
       },
@@ -2076,8 +1733,7 @@
           "title": "Call Aarav re product overview",
           "channel": "Call",
           "dueDate": "2026-09-18T05:30:00.000Z",
-          "isCompleted": false,
-          "assignedToUserKey": "sales@leadtrack.local"
+          "assignedToUserKey": "leadtrackSales"
         }
       },
       {
@@ -2088,26 +1744,19 @@
           "title": "Send Diya revised pricing",
           "channel": "Email",
           "dueDate": "2026-09-17T09:30:00.000Z",
-          "isCompleted": false,
-          "assignedToUserKey": "sales@leadtrack.local"
+          "assignedToUserKey": "leadtrackSales"
         }
       }
     ],
     "scenarios": []
   },
   "permissions": [
-    "LeadController.*",
-    "FollowUpTaskController.*",
-    "LeadTrackUserController.*",
-    "DashboardController.*",
     "DashboardController.getDefinition",
     "DashboardController.getWidgetData",
     "DashboardController.getDashboardData",
     "DashboardController.getVariableOptions",
     "DashboardController.getLayout",
     "DashboardController.saveLayout",
-    "ImportTransactionController.*",
-    "ExportTemplateController.*",
     "dashboard:leadtrack-overview:*"
   ]
 }

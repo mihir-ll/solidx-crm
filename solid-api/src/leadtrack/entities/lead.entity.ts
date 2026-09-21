@@ -1,4 +1,4 @@
-import { CommonEntity } from '@solidxai/core';
+import { CommonEntity, User } from '@solidxai/core';
 import {
   Column,
   Entity,
@@ -7,7 +7,6 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { LeadTrackUser } from './lead-track-user.entity';
 import { FollowUpTask } from './follow-up-task.entity';
 
 export type LeadStage =
@@ -59,9 +58,9 @@ export class Lead extends CommonEntity {
     stage: string = "New";
 
     @Index()
-    @ManyToOne(() => LeadTrackUser, { nullable: false, onDelete: 'RESTRICT' })
+    @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
     @JoinColumn()
-    owner: LeadTrackUser;
+    owner: User;
 
     @Column({ type: "text", nullable: true })
     remarks?: string;
