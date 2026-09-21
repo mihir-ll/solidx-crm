@@ -20,4 +20,4 @@ Before first use, run the LeadTrack metadata seed command inside the API contain
 
 ## Import format
 
-The built-in importer accepts CSV/XLSX columns matching: `name`, `company`, `industry`, `email`, `phone`, `dealValue`, `currency`, `source`, `expectedCloseDate`, `stage`, `ownerUserKey`, and `remarks`. Allowed source/stage values are defined in `solid-api/src/leadtrack/metadata/leadtrack-metadata.json`.
+The built-in importer accepts CSV/XLSX columns matching: `name`, `company`, `industry`, `email`, `phone`, `dealValue`, `currency`, `source`, `expectedCloseDate`, `stageUserKey`, `ownerUserKey`, and `remarks`. `stageUserKey` is the stage name configured under Configuration > Lead Stages.
