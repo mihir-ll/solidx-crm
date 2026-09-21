@@ -50,10 +50,11 @@ export class LeadService extends CRUDService<Lead> {
     delete dto.stage;
 
     if (applyDefault && dto.stageId == null) {
-      const defaultStage = await this.leadEntityManager
+      const [defaultStage] = await this.leadEntityManager
         .getRepository(LeadStage)
-        .findOne({
+        .find({
           order: { sequence: 'ASC' },
+          take: 1,
         });
       if (defaultStage) dto.stageId = defaultStage.id;
     }

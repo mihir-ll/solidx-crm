@@ -1,16 +1,16 @@
 Contact Name,Company,Industry,Email,Phone,Deal Value,Currency,Lead Source,Expected Close Date,Pipeline Stage,Owner,Remarks
-Ananya Desai,BluePeak Technologies,Software,ananya.desai@example.test,919810000101,450000,INR,LinkedIn,2026-10-15,new,aisha.khan@leadtrack.test,Requested a product overview and pricing details.
-Vikram Rao,Northstar Logistics,Logistics,vikram.rao@example.test,919810000102,725000,INR,PhoneCall,2026-10-22,firstContactPending,rohan.mehta@leadtrack.test,Initial call attempted; reconnect after business hours.
-Meera Nair,GreenLeaf Foods,Food and Beverage,meera.nair@example.test,919810000103,380000,INR,Referral,2026-10-30,followUp,neha.iyer@leadtrack.test,"Referral from an existing customer, needs a tailored demonstration."
-Kabir Malhotra,UrbanHive Realty,Real Estate,kabir.malhotra@example.test,919810000104,1250000,INR,WhatsApp,2026-11-05,meetingSet,arjun.patel@leadtrack.test,Discovery meeting scheduled with the operations team.
-Sneha Kulkarni,FinEdge Advisory,Financial Services,sneha.kulkarni@example.test,919810000105,980000,INR,Email,2026-11-12,meetingPending,aisha.khan@leadtrack.test,Waiting for confirmation from the finance director.
-Rahul Bose,CloudNine Retail,Retail,rahul.bose@example.test,919810000106,1600000,INR,LinkedIn,2026-11-20,opportunityGenerated,rohan.mehta@leadtrack.test,Proposal requested for twelve regional locations.
-Ishita Sen,MedAxis Clinics,Healthcare,ishita.sen@example.test,919810000107,2100000,INR,Referral,2026-12-01,opportunityGenerated,neha.iyer@leadtrack.test,Decision committee requires security and compliance documentation.
-Dev Verma,ForgeWorks Manufacturing,Manufacturing,dev.verma@example.test,919810000108,875000,INR,PhoneCall,2026-10-28,followUp,arjun.patel@leadtrack.test,Send integration checklist before the next call.
-Sara Thomas,LearnSphere Academy,Education,sara.thomas@example.test,919810000109,520000,INR,Email,2026-11-18,meetingSet,aisha.khan@leadtrack.test,Demo should focus on reporting and user management.
-Aditya Joshi,PixelCraft Studio,Media and Design,aditya.joshi@example.test,919810000110,240000,INR,Other,2026-10-10,dead,rohan.mehta@leadtrack.test,Budget was reassigned to another initiative.
-Pooja Menon,SunRoute Energy,Renewable Energy,pooja.menon@example.test,919810000111,1850000,INR,WhatsApp,2026-12-15,firstContactPending,neha.iyer@leadtrack.test,Asked to reconnect after the quarterly planning meeting.
-Nikhil Kapoor,Example Invalid Company,Unknown,nikhil.kapoor@example.test,919810000112,100000,INR,Other,2026-10-05,wrongLeadInfo,arjun.patel@leadtrack.test,Contact confirmed that the enquiry was submitted in error.
-Emily Carter,Atlas Research,Research,emily.carter@example.test,14155550101,32000,USD,LinkedIn,2026-12-20,new,aisha.khan@leadtrack.test,International lead evaluating the USD proposal option.
-Oliver Brown,Harbor Consulting,Consulting,oliver.brown@example.test,442071234567,28000,GBP,Referral,2026-12-10,meetingPending,rohan.mehta@leadtrack.test,Consulting partner evaluating a multi-client rollout.
-Layla Hassan,DesertLink Trading,Wholesale,layla.hassan@example.test,971501234567,145000,AED,Email,2026-11-28,followUp,neha.iyer@leadtrack.test,Requested commercial terms for the UAE team.
+Ananya Desai,BluePeak Technologies,Software,ananya.desai@example.test,919810000101,450000,INR,LinkedIn,2026-10-15,New,aisha.khan,Requested a product overview and pricing details.
+Vikram Rao,Northstar Logistics,Logistics,vikram.rao@example.test,919810000102,725000,INR,PhoneCall,2026-10-22,First Contact Pending,rohan.mehta,Initial call attempted; reconnect after business hours.
+Meera Nair,GreenLeaf Foods,Food and Beverage,meera.nair@example.test,919810000103,380000,INR,Referral,2026-10-30,Follow up,neha.iyer,"Referral from an existing customer, needs a tailored demonstration."
+Kabir Malhotra,UrbanHive Realty,Real Estate,kabir.malhotra@example.test,919810000104,1250000,INR,WhatsApp,2026-11-05,Meeting Set,arjun.patel,Discovery meeting scheduled with the operations team.
+Sneha Kulkarni,FinEdge Advisory,Financial Services,sneha.kulkarni@example.test,919810000105,980000,INR,Email,2026-11-12,Meeting Pending,aisha.khan,Waiting for confirmation from the finance director.
+Rahul Bose,CloudNine Retail,Retail,rahul.bose@example.test,919810000106,1600000,INR,LinkedIn,2026-11-20,Opportunity Generated,rohan.mehta,Proposal requested for twelve regional locations.
+Ishita Sen,MedAxis Clinics,Healthcare,ishita.sen@example.test,919810000107,2100000,INR,Referral,2026-12-01,Opportunity Generated,neha.iyer,Decision committee requires security and compliance documentation.
+Dev Verma,ForgeWorks Manufacturing,Manufacturing,dev.verma@example.test,919810000108,875000,INR,PhoneCall,2026-10-28,Follow up,arjun.patel,Send integration checklist before the next call.
+Sara Thomas,LearnSphere Academy,Education,sara.thomas@example.test,919810000109,520000,INR,Email,2026-11-18,Meeting Set,aisha.khan,Demo should focus on reporting and user management.
+Aditya Joshi,PixelCraft Studio,Media and Design,aditya.joshi@example.test,919810000110,240000,INR,Other,2026-10-10,Dead,rohan.mehta,Budget was reassigned to another initiative.
+Pooja Menon,SunRoute Energy,Renewable Energy,pooja.menon@example.test,919810000111,1850000,INR,WhatsApp,2026-12-15,First Contact Pending,neha.iyer,Asked to reconnect after the quarterly planning meeting.
+Nikhil Kapoor,Example Invalid Company,Unknown,nikhil.kapoor@example.test,919810000112,100000,INR,Other,2026-10-05,Wrong Lead Info,arjun.patel,Contact confirmed that the enquiry was submitted in error.
+Emily Carter,Atlas Research,Research,emily.carter@example.test,14155550101,32000,USD,LinkedIn,2026-12-20,New,aisha.khan,International lead evaluating the USD proposal option.
+Oliver Brown,Harbor Consulting,Consulting,oliver.brown@example.test,442071234567,28000,GBP,Referral,2026-12-10,Meeting Pending,rohan.mehta,Consulting partner evaluating a multi-client rollout.
+Layla Hassan,DesertLink Trading,Wholesale,layla.hassan@example.test,971501234567,145000,AED,Email,2026-11-28,Follow up,neha.iyer,Requested commercial terms for the UAE team.
