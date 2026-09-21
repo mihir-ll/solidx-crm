@@ -1,5 +1,7 @@
 import { CommonEntity } from '@solidxai/core';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -9,16 +11,7 @@ import {
 } from 'typeorm';
 import { LeadTrackUser } from './lead-track-user.entity';
 import { FollowUpTask } from './follow-up-task.entity';
-
-export type LeadStage =
-  | 'New'
-  | 'FirstContactPending'
-  | 'FollowUp'
-  | 'MeetingSet'
-  | 'MeetingPending'
-  | 'OpportunityGenerated'
-  | 'Dead'
-  | 'WrongLeadInfo';
+import { LeadStage } from './lead-stage.entity';
 
 @Entity('leadtrack_lead')
 export class Lead extends CommonEntity {
@@ -53,9 +46,16 @@ export class Lead extends CommonEntity {
   @Column({ type: 'date', nullable: true })
   expectedCloseDate?: Date;
 
+  @Column({ name: 'stage', type: 'varchar', default: 'New' })
+  legacyStage = 'New';
+
   @Index()
-  @Column({ type: 'varchar', default: 'New' })
-  stage: LeadStage = 'New';
+  @ManyToOne(() => LeadStage, (stage) => stage.leads, {
+    nullable: true,
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'stage_id' })
+  stage: LeadStage;
 
   @Index()
   @ManyToOne(() => LeadTrackUser, { nullable: false, onDelete: 'RESTRICT' })
@@ -67,4 +67,10 @@ export class Lead extends CommonEntity {
 
   @OneToMany(() => FollowUpTask, (task) => task.lead)
   tasks: FollowUpTask[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  syncLegacyStage() {
+    if (this.stage?.code) this.legacyStage = this.stage.code;
+  }
 }

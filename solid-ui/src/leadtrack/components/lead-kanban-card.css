@@ -23,35 +23,6 @@
   box-shadow: none;
 }
 
-.lead-kanban-card--new,
-.lead-kanban-card--wrong-lead-info {
-  --lead-kanban-accent: var(--solid-text-muted);
-}
-
-.lead-kanban-card--first-contact-pending {
-  --lead-kanban-accent: var(--yellow-600);
-}
-
-.lead-kanban-card--follow-up {
-  --lead-kanban-accent: var(--orange-600);
-}
-
-.lead-kanban-card--meeting-set {
-  --lead-kanban-accent: var(--blue-600);
-}
-
-.lead-kanban-card--meeting-pending {
-  --lead-kanban-accent: var(--purple-600);
-}
-
-.lead-kanban-card--opportunity-generated {
-  --lead-kanban-accent: var(--green-600);
-}
-
-.lead-kanban-card--dead {
-  --lead-kanban-accent: var(--red-600);
-}
-
 .lead-kanban-card__status-bar {
   min-height: 46px;
   display: flex;

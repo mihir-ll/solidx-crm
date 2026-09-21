@@ -1,28 +1,8 @@
 import type { SolidKanbanCardWidgetProps } from "@solidxai/core-ui";
 import "./lead-kanban-card.css";
 
-const stageLabels: Record<string, string> = {
-  FirstContactPending: "First Contact Pending",
-  FollowUp: "Follow up",
-  MeetingSet: "Meeting Set",
-  MeetingPending: "Meeting Pending",
-  OpportunityGenerated: "Opportunity Generated",
-  WrongLeadInfo: "Wrong Lead Info",
-};
-
 const sourceLabels: Record<string, string> = {
   PhoneCall: "Phone Call",
-};
-
-const stageClassNames: Record<string, string> = {
-  New: "lead-kanban-card--new",
-  FirstContactPending: "lead-kanban-card--first-contact-pending",
-  FollowUp: "lead-kanban-card--follow-up",
-  MeetingSet: "lead-kanban-card--meeting-set",
-  MeetingPending: "lead-kanban-card--meeting-pending",
-  OpportunityGenerated: "lead-kanban-card--opportunity-generated",
-  Dead: "lead-kanban-card--dead",
-  WrongLeadInfo: "lead-kanban-card--wrong-lead-info",
 };
 
 const formatMoney = (value: unknown, currency = "INR") => {
@@ -55,8 +35,9 @@ const displayText = (value: unknown, fallback = "Not set") =>
 export default function LeadKanbanCardWidget({
   rowData,
 }: SolidKanbanCardWidgetProps) {
-  const stageKey = displayText(rowData?.stage, "New");
-  const stage = stageLabels[stageKey] ?? stageKey;
+  const stageRecord =
+    rowData?.stage && typeof rowData.stage === "object" ? rowData.stage : null;
+  const stage = displayText(stageRecord?.name, "Unassigned stage");
   const sourceKey = displayText(rowData?.source, "Other");
   const source = sourceLabels[sourceKey] ?? sourceKey;
   const owner =
@@ -65,11 +46,7 @@ export default function LeadKanbanCardWidget({
 
   return (
     <div className="lead-kanban-card-shell">
-      <article
-        className={`lead-kanban-card ${
-          stageClassNames[stageKey] ?? stageClassNames.New
-        }`}
-      >
+      <article className="lead-kanban-card">
         <div className="lead-kanban-card__status-bar">
           <span className="lead-kanban-card__status" title={stage}>
             {stage}
