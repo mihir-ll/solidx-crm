@@ -46,9 +46,13 @@ export class PipelineFunnelProvider
     const rows = await (
       await this.query()
     )
-      .select('lead.stage', 'label')
+      .innerJoin('lead.stage', 'stage')
+      .select('stage.name', 'label')
       .addSelect('COUNT(lead.id)', 'value')
-      .groupBy('lead.stage')
+      .groupBy('stage.id')
+      .addGroupBy('stage.name')
+      .addGroupBy('stage.sequence')
+      .orderBy('stage.sequence', 'ASC')
       .getRawMany();
     return this.envelope(ctxt.widgetName, {
       items: rows.map((row) => ({
@@ -83,8 +87,9 @@ export class PipelineValueProvider
     )
       .select('lead.currency', 'currency')
       .addSelect('COALESCE(SUM(lead.dealValue), 0)', 'value')
-      .andWhere('lead.stage NOT IN (:...terminal)', {
-        terminal: ['Dead', 'WrongLeadInfo'],
+      .innerJoin('lead.stage', 'stage')
+      .andWhere('stage.code NOT IN (:...terminal)', {
+        terminal: ['dead', 'wrongLeadInfo'],
       })
       .groupBy('lead.currency')
       .getRawMany();
@@ -157,9 +162,10 @@ export class RepLeaderboardProvider
       await this.query()
     )
       .innerJoin('lead.owner', 'owner')
+      .innerJoin('lead.stage', 'stage')
       .select('owner.fullName', 'name')
       .addSelect('COUNT(lead.id)', 'value')
-      .andWhere('lead.stage = :stage', { stage: 'OpportunityGenerated' })
+      .andWhere('stage.code = :stage', { stage: 'opportunityGenerated' })
       .groupBy('owner.id')
       .addGroupBy('owner.fullName')
       .orderBy('COUNT(lead.id)', 'DESC')

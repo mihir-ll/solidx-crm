@@ -1,5 +1,7 @@
 import { CommonEntity, User } from '@solidxai/core';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -8,16 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { FollowUpTask } from './follow-up-task.entity';
-
-export type LeadStage =
-  | 'New'
-  | 'FirstContactPending'
-  | 'FollowUp'
-  | 'MeetingSet'
-  | 'MeetingPending'
-  | 'OpportunityGenerated'
-  | 'Dead'
-  | 'WrongLeadInfo';
+import { LeadStage } from './lead-stage.entity';
 
 @Entity('leadtrack_lead')
 @Index(["email", "deletedTracker"], { unique: true })
@@ -50,12 +43,19 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar" })
     source: string;
 
-    @Column({ type: "date", nullable: true })
-    expectedCloseDate?: Date;
+  @Column({ type: 'date', nullable: true })
+  expectedCloseDate?: Date;
 
-    @Index()
-    @Column({ type: "varchar", default: "New" })
-    stage: string = "New";
+  @Column({ name: 'stage', type: 'varchar', default: 'new' })
+  legacyStage = 'new';
+
+  @Index()
+  @ManyToOne(() => LeadStage, (stage) => stage.leads, {
+    nullable: true,
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'stage_id' })
+  stage: LeadStage;
 
     @Index()
     @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
@@ -65,6 +65,12 @@ export class Lead extends CommonEntity {
     @Column({ type: "text", nullable: true })
     remarks?: string;
 
-    @OneToMany(() => FollowUpTask, followUpTask => followUpTask.lead, { cascade: true })
-    tasks: FollowUpTask[];
+  @OneToMany(() => FollowUpTask, (task) => task.lead)
+  tasks: FollowUpTask[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  syncLegacyStage() {
+    if (this.stage?.code) this.legacyStage = this.stage.code;
+  }
 }
