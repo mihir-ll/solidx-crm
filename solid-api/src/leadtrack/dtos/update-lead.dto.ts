@@ -67,16 +67,6 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @ApiProperty()
     expectedCloseDate: Date;
 
-    @ApiProperty({ description: 'Lead stage record ID', required: false })
-    @IsOptional()
-    @Type(() => Number)
-    @IsInt()
-    stageId?: number;
-
-    @ApiProperty({ description: 'Kanban stage ID alias', required: false })
-    @IsOptional()
-    stage?: string | number;
-
     @IsOptional()
     @IsInt()
     @ApiProperty()

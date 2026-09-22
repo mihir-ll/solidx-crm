@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FollowUpTaskController } from './controllers/follow-up-task.controller';
+import { CrmUserController } from './controllers/crm-user.controller';
 import { LeadActivityReportController } from './controllers/lead-activity-report.controller';
 import { LeadController } from './controllers/lead.controller';
-import { LeadStageController } from './controllers/lead-stage.controller';
 import { FollowUpTask } from './entities/follow-up-task.entity';
 import { Lead } from './entities/lead.entity';
-import { LeadStage } from './entities/lead-stage.entity';
-import { LeadStageBootstrapService } from './providers/lead-stage-bootstrap.service';
+import { CrmUser } from './entities/crm-user.entity';
 import {
   LeadsBySourceProvider,
   LeadsCreatedTrendProvider,
@@ -17,30 +16,34 @@ import {
   RepLeaderboardProvider,
 } from './providers/dashboard.providers';
 import { FollowUpTaskRepository } from './repositories/follow-up-task.repository';
+import { CrmUserRepository } from './repositories/crm-user.repository';
 import { LeadRepository } from './repositories/lead.repository';
-import { LeadStageRepository } from './repositories/lead-stage.repository';
 import { FollowUpReminderJob } from './scheduled-jobs/follow-up-reminder.job';
+import { StaleLeadFollowUpJob } from './scheduled-jobs/stale-lead-follow-up.job';
+import { CrmUserCreationProvider } from './providers/crm-user-creation.provider';
 import { FollowUpTaskService } from './services/follow-up-task.service';
+import { CrmUserService } from './services/crm-user.service';
+import { FollowUpAutomationService } from './services/follow-up-automation.service';
 import { LeadActivityReportService } from './services/lead-activity-report.service';
 import { LeadService } from './services/lead.service';
-import { LeadStageService } from './services/lead-stage.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([LeadStage, Lead, FollowUpTask])],
+  imports: [TypeOrmModule.forFeature([CrmUser, Lead, FollowUpTask])],
   controllers: [
-    LeadStageController,
+    CrmUserController,
     LeadController,
     FollowUpTaskController,
     LeadActivityReportController,
   ],
   providers: [
     LeadRepository,
-    LeadStageRepository,
+    CrmUserRepository,
     FollowUpTaskRepository,
     LeadService,
-    LeadStageService,
-    LeadStageBootstrapService,
+    FollowUpAutomationService,
+    CrmUserCreationProvider,
     FollowUpTaskService,
+    CrmUserService,
     LeadActivityReportService,
     PipelineFunnelProvider,
     PipelineValueProvider,
@@ -49,6 +52,7 @@ import { LeadStageService } from './services/lead-stage.service';
     OverdueFollowUpsProvider,
     LeadsCreatedTrendProvider,
     FollowUpReminderJob,
+    StaleLeadFollowUpJob,
   ],
 })
 export class LeadTrackModule {}

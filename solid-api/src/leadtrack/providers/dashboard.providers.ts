@@ -14,6 +14,27 @@ const meta = (providerName: string, widgetName: string) => ({
   durationMs: 0,
 });
 
+const STAGE_ORDER = [
+  'New',
+  'FirstContactPending',
+  'FollowUp',
+  'MeetingSet',
+  'MeetingPending',
+  'OpportunityGenerated',
+  'Dead',
+  'WrongLeadInfo',
+];
+const STAGE_LABELS: Record<string, string> = {
+  New: 'New',
+  FirstContactPending: 'First Contact Pending',
+  FollowUp: 'Follow up',
+  MeetingSet: 'Meeting Set',
+  MeetingPending: 'Meeting Pending',
+  OpportunityGenerated: 'Opportunity Generated',
+  Dead: 'Dead',
+  WrongLeadInfo: 'Wrong Lead Info',
+};
+
 abstract class LeadDashboardProvider {
   constructor(protected readonly leads: LeadRepository) {}
   protected async query(alias = 'lead') {
@@ -46,17 +67,17 @@ export class PipelineFunnelProvider
     const rows = await (
       await this.query()
     )
-      .innerJoin('lead.stage', 'stage')
-      .select('stage.name', 'label')
+      .select('lead.stage', 'stage')
       .addSelect('COUNT(lead.id)', 'value')
-      .groupBy('stage.id')
-      .addGroupBy('stage.name')
-      .addGroupBy('stage.sequence')
-      .orderBy('stage.sequence', 'ASC')
+      .groupBy('lead.stage')
       .getRawMany();
+    rows.sort(
+      (left, right) =>
+        STAGE_ORDER.indexOf(left.stage) - STAGE_ORDER.indexOf(right.stage),
+    );
     return this.envelope(ctxt.widgetName, {
       items: rows.map((row) => ({
-        label: row.label,
+        label: STAGE_LABELS[row.stage] ?? row.stage,
         value: Number(row.value),
       })),
     });
@@ -87,9 +108,8 @@ export class PipelineValueProvider
     )
       .select('lead.currency', 'currency')
       .addSelect('COALESCE(SUM(lead.dealValue), 0)', 'value')
-      .innerJoin('lead.stage', 'stage')
-      .andWhere('stage.code NOT IN (:...terminal)', {
-        terminal: ['dead', 'wrongLeadInfo'],
+      .andWhere('lead.stage NOT IN (:...terminal)', {
+        terminal: ['Dead', 'WrongLeadInfo'],
       })
       .groupBy('lead.currency')
       .getRawMany();
@@ -162,10 +182,9 @@ export class RepLeaderboardProvider
       await this.query()
     )
       .innerJoin('lead.owner', 'owner')
-      .innerJoin('lead.stage', 'stage')
       .select('owner.fullName', 'name')
       .addSelect('COUNT(lead.id)', 'value')
-      .andWhere('stage.code = :stage', { stage: 'opportunityGenerated' })
+      .andWhere('lead.stage = :stage', { stage: 'OpportunityGenerated' })
       .groupBy('owner.id')
       .addGroupBy('owner.fullName')
       .orderBy('COUNT(lead.id)', 'DESC')

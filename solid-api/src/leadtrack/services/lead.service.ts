@@ -1,25 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { CRUDService } from '@solidxai/core';
 import { EntityManager } from 'typeorm';
 import { Lead } from '../entities/lead.entity';
-import { LeadStage } from '../entities/lead-stage.entity';
 import { LeadRepository } from '../repositories/lead.repository';
+import { FollowUpAutomationService } from './follow-up-automation.service';
 
 @Injectable()
 export class LeadService extends CRUDService<Lead> {
   constructor(
     @InjectEntityManager() private readonly leadEntityManager: EntityManager,
-    repo: LeadRepository,
+    private readonly leadRepository: LeadRepository,
     moduleRef: ModuleRef,
+    private readonly followUpAutomation: FollowUpAutomationService,
   ) {
-    super(leadEntityManager, repo, 'lead', 'leadtrack', moduleRef);
+    super(leadEntityManager, leadRepository, 'lead', 'leadtrack', moduleRef);
   }
 
   async create(createDto: any, files: Express.Multer.File[] = [], ctxt: any = {}) {
-    await this.normalizeStage(createDto, true);
-    return super.create(createDto, files, ctxt);
+    this.scopeCreateToActor(createDto, ctxt);
+    if (!createDto.stage) createDto.stage = 'New';
+    const created = await super.create(createDto, files, ctxt);
+    const lead = await this.loadLead(created.id);
+    await this.followUpAutomation.onLeadCreated(lead);
+    return created;
+  }
+
+  async insertMany(
+    createDtos: any[],
+    files: Express.Multer.File[][] = [],
+    ctxt: any = {},
+  ) {
+    for (const dto of createDtos) {
+      this.scopeCreateToActor(dto, ctxt);
+      if (!dto.stage) dto.stage = 'New';
+    }
+    const created = await super.insertMany(createDtos, files, ctxt);
+    for (const item of created) {
+      const lead = await this.loadLead(item.id);
+      await this.followUpAutomation.onLeadCreated(lead);
+    }
+    return created;
   }
 
   async update(
@@ -30,8 +52,9 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
     isUpdate = false,
   ) {
-    await this.normalizeStage(updateDto, false);
-    return super.update(
+    this.assertOwnerUpdateAllowed(updateDto, ctxt);
+    const previous = await this.loadLead(id);
+    const updated = await super.update(
       id,
       updateDto,
       files,
@@ -39,24 +62,40 @@ export class LeadService extends CRUDService<Lead> {
       ctxt,
       isUpdate,
     );
+    const current = await this.loadLead(id);
+    await this.followUpAutomation.onLeadUpdated(previous, current);
+    return updated;
   }
 
-  private async normalizeStage(dto: any, applyDefault: boolean) {
-    if (dto.stageId == null && dto.stage != null) {
-      dto.stageId = Number(
-        typeof dto.stage === 'object' ? dto.stage.id : dto.stage,
-      );
-    }
-    delete dto.stage;
+  private async loadLead(id: number): Promise<Lead> {
+    const query = await this.leadRepository.createSecurityRuleAwareQueryBuilder('lead');
+    const lead = await query
+      .leftJoinAndSelect('lead.owner', 'owner')
+      .andWhere('lead.id = :id', { id })
+      .getOne();
+    if (!lead) throw new NotFoundException('The lead is not available to this user.');
+    return lead;
+  }
 
-    if (applyDefault && dto.stageId == null) {
-      const [defaultStage] = await this.leadEntityManager
-        .getRepository(LeadStage)
-        .find({
-          order: { sequence: 'ASC' },
-          take: 1,
-        });
-      if (defaultStage) dto.stageId = defaultStage.id;
+  private scopeCreateToActor(dto: any, ctxt: any) {
+    const actor = ctxt?.activeUser;
+    if (!actor?.sub || actor.roles?.includes('Admin')) return;
+    dto.ownerId = Number(actor.sub);
+    delete dto.ownerUserKey;
+  }
+
+  private assertOwnerUpdateAllowed(dto: any, ctxt: any) {
+    const actor = ctxt?.activeUser;
+    if (!actor?.sub || actor.roles?.includes('Admin')) return;
+
+    const ownerId = dto?.ownerId ?? dto?.owner?.id;
+    const ownerUserKey = dto?.ownerUserKey;
+    if (
+      (ownerId != null && Number(ownerId) !== Number(actor.sub)) ||
+      (ownerUserKey != null && ownerUserKey !== actor.username)
+    ) {
+      throw new ForbiddenException('Sales representatives cannot reassign leads.');
     }
   }
+
 }

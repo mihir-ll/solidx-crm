@@ -1,7 +1,5 @@
-import { CommonEntity, User } from '@solidxai/core';
+import { CommonEntity } from '@solidxai/core';
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -10,10 +8,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { FollowUpTask } from './follow-up-task.entity';
-import { LeadStage } from './lead-stage.entity';
+import { CrmUser } from './crm-user.entity';
 
 @Entity('leadtrack_lead')
-@Index(["email", "deletedTracker"], { unique: true })
 export class Lead extends CommonEntity {
     @Index()
     @Column({ type: "varchar", length: 120 })
@@ -46,21 +43,17 @@ export class Lead extends CommonEntity {
   @Column({ type: 'date', nullable: true })
   expectedCloseDate?: Date;
 
-  @Column({ name: 'stage', type: 'varchar', default: 'new' })
-  legacyStage = 'new';
+  @Column({ type: 'timestamptz', nullable: true })
+  meetingDate?: Date;
 
   @Index()
-  @ManyToOne(() => LeadStage, (stage) => stage.leads, {
-    nullable: true,
-    onDelete: 'RESTRICT',
-  })
-  @JoinColumn({ name: 'stage_id' })
-  stage: LeadStage;
+  @Column({ type: 'varchar', default: 'New' })
+  stage = 'New';
 
     @Index()
-    @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
+    @ManyToOne(() => CrmUser, { nullable: false, onDelete: 'RESTRICT' })
     @JoinColumn()
-    owner: User;
+    owner: CrmUser;
 
     @Column({ type: "text", nullable: true })
     remarks?: string;
@@ -68,9 +61,4 @@ export class Lead extends CommonEntity {
   @OneToMany(() => FollowUpTask, (task) => task.lead)
   tasks: FollowUpTask[];
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  syncLegacyStage() {
-    if (this.stage?.code) this.legacyStage = this.stage.code;
-  }
 }

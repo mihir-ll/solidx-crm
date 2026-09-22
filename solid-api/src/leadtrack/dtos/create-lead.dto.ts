@@ -43,14 +43,24 @@ export class CreateLeadDto {
   @Type(() => Date)
   @IsDate()
   expectedCloseDate?: Date;
-   @ApiPropertyOptional({ description: 'Lead stage record ID' })
+  @ApiPropertyOptional()
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  stageId?: number;
-  @ApiPropertyOptional({ description: 'Kanban stage ID alias' })
+  @Type(() => Date)
+  @IsDate()
+  meetingDate?: Date;
+  @ApiPropertyOptional({ description: 'Pipeline stage', default: 'New' })
   @IsOptional()
-  stage?: string | number;
+  @IsIn([
+    'New',
+    'FirstContactPending',
+    'FollowUp',
+    'MeetingSet',
+    'MeetingPending',
+    'OpportunityGenerated',
+    'Dead',
+    'WrongLeadInfo',
+  ])
+  stage?: string;
   @ApiProperty() @Type(() => Number) @IsInt() ownerId: number;
   @ApiPropertyOptional() @IsOptional() @IsString() remarks?: string;
 }

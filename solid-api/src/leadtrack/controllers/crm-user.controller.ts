@@ -17,31 +17,40 @@ import {
   SolidRequestContextDecorator,
   SolidRequestContextDto,
 } from '@solidxai/core';
-import { CreateLeadStageDto } from '../dtos/create-lead-stage.dto';
-import { UpdateLeadStageDto } from '../dtos/update-lead-stage.dto';
-import { LeadStageService } from '../services/lead-stage.service';
+import { CreateCrmUserDto } from '../dtos/create-crm-user.dto';
+import { CrmUserService } from '../services/crm-user.service';
 
-@ApiTags('LeadTrack')
+@ApiTags('LeadTrack Users')
 @ApiBearerAuth('jwt')
-@Controller('lead-stage')
-export class LeadStageController {
-  constructor(private readonly service: LeadStageService) {}
+@Controller('crm-user')
+export class CrmUserController {
+  constructor(private readonly service: CrmUserService) {}
 
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
   create(
-    @Body() dto: CreateLeadStageDto,
+    @Body() dto: CreateCrmUserDto,
     @UploadedFiles() files: Express.Multer.File[],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {
     return this.service.create(dto, files, ctxt);
   }
 
+  @Post('bulk')
+  @UseInterceptors(AnyFilesInterceptor())
+  insertMany(
+    @Body() dtos: CreateCrmUserDto[],
+    @UploadedFiles() files: Express.Multer.File[][] = [],
+    @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
+  ) {
+    return this.service.insertMany(dtos, files, ctxt);
+  }
+
   @Put(':id')
   @UseInterceptors(AnyFilesInterceptor())
   update(
     @Param('id') id: number,
-    @Body() dto: UpdateLeadStageDto,
+    @Body() dto: Partial<CreateCrmUserDto>,
     @UploadedFiles() files: Express.Multer.File[],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {
@@ -52,7 +61,7 @@ export class LeadStageController {
   @UseInterceptors(AnyFilesInterceptor())
   partialUpdate(
     @Param('id') id: number,
-    @Body() dto: UpdateLeadStageDto,
+    @Body() dto: Partial<CreateCrmUserDto>,
     @UploadedFiles() files: Express.Multer.File[],
     @SolidRequestContextDecorator() ctxt: SolidRequestContextDto,
   ) {

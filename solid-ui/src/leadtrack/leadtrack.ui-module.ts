@@ -14,7 +14,9 @@ const leadTrackUiModule = {
       },
     ],
   },
-  extensionComponents: [{ name: "LeadKanbanCardWidget", component: LeadKanbanCardWidget, type: ExtensionComponentTypes.kanbanCardWidget }],
+  extensionComponents: [
+    { name: "LeadKanbanCardWidget", component: LeadKanbanCardWidget, type: ExtensionComponentTypes.kanbanCardWidget },
+  ],
   extensionFunctions: [],
   reducers: { [leadActivityReportApi.reducerPath]: leadActivityReportApi.reducer },
   middlewares: [leadActivityReportApi.middleware],

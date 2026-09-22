@@ -1,4 +1,4 @@
-import { CommonEntity, User } from '@solidxai/core';
+import { CommonEntity } from '@solidxai/core';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -9,6 +9,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Lead } from './lead.entity';
+import { CrmUser } from './crm-user.entity';
 
 @Entity('leadtrack_follow_up_task')
 export class FollowUpTask extends CommonEntity {
@@ -41,9 +42,12 @@ export class FollowUpTask extends CommonEntity {
     outcomeNotes?: string;
 
     @Index()
-    @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
+    @ManyToOne(() => CrmUser, { nullable: true, onDelete: 'SET NULL' })
     @JoinColumn()
-    assignedTo?: User;
+    assignedTo?: CrmUser;
+
+    @Column({ type: 'boolean', default: false })
+    autoCreated = false;
 
     @BeforeInsert()
     @BeforeUpdate()
