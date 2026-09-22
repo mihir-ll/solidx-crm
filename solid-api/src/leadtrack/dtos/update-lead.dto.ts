@@ -31,10 +31,10 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     industry: string;
 
     @MaxLength(254)
-    @IsNotEmpty()
     @IsOptional()
     @IsString()
     @ApiProperty()
+    @Transform(emptyStringToNullTransformer)
     @IsEmail()
     email: string;
 
@@ -67,16 +67,6 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @ApiProperty()
     expectedCloseDate: Date;
 
-    @ApiProperty({ description: 'Lead stage record ID', required: false })
-    @IsOptional()
-    @Type(() => Number)
-    @IsInt()
-    stageId?: number;
-
-    @ApiProperty({ description: 'Kanban stage ID alias', required: false })
-    @IsOptional()
-    stage?: string | number;
-
     @IsOptional()
     @IsInt()
     @ApiProperty()
@@ -108,4 +98,15 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @IsOptional()
     @ApiProperty()
     tasksCommand: string;
+
+    @IsOptional()
+    @IsDate()
+    @ApiProperty()
+    meetingDate: Date;
+
+    @IsNotEmpty()
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    stage: string;
 }

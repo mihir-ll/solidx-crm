@@ -1,7 +1,5 @@
-import { CommonEntity, User } from '@solidxai/core';
+import { CommonEntity } from '@solidxai/core';
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -10,10 +8,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { FollowUpTask } from './follow-up-task.entity';
-import { LeadStage } from './lead-stage.entity';
+import { CrmUser } from './crm-user.entity';
 
 @Entity('leadtrack_lead')
-@Index(["email", "deletedTracker"], { unique: true })
 export class Lead extends CommonEntity {
     @Index()
     @Column({ type: "varchar", length: 120 })
@@ -26,8 +23,20 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar", nullable: true })
     industry?: string;
 
+    @Column({ type: "varchar", nullable: true, length: 80 })
+    leadType?: string;
+
+    @Column({ type: "varchar", nullable: true, length: 120 })
+    city?: string;
+
+    @Column({ type: "varchar", nullable: true, length: 120 })
+    designation?: string;
+
+    @Column({ type: "varchar", nullable: true, length: 500 })
+    linkedIn?: string;
+
     @Index()
-    @Column({ type: "varchar", length: 254, nullable: true })
+    @Column({ type: "varchar", nullable: true, length: 254 })
     email?: string;
 
     @Column({ type: "varchar", length: 20 })
@@ -43,34 +52,28 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar" })
     source: string;
 
-  @Column({ type: 'date', nullable: true })
-  expectedCloseDate?: Date;
+    // SolidX stores multi-select static selections as a JSON-encoded string.
+    @Column({ type: "varchar", nullable: true })
+    channelsUsed?: string;
 
-  @Column({ name: 'stage', type: 'varchar', default: 'new' })
-  legacyStage = 'new';
+    @Column({ type: "date", nullable: true })
+    expectedCloseDate?: Date;
 
-  @Index()
-  @ManyToOne(() => LeadStage, (stage) => stage.leads, {
-    nullable: true,
-    onDelete: 'RESTRICT',
-  })
-  @JoinColumn({ name: 'stage_id' })
-  stage: LeadStage;
+    @Column({ type: "timestamptz", nullable: true })
+    meetingDate?: Date;
 
     @Index()
-    @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
+    @Column({ type: "varchar", default: "new" })
+    stage: string = "new";
+
+    @Index()
+    @ManyToOne(() => CrmUser, { nullable: false, onDelete: 'RESTRICT' })
     @JoinColumn()
-    owner: User;
+    owner: CrmUser;
 
     @Column({ type: "text", nullable: true })
     remarks?: string;
 
-  @OneToMany(() => FollowUpTask, (task) => task.lead)
-  tasks: FollowUpTask[];
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  syncLegacyStage() {
-    if (this.stage?.code) this.legacyStage = this.stage.code;
-  }
+    @OneToMany(() => FollowUpTask, followUpTask => followUpTask.lead, { cascade: true })
+    tasks: FollowUpTask[];
 }

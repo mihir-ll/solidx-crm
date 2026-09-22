@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
 import {
   RequestContextService,
   SecurityRuleRepository,
   SolidBaseRepository,
 } from '@solidxai/core';
+import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { LeadStage } from '../entities/lead-stage.entity';
+import { CrmUser } from '../entities/crm-user.entity';
 
 @Injectable()
-export class LeadStageRepository extends SolidBaseRepository<LeadStage> {
+export class CrmUserRepository extends SolidBaseRepository<CrmUser> {
   constructor(
     dataSource: DataSource,
     requestContextService: RequestContextService,
     securityRuleRepository: SecurityRuleRepository,
   ) {
-    super(LeadStage, dataSource, requestContextService, securityRuleRepository);
+    super(CrmUser, dataSource, requestContextService, securityRuleRepository);
   }
 }

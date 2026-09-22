@@ -18,8 +18,8 @@
 .lead-kanban-card__body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 13px 40px 13px 13px;
+  gap: 7px;
+  padding: 10px 40px 8px 11px;
 }
 
 .lead-kanban-card__heading {
@@ -39,13 +39,6 @@
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.lead-kanban-card__heading-separator {
-  flex: 0 0 auto;
-  width: 1px;
-  height: 16px;
-  background: var(--solid-border-strong);
 }
 
 .lead-kanban-card__owner {
@@ -92,44 +85,51 @@
   color: var(--solid-interactive-bg);
 }
 
-.lead-kanban-card__meta {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  border-top: 1px solid var(--solid-border-default);
-}
-
-.lead-kanban-card__meta-item {
+.lead-kanban-card__assignment-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   min-width: 0;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--solid-border-default);
 }
 
-.lead-kanban-card__meta-icon {
+.lead-kanban-card__lead-type {
   display: inline-flex;
-  flex: 0 0 auto;
   align-items: center;
-  justify-content: center;
-  width: 25px;
-  height: 25px;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
+  padding: 3px 9px;
+  border: 1px solid var(--solid-border-default);
+  border-radius: 999px;
   color: var(--solid-interactive-bg);
   background: var(--solid-surface-2);
-  border-radius: 7px;
-  font-size: 16px;
-  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 20;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.lead-kanban-card__meta-item strong {
-  display: block;
+.lead-kanban-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  margin-top: 1px;
+  padding-top: 7px;
+  border-top: 1px solid var(--solid-border-default);
+  color: var(--solid-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.lead-kanban-card__footer time {
   min-width: 0;
   overflow: hidden;
-  color: var(--solid-text-primary);
-  font-size: 0.75rem;
-  font-weight: 750;
-  line-height: 1.25;
+  color: var(--solid-text-muted);
+  font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
