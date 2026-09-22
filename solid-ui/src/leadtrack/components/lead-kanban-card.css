@@ -92,6 +92,29 @@
   color: var(--solid-interactive-bg);
 }
 
+.lead-kanban-card__type-row {
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+.lead-kanban-card__lead-type {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 3px 9px;
+  border: 1px solid var(--solid-border-default);
+  border-radius: 999px;
+  color: var(--solid-interactive-bg);
+  background: var(--solid-surface-2);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .lead-kanban-card__meta {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

@@ -15,24 +15,24 @@ const meta = (providerName: string, widgetName: string) => ({
 });
 
 const STAGE_ORDER = [
-  'New',
-  'FirstContactPending',
-  'FollowUp',
-  'MeetingSet',
-  'MeetingPending',
-  'OpportunityGenerated',
-  'Dead',
-  'WrongLeadInfo',
+  'new',
+  'first_contact_pending',
+  'follow_up',
+  'meeting_set',
+  'meeting_pending',
+  'opportunity_generated',
+  'dead',
+  'wrong_lead_info',
 ];
 const STAGE_LABELS: Record<string, string> = {
-  New: 'New',
-  FirstContactPending: 'First Contact Pending',
-  FollowUp: 'Follow up',
-  MeetingSet: 'Meeting Set',
-  MeetingPending: 'Meeting Pending',
-  OpportunityGenerated: 'Opportunity Generated',
-  Dead: 'Dead',
-  WrongLeadInfo: 'Wrong Lead Info',
+  new: 'New',
+  first_contact_pending: 'First Contact Pending',
+  follow_up: 'Follow up',
+  meeting_set: 'Meeting Set',
+  meeting_pending: 'Meeting Pending',
+  opportunity_generated: 'Opportunity Generated',
+  dead: 'Dead',
+  wrong_lead_info: 'Wrong Lead Info',
 };
 
 abstract class LeadDashboardProvider {
@@ -109,7 +109,7 @@ export class PipelineValueProvider
       .select('lead.currency', 'currency')
       .addSelect('COALESCE(SUM(lead.dealValue), 0)', 'value')
       .andWhere('lead.stage NOT IN (:...terminal)', {
-        terminal: ['Dead', 'WrongLeadInfo'],
+        terminal: ['dead', 'wrong_lead_info'],
       })
       .groupBy('lead.currency')
       .getRawMany();
@@ -184,7 +184,7 @@ export class RepLeaderboardProvider
       .innerJoin('lead.owner', 'owner')
       .select('owner.fullName', 'name')
       .addSelect('COUNT(lead.id)', 'value')
-      .andWhere('lead.stage = :stage', { stage: 'OpportunityGenerated' })
+      .andWhere('lead.stage = :stage', { stage: 'opportunity_generated' })
       .groupBy('owner.id')
       .addGroupBy('owner.fullName')
       .orderBy('COUNT(lead.id)', 'DESC')

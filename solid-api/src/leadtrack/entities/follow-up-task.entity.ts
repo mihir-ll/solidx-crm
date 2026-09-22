@@ -46,8 +46,8 @@ export class FollowUpTask extends CommonEntity {
     @JoinColumn()
     assignedTo?: CrmUser;
 
-    @Column({ type: 'boolean', default: false })
-    autoCreated = false;
+    @Column({ type: "boolean", default: false })
+    autoCreated: boolean = false;
 
     @BeforeInsert()
     @BeforeUpdate()

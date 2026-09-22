@@ -5,7 +5,7 @@ import { EntityManager, In } from 'typeorm';
 import { FollowUpTask } from '../entities/follow-up-task.entity';
 import { Lead } from '../entities/lead.entity';
 
-const TERMINAL_STAGES = new Set(['Dead', 'WrongLeadInfo']);
+const TERMINAL_STAGES = new Set(['dead', 'wrong_lead_info']);
 const DAY = 24 * 60 * 60 * 1000;
 
 @Injectable()
@@ -13,7 +13,7 @@ export class FollowUpAutomationService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
   async onLeadCreated(lead: Lead) {
-    if (lead.stage !== 'New') return;
+    if (lead.stage !== 'new') return;
     await this.createIfMissing(lead, 'Make first contact call', this.afterDays(1));
   }
 
@@ -50,7 +50,7 @@ export class FollowUpAutomationService {
   async createStaleLeadNudges() {
     const cutoff = new Date(Date.now() - 7 * DAY);
     const leads = await this.manager.getRepository(Lead).find({
-      where: { stage: In(['New', 'FirstContactPending', 'FollowUp', 'MeetingSet', 'MeetingPending']) },
+      where: { stage: In(['new', 'first_contact_pending', 'follow_up', 'meeting_set', 'meeting_pending']) },
       relations: ['owner', 'tasks'],
     });
     if (!leads.length) return;
@@ -105,25 +105,25 @@ export class FollowUpAutomationService {
 
   private taskForStage(lead: Lead): { title: string; dueDate: Date } | null {
     switch (lead.stage) {
-      case 'FirstContactPending':
+      case 'first_contact_pending':
         return { title: 'Attempt first call', dueDate: this.afterDays(1) };
-      case 'FollowUp':
+      case 'follow_up':
         return { title: 'Follow-up call', dueDate: this.afterDays(2) };
-      case 'MeetingSet':
+      case 'meeting_set':
         return {
           title: 'Prepare for meeting',
           dueDate: lead.meetingDate
             ? new Date(new Date(lead.meetingDate).getTime() - DAY)
             : this.afterDays(1),
         };
-      case 'MeetingPending':
+      case 'meeting_pending':
         return {
           title: 'Post-meeting follow-up',
           dueDate: lead.meetingDate
             ? new Date(new Date(lead.meetingDate).getTime() + DAY)
             : this.afterDays(1),
         };
-      case 'OpportunityGenerated':
+      case 'opportunity_generated':
         return { title: 'Handoff notes to sales', dueDate: this.afterDays(1) };
       default:
         return null;

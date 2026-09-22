@@ -53,6 +53,54 @@
             "enableAuditTracking": true
           },
           {
+            "name": "leadType",
+            "displayName": "Lead Type",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "Staffing:Staffing",
+              "SolidX:SolidX"
+            ],
+            "selectionValueType": "string",
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "city",
+            "displayName": "City",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 120,
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "designation",
+            "displayName": "Designation",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 120,
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "linkedIn",
+            "displayName": "LinkedIn",
+            "type": "shortText",
+            "ormType": "varchar",
+            "max": 500,
+            "required": false,
+            "unique": false,
+            "index": false,
+            "enableAuditTracking": true
+          },
+          {
             "name": "email",
             "displayName": "Email",
             "type": "email",
@@ -110,17 +158,35 @@
             "type": "selectionStatic",
             "ormType": "varchar",
             "selectionStaticValues": [
-              "phoneCall:Phone Call",
-              "email:Email",
-              "linkedIn:LinkedIn",
-              "whatsApp:WhatsApp",
-              "referral:Referral",
-              "other:Other"
+              "Phone Call:Phone Call",
+              "Email:Email",
+              "LinkedIn:LinkedIn",
+              "WhatsApp:WhatsApp",
+              "Referral:Referral",
+              "Other:Other"
             ],
             "selectionValueType": "string",
             "required": true,
             "unique": false,
             "index": true,
+            "enableAuditTracking": true
+          },
+          {
+            "name": "channelsUsed",
+            "displayName": "Channels Used",
+            "type": "selectionStatic",
+            "ormType": "varchar",
+            "selectionStaticValues": [
+              "Call:Call",
+              "Email:Email",
+              "WhatsApp:WhatsApp",
+              "LinkedIn:LinkedIn"
+            ],
+            "selectionValueType": "string",
+            "isMultiSelect": true,
+            "required": false,
+            "unique": false,
+            "index": false,
             "enableAuditTracking": true
           },
           {
@@ -154,16 +220,16 @@
             "enableAuditTracking": true,
             "selectionStaticValues": [
               "new:New",
-              "firstContactPending:First Contact Pending",
-              "followUp:Follow up",
-              "meetingSet:Meeting Set",
-              "meetingPending:Meeting Pending",
-              "opportunityGenerated:Opportunity Generated",
+              "first_contact_pending:First Contact Pending",
+              "follow_up:Follow up",
+              "meeting_set:Meeting Set",
+              "meeting_pending:Meeting Pending",
+              "opportunity_generated:Opportunity Generated",
               "dead:Dead",
-              "wrongLeadInfo:Wrong Lead Info"
+              "wrong_lead_info:Wrong Lead Info"
             ],
             "selectionValueType": "string",
-            "defaultValue": "New"
+            "defaultValue": "new"
           },
           {
             "name": "owner",
@@ -253,12 +319,12 @@
             "type": "selectionStatic",
             "ormType": "varchar",
             "selectionStaticValues": [
-              "call:Call",
-              "email:Email",
-              "linkedIn:LinkedIn",
-              "whatsApp:WhatsApp",
-              "meeting:Meeting",
-              "other:Other"
+              "Call:Call",
+              "Email:Email",
+              "LinkedIn:LinkedIn",
+              "WhatsApp:WhatsApp",
+              "Meeting:Meeting",
+              "Other:Other"
             ],
             "selectionValueType": "string",
             "defaultValue": "Call",
@@ -352,7 +418,7 @@
         "fields": [
           {
             "name": "userType",
-            "displayName": "LeadTrack Role",
+            "displayName": "User Type",
             "type": "selectionStatic",
             "ormType": "varchar",
             "selectionStaticValues": [
@@ -694,6 +760,28 @@
           {
             "type": "field",
             "attrs": {
+              "name": "city",
+              "sortable": true,
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "designation",
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "leadType",
+              "isSearchable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
               "name": "stage",
               "sortable": true,
               "isSearchable": true
@@ -733,6 +821,15 @@
             "type": "field",
             "attrs": {
               "name": "expectedCloseDate",
+              "sortable": true
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "createdAt",
+              "label": "Created At",
+              "isSearchable": false,
               "sortable": true
             }
           }
@@ -958,6 +1055,18 @@
               {
                 "type": "field",
                 "attrs": {
+                  "name": "designation"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "leadType"
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
                   "name": "dealValue"
                 }
               },
@@ -1157,6 +1266,82 @@
                                 ]
                               }
                             ]
+                          },
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "company-info-row-2"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "city-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "city"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "designation-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "designation"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "company-info-row-3"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "lead-type-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "leadType"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "linkedin-column",
+                                  "className": "col-12 md:col-6"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "linkedIn"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         ]
                       },
@@ -1241,6 +1426,29 @@
                                     "type": "field",
                                     "attrs": {
                                       "name": "dealValue"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "row",
+                            "attrs": {
+                              "name": "channels-used-row"
+                            },
+                            "children": [
+                              {
+                                "type": "column",
+                                "attrs": {
+                                  "name": "channels-used-column",
+                                  "className": "col-12"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "channelsUsed"
                                     }
                                   }
                                 ]
@@ -1651,6 +1859,30 @@
           {
             "type": "field",
             "attrs": {
+              "name": "leadType"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "city"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "designation"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "linkedIn"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
               "name": "email"
             }
           },
@@ -1707,6 +1939,13 @@
             "type": "field",
             "attrs": {
               "name": "tasks"
+            }
+          },
+          {
+            "type": "field",
+            "attrs": {
+              "name": "createdAt",
+              "label": "Created At"
             }
           }
         ]
@@ -1959,14 +2198,19 @@
           "name": "Aarav Mehta",
           "company": "Northstar Labs",
           "industry": "Technology",
+          "leadType": "SolidX",
+          "city": "Bengaluru",
+          "designation": "Operations Manager",
+          "linkedIn": "https://www.linkedin.com/in/aarav-mehta",
           "email": "aarav@example.test",
           "phone": "+919810000001",
           "dealValue": 850000,
           "currency": "INR",
-          "source": "PhoneCall",
+          "source": "Phone Call",
+          "channelsUsed": "[\"Call\",\"Email\"]",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Requested a product overview.",
-          "stage": "New"
+          "stage": "new"
         }
       },
       {
@@ -1976,14 +2220,19 @@
           "name": "Diya Shah",
           "company": "Juniper Retail",
           "industry": "Retail",
+          "leadType": "Staffing",
+          "city": "Mumbai",
+          "designation": "Retail Director",
+          "linkedIn": "https://www.linkedin.com/in/diya-shah",
           "email": "diya@example.test",
           "phone": "+919810000002",
           "dealValue": 420000,
           "currency": "INR",
           "source": "Email",
+          "channelsUsed": "[\"Email\"]",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Pricing follow-up due.",
-          "stage": "FollowUp"
+          "stage": "follow_up"
         }
       },
       {
@@ -1993,14 +2242,19 @@
           "name": "Kabir Rao",
           "company": "Atlas Logistics",
           "industry": "Logistics",
+          "leadType": "SolidX",
+          "city": "Delhi",
+          "designation": "Logistics Head",
+          "linkedIn": "https://www.linkedin.com/in/kabir-rao",
           "email": "kabir@example.test",
           "phone": "+919810000003",
           "dealValue": 1250000,
           "currency": "INR",
           "source": "Referral",
+          "channelsUsed": "[\"Call\",\"WhatsApp\"]",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Decision-maker meeting scheduled.",
-          "stage": "MeetingPending"
+          "stage": "meeting_pending"
         }
       },
       {

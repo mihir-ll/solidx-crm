@@ -24,7 +24,6 @@ export class CreateFollowUpTaskDto {
     title: string;
 
     @ApiPropertyOptional({ default: 'Call' })
-    @IsIn(['Call', 'Email', 'LinkedIn', 'WhatsApp', 'Meeting', 'Other'])
     @IsNotEmpty()
     @IsString()
     @ApiProperty()
@@ -66,4 +65,11 @@ export class CreateFollowUpTaskDto {
     @IsOptional()
     @ApiProperty()
     assignedToUserKey: string;
+
+
+@IsNotEmpty()
+@IsBoolean()
+@ApiProperty()
+autoCreated: boolean = false;
+
 }

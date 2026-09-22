@@ -23,8 +23,20 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar", nullable: true })
     industry?: string;
 
+    @Column({ type: "varchar", nullable: true, length: 80 })
+    leadType?: string;
+
+    @Column({ type: "varchar", nullable: true, length: 120 })
+    city?: string;
+
+    @Column({ type: "varchar", nullable: true, length: 120 })
+    designation?: string;
+
+    @Column({ type: "varchar", nullable: true, length: 500 })
+    linkedIn?: string;
+
     @Index()
-    @Column({ type: "varchar", length: 254, nullable: true })
+    @Column({ type: "varchar", nullable: true, length: 254 })
     email?: string;
 
     @Column({ type: "varchar", length: 20 })
@@ -40,15 +52,19 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar" })
     source: string;
 
-  @Column({ type: 'date', nullable: true })
-  expectedCloseDate?: Date;
+    // SolidX stores multi-select static selections as a JSON-encoded string.
+    @Column({ type: "varchar", nullable: true })
+    channelsUsed?: string;
 
-  @Column({ type: 'timestamptz', nullable: true })
-  meetingDate?: Date;
+    @Column({ type: "date", nullable: true })
+    expectedCloseDate?: Date;
 
-  @Index()
-  @Column({ type: 'varchar', default: 'New' })
-  stage = 'New';
+    @Column({ type: "timestamptz", nullable: true })
+    meetingDate?: Date;
+
+    @Index()
+    @Column({ type: "varchar", default: "new" })
+    stage: string = "new";
 
     @Index()
     @ManyToOne(() => CrmUser, { nullable: false, onDelete: 'RESTRICT' })
@@ -58,7 +74,6 @@ export class Lead extends CommonEntity {
     @Column({ type: "text", nullable: true })
     remarks?: string;
 
-  @OneToMany(() => FollowUpTask, (task) => task.lead)
-  tasks: FollowUpTask[];
-
+    @OneToMany(() => FollowUpTask, followUpTask => followUpTask.lead, { cascade: true })
+    tasks: FollowUpTask[];
 }

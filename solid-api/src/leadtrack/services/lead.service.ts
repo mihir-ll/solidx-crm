@@ -19,8 +19,9 @@ export class LeadService extends CRUDService<Lead> {
   }
 
   async create(createDto: any, files: Express.Multer.File[] = [], ctxt: any = {}) {
+    this.normalizeChannelsUsed(createDto);
     this.scopeCreateToActor(createDto, ctxt);
-    if (!createDto.stage) createDto.stage = 'New';
+    if (!createDto.stage) createDto.stage = 'new';
     const created = await super.create(createDto, files, ctxt);
     const lead = await this.loadLead(created.id);
     await this.followUpAutomation.onLeadCreated(lead);
@@ -33,8 +34,9 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
   ) {
     for (const dto of createDtos) {
+      this.normalizeChannelsUsed(dto);
       this.scopeCreateToActor(dto, ctxt);
-      if (!dto.stage) dto.stage = 'New';
+      if (!dto.stage) dto.stage = 'new';
     }
     const created = await super.insertMany(createDtos, files, ctxt);
     for (const item of created) {
@@ -52,6 +54,7 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
     isUpdate = false,
   ) {
+    this.normalizeChannelsUsed(updateDto);
     this.assertOwnerUpdateAllowed(updateDto, ctxt);
     const previous = await this.loadLead(id);
     const updated = await super.update(
@@ -82,6 +85,12 @@ export class LeadService extends CRUDService<Lead> {
     if (!actor?.sub || actor.roles?.includes('Admin')) return;
     dto.ownerId = Number(actor.sub);
     delete dto.ownerUserKey;
+  }
+
+  private normalizeChannelsUsed(dto: any) {
+    if (Array.isArray(dto?.channelsUsed)) {
+      dto.channelsUsed = JSON.stringify(dto.channelsUsed);
+    }
   }
 
   private assertOwnerUpdateAllowed(dto: any, ctxt: any) {

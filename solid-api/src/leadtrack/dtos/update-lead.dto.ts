@@ -31,10 +31,10 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     industry: string;
 
     @MaxLength(254)
-    @IsNotEmpty()
     @IsOptional()
     @IsString()
     @ApiProperty()
+    @Transform(emptyStringToNullTransformer)
     @IsEmail()
     email: string;
 
@@ -98,4 +98,15 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @IsOptional()
     @ApiProperty()
     tasksCommand: string;
+
+    @IsOptional()
+    @IsDate()
+    @ApiProperty()
+    meetingDate: Date;
+
+    @IsNotEmpty()
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    stage: string;
 }

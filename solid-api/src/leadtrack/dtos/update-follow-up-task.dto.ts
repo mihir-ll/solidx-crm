@@ -53,4 +53,12 @@ export class UpdateFollowUpTaskDto extends PartialType(CreateFollowUpTaskDto) {
     @IsOptional()
     @ApiProperty()
     assignedToUserKey: string;
+
+
+@IsNotEmpty()
+@IsOptional()
+@IsBoolean()
+@ApiProperty()
+autoCreated: boolean;
+
 }

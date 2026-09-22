@@ -4,10 +4,6 @@ import {
 } from "@solidxai/core-ui";
 import "./lead-kanban-card.css";
 
-const sourceLabels: Record<string, string> = {
-  PhoneCall: "Phone Call",
-};
-
 const formatMoney = (value: unknown, currency = "INR") => {
   const amount = Number(value);
   if (!Number.isFinite(amount)) return "Not set";
@@ -25,13 +21,14 @@ const displayText = (value: unknown, fallback = "Not set") =>
 export default function LeadKanbanCardWidget({
   rowData,
 }: SolidKanbanCardWidgetProps) {
-  const sourceKey = displayText(rowData?.source, "Other");
-  const source = sourceLabels[sourceKey] ?? sourceKey;
+  const source = displayText(rowData?.source, "Other");
   const owner =
     rowData?.owner?.fullName ?? rowData?.owner?.email ?? "Unassigned";
   const leadName = displayText(rowData?.name, "Unnamed lead");
   const company = displayText(rowData?.company, "Independent");
   const industry = displayText(rowData?.industry, "Unknown industry");
+  const designation = displayText(rowData?.designation, "");
+  const leadType = displayText(rowData?.leadType, "");
   const phone = displayText(rowData?.phone, "No phone");
   const email = displayText(rowData?.email, "No email");
   const value = formatMoney(rowData?.dealValue, rowData?.currency);
@@ -51,9 +48,23 @@ export default function LeadKanbanCardWidget({
 
           <div className="lead-kanban-card__context">
             <span title={company}>{company}</span>
-            <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
-            <span title={industry}>{industry}</span>
           </div>
+
+          <div className="lead-kanban-card__context">
+            <span title={industry}>{industry}</span>
+            {designation && (
+              <>
+                <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
+                <span title={designation}>{designation}</span>
+              </>
+            )}
+          </div>
+
+          {leadType && (
+            <div className="lead-kanban-card__type-row">
+              <span className="lead-kanban-card__lead-type">{leadType}</span>
+            </div>
+          )}
 
           <div className="lead-kanban-card__meta">
             <div
