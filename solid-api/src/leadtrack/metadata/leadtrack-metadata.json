@@ -1055,50 +1055,22 @@
               {
                 "type": "field",
                 "attrs": {
-                  "name": "designation"
-                }
-              },
-              {
-                "type": "field",
-                "attrs": {
-                  "name": "leadType"
-                }
-              },
-              {
-                "type": "field",
-                "attrs": {
-                  "name": "dealValue"
-                }
-              },
-              {
-                "type": "field",
-                "attrs": {
-                  "name": "currency"
-                }
-              },
-              {
-                "type": "field",
-                "attrs": {
-                  "name": "source"
-                }
-              },
-              {
-                "type": "field",
-                "attrs": {
-                  "name": "phone"
-                }
-              },
-              {
-                "type": "field",
-                "attrs": {
-                  "name": "email"
+                  "name": "leadType",
+                  "isSearchable": true
                 }
               },
               {
                 "type": "field",
                 "attrs": {
                   "name": "owner",
-                  "coModelFieldToDisplay": "fullName"
+                  "coModelFieldToDisplay": "fullName",
+                  "isSearchable": true
+                }
+              },
+              {
+                "type": "field",
+                "attrs": {
+                  "name": "updatedAt"
                 }
               }
             ]
@@ -1582,8 +1554,8 @@
             "attrs": {
               "name": "lead",
               "isSearchable": true,
-              "searchField": "lead.email",
-              "coModelFieldToDisplay": "email"
+              "searchField": "lead.name",
+              "coModelFieldToDisplay": "name"
             }
           },
           {
@@ -1652,8 +1624,8 @@
                         "attrs": {
                           "name": "lead",
                           "isSearchable": true,
-                          "searchField": "lead.email",
-                          "coModelFieldToDisplay": "email"
+                          "searchField": "lead.name",
+                          "coModelFieldToDisplay": "name"
                         }
                       }
                     ]
@@ -1983,7 +1955,7 @@
             "type": "field",
             "attrs": {
               "name": "lead",
-              "coModelFieldToDisplay": "email"
+              "coModelFieldToDisplay": "name"
             }
           },
           {
@@ -2042,11 +2014,47 @@
     {
       "dashboardSchemaVersion": 1,
       "name": "leadtrack-overview",
-      "displayName": "Sales Overview",
-      "description": "Security-aware sales pipeline dashboard.",
+      "displayName": "LeadTrack Overview",
+      "description": "A live overview of lead volume, pipeline progress, ownership and follow-up health.",
       "moduleUserKey": "leadtrack",
       "variables": [],
       "widgets": [
+        {
+          "id": "kpi-total-leads",
+          "name": "Total Leads",
+          "type": "kpi",
+          "dataProvider": "LeadOverviewKpiProvider",
+          "providerContext": {
+            "metric": "total_leads"
+          }
+        },
+        {
+          "id": "kpi-active-leads",
+          "name": "Active Leads",
+          "type": "kpi",
+          "dataProvider": "LeadOverviewKpiProvider",
+          "providerContext": {
+            "metric": "active_leads"
+          }
+        },
+        {
+          "id": "kpi-opportunities",
+          "name": "Opportunities",
+          "type": "kpi",
+          "dataProvider": "LeadOverviewKpiProvider",
+          "providerContext": {
+            "metric": "generated_opportunities"
+          }
+        },
+        {
+          "id": "kpi-overdue-followups",
+          "name": "Overdue Follow-ups",
+          "type": "kpi",
+          "dataProvider": "LeadOverviewKpiProvider",
+          "providerContext": {
+            "metric": "overdue_followups"
+          }
+        },
         {
           "id": "pipeline-funnel",
           "name": "Pipeline Funnel",
@@ -2095,45 +2103,73 @@
         "columns": 12,
         "items": [
           {
-            "widgetId": "pipeline-funnel",
+            "widgetId": "kpi-total-leads",
             "x": 0,
             "y": 0,
-            "w": 6,
-            "h": 4
+            "w": 3,
+            "h": 2
           },
           {
-            "widgetId": "pipeline-value",
+            "widgetId": "kpi-active-leads",
+            "x": 3,
+            "y": 0,
+            "w": 3,
+            "h": 2
+          },
+          {
+            "widgetId": "kpi-opportunities",
             "x": 6,
             "y": 0,
-            "w": 6,
+            "w": 3,
+            "h": 2
+          },
+          {
+            "widgetId": "kpi-overdue-followups",
+            "x": 9,
+            "y": 0,
+            "w": 3,
+            "h": 2
+          },
+          {
+            "widgetId": "pipeline-funnel",
+            "x": 0,
+            "y": 2,
+            "w": 4,
             "h": 4
           },
           {
             "widgetId": "leads-by-source",
-            "x": 0,
-            "y": 4,
+            "x": 4,
+            "y": 2,
             "w": 4,
             "h": 4
           },
           {
             "widgetId": "rep-leaderboard",
-            "x": 4,
-            "y": 4,
-            "w": 4,
-            "h": 4
-          },
-          {
-            "widgetId": "overdue-followups",
             "x": 8,
-            "y": 4,
+            "y": 2,
             "w": 4,
             "h": 4
           },
           {
             "widgetId": "leads-created-trend",
             "x": 0,
-            "y": 8,
+            "y": 6,
             "w": 12,
+            "h": 4
+          },
+          {
+            "widgetId": "overdue-followups",
+            "x": 4,
+            "y": 10,
+            "w": 8,
+            "h": 4
+          },
+          {
+            "widgetId": "pipeline-value",
+            "x": 0,
+            "y": 10,
+            "w": 4,
             "h": 4
           }
         ]

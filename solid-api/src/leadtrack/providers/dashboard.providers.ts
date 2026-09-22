@@ -45,6 +45,73 @@ abstract class LeadDashboardProvider {
   }
 }
 
+type LeadOverviewMetric =
+  | 'total_leads'
+  | 'active_leads'
+  | 'generated_opportunities'
+  | 'overdue_followups';
+
+@DashboardWidgetDataProvider()
+@Injectable()
+export class LeadOverviewKpiProvider
+  extends LeadDashboardProvider
+  implements IDashboardWidgetDataProvider
+{
+  constructor(leads: LeadRepository) {
+    super(leads);
+  }
+
+  name() {
+    return 'LeadOverviewKpiProvider';
+  }
+
+  help() {
+    return 'Security-aware lead overview metrics for dashboard KPI widgets.';
+  }
+
+  async getData(
+    _definition: Record<string, any>,
+    ctxt: IDashboardWidgetDataProviderContext,
+  ): Promise<IDashboardWidgetDataResponseEnvelope<{ value: number; label: string }>> {
+    const metric = ctxt?.providerContext?.metric as LeadOverviewMetric;
+    const query = await this.query();
+    let value = 0;
+
+    switch (metric) {
+      case 'active_leads':
+        value = await query
+          .andWhere('lead.stage NOT IN (:...terminal)', {
+            terminal: ['dead', 'wrong_lead_info'],
+          })
+          .getCount();
+        break;
+      case 'generated_opportunities':
+        value = await query
+          .andWhere('lead.stage = :stage', { stage: 'opportunity_generated' })
+          .getCount();
+        break;
+      case 'overdue_followups': {
+        const result = await query
+          .innerJoin('lead.tasks', 'task')
+          .select('COUNT(DISTINCT task.id)', 'value')
+          .andWhere('task.isCompleted = false')
+          .andWhere('task.dueDate < :now', { now: new Date() })
+          .getRawOne<{ value: string | number }>();
+        value = Number(result?.value ?? 0);
+        break;
+      }
+      case 'total_leads':
+      default:
+        value = await query.getCount();
+    }
+
+    return this.envelope(ctxt.widgetName, {
+      value,
+      label: _definition?.name ?? 'Lead KPI',
+    });
+  }
+}
+
 @DashboardWidgetDataProvider()
 @Injectable()
 export class PipelineFunnelProvider
@@ -71,15 +138,19 @@ export class PipelineFunnelProvider
       .addSelect('COUNT(lead.id)', 'value')
       .groupBy('lead.stage')
       .getRawMany();
-    rows.sort(
-      (left, right) =>
-        STAGE_ORDER.indexOf(left.stage) - STAGE_ORDER.indexOf(right.stage),
+    const countsByStage = new Map(
+      rows.map((row) => [row.stage, Number(row.value)] as const),
     );
     return this.envelope(ctxt.widgetName, {
-      items: rows.map((row) => ({
-        label: STAGE_LABELS[row.stage] ?? row.stage,
-        value: Number(row.value),
-      })),
+      categories: STAGE_ORDER.map(
+        (stage) => STAGE_LABELS[stage] ?? stage,
+      ),
+      series: [
+        {
+          name: 'Leads',
+          data: STAGE_ORDER.map((stage) => countsByStage.get(stage) ?? 0),
+        },
+      ],
     });
   }
 }
