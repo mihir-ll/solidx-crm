@@ -38,6 +38,9 @@ export class CreateLeadDto {
   @ApiProperty()
   @IsIn(['PhoneCall', 'Email', 'LinkedIn', 'WhatsApp', 'Referral', 'Other'])
   source: string;
+  @ApiProperty({ enum: ['SolidX', 'Staffing', 'TestingHub'] })
+  @IsIn(['SolidX', 'Staffing', 'TestingHub'])
+  leadType: string;
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Date)

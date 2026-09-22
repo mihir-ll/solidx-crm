@@ -43,6 +43,10 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar" })
     source: string;
 
+    @Index()
+    @Column({ name: "lead_type", type: "varchar", length: 40, nullable: true })
+    leadType?: string;
+
   @Column({ type: 'date', nullable: true })
   expectedCloseDate?: Date;
 

@@ -8,6 +8,12 @@ const sourceLabels: Record<string, string> = {
   PhoneCall: "Phone Call",
 };
 
+const leadTypeLabels: Record<string, string> = {
+  SolidX: "SolidX",
+  Staffing: "Staffing",
+  TestingHub: "Testing Hub",
+};
+
 const formatMoney = (value: unknown, currency = "INR") => {
   const amount = Number(value);
   if (!Number.isFinite(amount)) return "Not set";
@@ -27,6 +33,8 @@ export default function LeadKanbanCardWidget({
 }: SolidKanbanCardWidgetProps) {
   const sourceKey = displayText(rowData?.source, "Other");
   const source = sourceLabels[sourceKey] ?? sourceKey;
+  const leadTypeKey = displayText(rowData?.leadType, "Unclassified");
+  const leadType = leadTypeLabels[leadTypeKey] ?? leadTypeKey;
   const owner =
     rowData?.owner?.fullName ?? rowData?.owner?.email ?? "Unassigned";
   const leadName = displayText(rowData?.name, "Unnamed lead");
@@ -53,6 +61,10 @@ export default function LeadKanbanCardWidget({
             <span title={company}>{company}</span>
             <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
             <span title={industry}>{industry}</span>
+          </div>
+
+          <div className="lead-kanban-card__type" title={`Lead type: ${leadType}`}>
+            {leadType}
           </div>
 
           <div className="lead-kanban-card__meta">

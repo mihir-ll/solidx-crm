@@ -92,6 +92,22 @@
   color: var(--solid-interactive-bg);
 }
 
+.lead-kanban-card__type {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 4px 8px;
+  color: var(--solid-interactive-bg);
+  background: var(--solid-surface-2);
+  border: 1px solid var(--solid-border-default);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .lead-kanban-card__meta {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
