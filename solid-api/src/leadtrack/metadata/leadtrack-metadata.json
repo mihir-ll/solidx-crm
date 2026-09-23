@@ -613,7 +613,11 @@
       "actionUserKey": "leadTrackOverview-dashboard-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
-      "iconName": "dashboard"
+      "iconName": "dashboard",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Sales",
@@ -622,7 +626,11 @@
       "actionUserKey": "",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
-      "iconName": "leaderboard"
+      "iconName": "leaderboard",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Reports",
@@ -658,7 +666,11 @@
       "actionUserKey": "lead-kanban-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
-      "iconName": "view_kanban"
+      "iconName": "view_kanban",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Leads",
@@ -667,7 +679,11 @@
       "actionUserKey": "lead-list-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
-      "iconName": "person_search"
+      "iconName": "person_search",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Follow-ups",
@@ -676,7 +692,11 @@
       "actionUserKey": "followUpTask-list-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
-      "iconName": "event"
+      "iconName": "event",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     }
   ],
   "views": [
