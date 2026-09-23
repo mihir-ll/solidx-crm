@@ -7,7 +7,7 @@ import "./lead-kanban-card.css";
 const displayText = (value: unknown, fallback = "Not set") =>
   typeof value === "string" && value.trim() ? value : fallback;
 
-const formatUpdatedDate = (value: unknown) => {
+const formatDate = (value: unknown) => {
   if (!value) return "";
   const date = new Date(String(value));
   if (Number.isNaN(date.getTime())) return "";
@@ -26,9 +26,8 @@ export default function LeadKanbanCardWidget({
     rowData?.owner?.fullName ?? rowData?.owner?.email ?? "Unassigned";
   const leadName = displayText(rowData?.name, "Unnamed lead");
   const company = displayText(rowData?.company, "Independent");
-  const industry = displayText(rowData?.industry, "Unknown industry");
   const leadType = displayText(rowData?.leadType, "");
-  const updatedDate = formatUpdatedDate(rowData?.updatedAt);
+  const cardDate = formatDate(rowData?.updatedAt);
 
   return (
     <div className="lead-kanban-card-shell">
@@ -40,8 +39,12 @@ export default function LeadKanbanCardWidget({
 
           <div className="lead-kanban-card__context">
             <span title={company}>{company}</span>
-            <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
-            <span title={industry}>{industry}</span>
+            {cardDate && (
+              <>
+                <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
+                <time dateTime={String(rowData?.updatedAt)}>{cardDate}</time>
+              </>
+            )}
           </div>
 
           <div className="lead-kanban-card__assignment-row">
@@ -53,13 +56,6 @@ export default function LeadKanbanCardWidget({
               <span className="lead-kanban-card__lead-type">{leadType}</span>
             )}
           </div>
-
-          {updatedDate && (
-            <footer className="lead-kanban-card__footer">
-              <span>Updated</span>
-              <time dateTime={String(rowData?.updatedAt)}>{updatedDate}</time>
-            </footer>
-          )}
         </div>
       </article>
     </div>

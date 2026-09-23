@@ -1568,7 +1568,8 @@
             "type": "field",
             "attrs": {
               "name": "dueDate",
-              "sortable": true
+              "sortable": true,
+              "viewWidget": "FollowUpDueDateListWidget"
             }
           },
           {
