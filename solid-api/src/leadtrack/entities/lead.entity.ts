@@ -52,7 +52,6 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar" })
     source: string;
 
-
     @Column({ type: "date", nullable: true })
     expectedCloseDate?: Date;
 
