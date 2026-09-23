@@ -15,11 +15,26 @@ export type ActivityActor = {
   email: string | null;
 };
 
+export type ReportUser = {
+  id: number;
+  fullName?: string;
+  email?: string | null;
+  username?: string | null;
+};
+
 export type ActivitySummaryGroup = ActivityActor & {
-  total: number;
-  created: number;
-  updated: number;
-  deleted: number;
+  leadsAdded: number;
+  tasksCompleted: number;
+  tasksCompletedByChannel: Record<
+    "Call" | "Email" | "LinkedIn" | "WhatsApp" | "Meeting" | "Other",
+    number
+  >;
+  stageAdvances: number;
+  meetingsSet: number;
+  opportunitiesGenerated: number;
+  deadOrWrong: number;
+  overdueFollowUps: number;
+  notesPosted: number;
 };
 
 export type ActivityChange = {
@@ -35,13 +50,38 @@ export type ActivityRecord = {
   id: number;
   actor: ActivityActor;
   occurredAt: string;
-  action: "Created" | "Updated" | "Deleted";
+  type: "lead_added" | "lead_changed" | "task_completed" | "note_posted";
   entity: string;
   entityName: string;
   record: string;
   entityId: number;
+  lead: {
+    id: number | null;
+    name: string;
+    company: string | null;
+  };
   message: string;
+  channel?: string | null;
   changes: ActivityChange[];
+};
+
+type SummaryResponse = {
+  range: { startDate: string; endDate: string };
+  groups: ActivitySummaryGroup[];
+  totalActions: number;
+};
+
+type ActivityResponse = {
+  range: { startDate: string; endDate: string };
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  records: ActivityRecord[];
+};
+
+type UserListResponse = {
+  records: ReportUser[];
 };
 
 const queryString = (query: LeadActivityReportQuery) => {
@@ -54,28 +94,38 @@ const queryString = (query: LeadActivityReportQuery) => {
   return params.toString();
 };
 
+const unwrapResponse = <T>(response: T | { data?: T }) => {
+  if (typeof response === "object" && response !== null && "data" in response) {
+    return response.data ?? (response as T);
+  }
+  return response as T;
+};
+
 export const leadActivityReportApi = createApi({
   reducerPath: "leadActivityReportApi",
   baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
-    getSummary: builder.query<{
-      range: { startDate: string; endDate: string };
-      groups: ActivitySummaryGroup[];
-      totalActions: number;
-    }, Pick<LeadActivityReportQuery, "startDate" | "endDate">>({
-      query: (query) => `/leadtrack-report/activity/summary?${queryString(query)}`,
-      transformResponse: (response: any) => response?.data ?? response,
+    getSummary: builder.query<
+      SummaryResponse,
+      Pick<LeadActivityReportQuery, "startDate" | "endDate" | "actorId">
+    >({
+      query: (query) =>
+        `/leadtrack-report/activity/summary?${queryString(query)}`,
+      transformResponse: (
+        response: SummaryResponse | { data?: SummaryResponse },
+      ) => unwrapResponse<SummaryResponse>(response),
     }),
-    getActivity: builder.query<{
-      range: { startDate: string; endDate: string };
-      page: number;
-      pageSize: number;
-      total: number;
-      totalPages: number;
-      records: ActivityRecord[];
-    }, LeadActivityReportQuery>({
+    getActivity: builder.query<ActivityResponse, LeadActivityReportQuery>({
       query: (query) => `/leadtrack-report/activity?${queryString(query)}`,
-      transformResponse: (response: any) => response?.data ?? response,
+      transformResponse: (
+        response: ActivityResponse | { data?: ActivityResponse },
+      ) => unwrapResponse<ActivityResponse>(response),
+    }),
+    getUsers: builder.query<ReportUser[], void>({
+      query: () => "/crm-user?limit=100&offset=0&sort=fullName",
+      transformResponse: (
+        response: UserListResponse | { data?: UserListResponse },
+      ) => unwrapResponse<UserListResponse>(response).records ?? [],
     }),
     exportActivity: builder.query<Blob, LeadActivityReportQuery>({
       query: (query) => ({
@@ -90,4 +140,5 @@ export const {
   useGetSummaryQuery,
   useLazyGetActivityQuery,
   useLazyExportActivityQuery,
+  useGetUsersQuery,
 } = leadActivityReportApi;

@@ -424,6 +424,9 @@
     {
       "name": "Admin",
       "permissions": [
+        "LeadActivityReportController.getSummary",
+        "LeadActivityReportController.getActivity",
+        "LeadActivityReportController.exportCsv",
         "CrmUserController.create",
         "CrmUserController.update",
         "CrmUserController.partialUpdate",
