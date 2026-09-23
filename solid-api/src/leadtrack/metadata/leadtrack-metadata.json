@@ -59,7 +59,8 @@
             "ormType": "varchar",
             "selectionStaticValues": [
               "Staffing:Staffing",
-              "SolidX:SolidX"
+              "SolidX:SolidX",
+              "TestHub:Test Hub"
             ],
             "selectionValueType": "string",
             "required": false,
@@ -120,6 +121,7 @@
             "required": true,
             "unique": false,
             "index": false,
+            "isUserKey": true,
             "enableAuditTracking": true
           },
           {

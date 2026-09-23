@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateFollowUpTaskDto {
@@ -49,7 +50,8 @@ export class CreateFollowUpTaskDto {
     completedAt?: Date;
 
     @ApiPropertyOptional()
-    @IsOptional()
+    @ValidateIf((task) => task.isCompleted === true || task.isCompleted === 'true')
+    @IsNotEmpty({ message: 'Outcome notes are required when a follow-up task is completed.' })
     @IsString()
     @ApiProperty()
     outcomeNotes?: string;
