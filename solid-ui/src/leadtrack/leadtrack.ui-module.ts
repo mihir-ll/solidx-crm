@@ -2,6 +2,7 @@ import { ExtensionComponentTypes, type SolidUiModule } from "@solidxai/core-ui";
 import { createElement } from "react";
 import LeadKanbanCardWidget from "./components/LeadKanbanCardWidget";
 import LeadActivityReportPage from "./components/LeadActivityReportPage";
+import FollowUpDueDateListWidget from "./components/FollowUpDueDateListWidget";
 import { leadActivityReportApi } from "./api/leadActivityReportApi";
 
 const leadTrackUiModule = {
@@ -16,6 +17,7 @@ const leadTrackUiModule = {
   },
   extensionComponents: [
     { name: "LeadKanbanCardWidget", component: LeadKanbanCardWidget, type: ExtensionComponentTypes.kanbanCardWidget },
+    { name: "FollowUpDueDateListWidget", component: FollowUpDueDateListWidget, type: ExtensionComponentTypes.listFieldWidget },
   ],
   extensionFunctions: [],
   reducers: { [leadActivityReportApi.reducerPath]: leadActivityReportApi.reducer },
