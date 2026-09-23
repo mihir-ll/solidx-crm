@@ -22,6 +22,7 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
   }
 
   async create(dto: any, files: Express.Multer.File[] = [], ctxt: any = {}) {
+    this.validateCompletionOutcome(dto?.isCompleted, dto?.outcomeNotes);
     const leadId = this.leadIdFrom(dto);
     const lead = await this.findAccessibleLead(leadId);
     await this.defaultAssignee(dto, lead);
@@ -34,6 +35,7 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
     ctxt: any = {},
   ) {
     for (const dto of createDtos) {
+      this.validateCompletionOutcome(dto?.isCompleted, dto?.outcomeNotes);
       const lead = await this.findAccessibleLead(this.leadIdFrom(dto));
       await this.defaultAssignee(dto, lead);
     }
@@ -52,6 +54,9 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
       await this.findAccessibleLead(this.leadIdFrom(dto));
     }
     const previous = await this.loadTask(id);
+    const nextIsCompleted = dto?.isCompleted === undefined ? previous.isCompleted : dto.isCompleted;
+    const nextOutcomeNotes = dto?.outcomeNotes === undefined ? previous.outcomeNotes : dto.outcomeNotes;
+    this.validateCompletionOutcome(nextIsCompleted, nextOutcomeNotes);
     const result = await super.update(
       id,
       dto,
@@ -65,6 +70,16 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
       await this.followUpAutomation.onTaskCompleted(current);
     }
     return result;
+  }
+
+  private validateCompletionOutcome(isCompleted: unknown, outcomeNotes: unknown) {
+    const completed = isCompleted === true || isCompleted === 'true';
+    const hasOutcome = typeof outcomeNotes === 'string' && outcomeNotes.trim().length > 0;
+    if (completed && !hasOutcome) {
+      throw new BadRequestException(
+        'Outcome notes are required when a follow-up task is completed.',
+      );
+    }
   }
 
   private async defaultAssignee(dto: any, lead: Lead) {

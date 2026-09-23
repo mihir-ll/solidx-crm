@@ -88,16 +88,12 @@ export class CreateLeadDto {
     @ApiProperty()
     currency: string = "INR";
 
+    @Transform(({ value }) => Array.isArray(value) ? JSON.stringify(value) : value)
     @IsNotEmpty()
     @IsString()
     @ApiProperty()
     source: string;
 
-    @ApiPropertyOptional({ type: [String], description: 'JSON-encoded static selection values' })
-    @Transform(({ value }) => Array.isArray(value) ? JSON.stringify(value) : value)
-    @IsOptional()
-    @IsString()
-    channelsUsed?: string;
 
     @ApiPropertyOptional()
     @Type(() => Date)

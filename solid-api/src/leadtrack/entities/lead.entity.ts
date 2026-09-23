@@ -52,9 +52,6 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar" })
     source: string;
 
-    // SolidX stores multi-select static selections as a JSON-encoded string.
-    @Column({ type: "varchar", nullable: true })
-    channelsUsed?: string;
 
     @Column({ type: "date", nullable: true })
     expectedCloseDate?: Date;

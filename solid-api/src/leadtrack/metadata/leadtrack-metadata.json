@@ -59,7 +59,8 @@
             "ormType": "varchar",
             "selectionStaticValues": [
               "Staffing:Staffing",
-              "SolidX:SolidX"
+              "SolidX:SolidX",
+              "TestHub:Test Hub"
             ],
             "selectionValueType": "string",
             "required": false,
@@ -120,6 +121,7 @@
             "required": true,
             "unique": false,
             "index": false,
+            "isUserKey": true,
             "enableAuditTracking": true
           },
           {
@@ -158,7 +160,7 @@
             "type": "selectionStatic",
             "ormType": "varchar",
             "selectionStaticValues": [
-              "Phone Call:Phone Call",
+              "Call:Call",
               "Email:Email",
               "LinkedIn:LinkedIn",
               "WhatsApp:WhatsApp",
@@ -166,27 +168,10 @@
               "Other:Other"
             ],
             "selectionValueType": "string",
+            "isMultiSelect": true,
             "required": true,
             "unique": false,
             "index": true,
-            "enableAuditTracking": true
-          },
-          {
-            "name": "channelsUsed",
-            "displayName": "Channels Used",
-            "type": "selectionStatic",
-            "ormType": "varchar",
-            "selectionStaticValues": [
-              "Call:Call",
-              "Email:Email",
-              "WhatsApp:WhatsApp",
-              "LinkedIn:LinkedIn"
-            ],
-            "selectionValueType": "string",
-            "isMultiSelect": true,
-            "required": false,
-            "unique": false,
-            "index": false,
             "enableAuditTracking": true
           },
           {
@@ -1407,29 +1392,6 @@
                           {
                             "type": "row",
                             "attrs": {
-                              "name": "channels-used-row"
-                            },
-                            "children": [
-                              {
-                                "type": "column",
-                                "attrs": {
-                                  "name": "channels-used-column",
-                                  "className": "col-12"
-                                },
-                                "children": [
-                                  {
-                                    "type": "field",
-                                    "attrs": {
-                                      "name": "channelsUsed"
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "type": "row",
-                            "attrs": {
                               "name": "sales-dates-row"
                             },
                             "children": [
@@ -2416,8 +2378,7 @@
           "phone": "+919810000001",
           "dealValue": 850000,
           "currency": "INR",
-          "source": "Phone Call",
-          "channelsUsed": "[\"Call\",\"Email\"]",
+          "source": "[\"Call\"]",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Requested a product overview.",
           "stage": "new"
@@ -2438,8 +2399,7 @@
           "phone": "+919810000002",
           "dealValue": 420000,
           "currency": "INR",
-          "source": "Email",
-          "channelsUsed": "[\"Email\"]",
+          "source": "[\"Email\"]",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Pricing follow-up due.",
           "stage": "follow_up"
@@ -2460,8 +2420,7 @@
           "phone": "+919810000003",
           "dealValue": 1250000,
           "currency": "INR",
-          "source": "Referral",
-          "channelsUsed": "[\"Call\",\"WhatsApp\"]",
+          "source": "[\"Referral\"]",
           "ownerUserKey": "leadtrackSales",
           "remarks": "Decision-maker meeting scheduled.",
           "stage": "meeting_pending"

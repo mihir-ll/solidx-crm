@@ -56,6 +56,7 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @ApiProperty()
     currency: string;
 
+    @Transform(({ value }) => Array.isArray(value) ? JSON.stringify(value) : value)
     @IsNotEmpty()
     @IsOptional()
     @IsString()
