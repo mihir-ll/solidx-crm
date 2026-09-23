@@ -213,19 +213,28 @@ export class LeadsBySourceProvider
     _definition: Record<string, any>,
     ctxt: IDashboardWidgetDataProviderContext,
   ): Promise<IDashboardWidgetDataResponseEnvelope<any>> {
-    const rows = await (
-      await this.query()
-    )
-      .select('lead.source', 'label')
-      .addSelect('COUNT(lead.id)', 'value')
-      .groupBy('lead.source')
-      .orderBy('COUNT(lead.id)', 'DESC')
+    const rows = await (await this.query())
+      .select('lead.source', 'source')
       .getRawMany();
+    const counts = new Map<string, number>();
+    for (const row of rows) {
+      let sources: string[] = [];
+      if (typeof row.source === 'string') {
+        try {
+          const parsed = JSON.parse(row.source);
+          sources = Array.isArray(parsed) ? parsed : [row.source];
+        } catch {
+          sources = [row.source];
+        }
+      }
+      for (const source of sources.filter(Boolean)) {
+        counts.set(source, (counts.get(source) ?? 0) + 1);
+      }
+    }
     return this.envelope(ctxt.widgetName, {
-      items: rows.map((row) => ({
-        label: row.label,
-        value: Number(row.value),
-      })),
+      items: Array.from(counts.entries())
+        .sort(([, a], [, b]) => b - a)
+        .map(([label, value]) => ({ label, value })),
     });
   }
 }

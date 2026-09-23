@@ -19,7 +19,7 @@ export class LeadService extends CRUDService<Lead> {
   }
 
   async create(createDto: any, files: Express.Multer.File[] = [], ctxt: any = {}) {
-    this.normalizeChannelsUsed(createDto);
+    this.normalizeLeadSource(createDto);
     this.scopeCreateToActor(createDto, ctxt);
     if (!createDto.stage) createDto.stage = 'new';
     const created = await super.create(createDto, files, ctxt);
@@ -34,7 +34,7 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
   ) {
     for (const dto of createDtos) {
-      this.normalizeChannelsUsed(dto);
+      this.normalizeLeadSource(dto);
       this.scopeCreateToActor(dto, ctxt);
       if (!dto.stage) dto.stage = 'new';
     }
@@ -54,7 +54,7 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
     isUpdate = false,
   ) {
-    this.normalizeChannelsUsed(updateDto);
+    this.normalizeLeadSource(updateDto);
     this.assertOwnerUpdateAllowed(updateDto, ctxt);
     const previous = await this.loadLead(id);
     const updated = await super.update(
@@ -87,9 +87,9 @@ export class LeadService extends CRUDService<Lead> {
     delete dto.ownerUserKey;
   }
 
-  private normalizeChannelsUsed(dto: any) {
-    if (Array.isArray(dto?.channelsUsed)) {
-      dto.channelsUsed = JSON.stringify(dto.channelsUsed);
+  private normalizeLeadSource(dto: any) {
+    if (Array.isArray(dto?.source)) {
+      dto.source = JSON.stringify(dto.source);
     }
   }
 
