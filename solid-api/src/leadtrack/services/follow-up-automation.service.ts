@@ -12,10 +12,11 @@ const DAY = 24 * 60 * 60 * 1000;
 export class FollowUpAutomationService {
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
-  async onLeadCreated(lead: Lead) {
-    if (lead.stage !== 'new') return;
-    await this.createIfMissing(lead, 'Make first contact call', this.afterDays(1));
-  }
+  // Initial lead creation follow up
+  // async onLeadCreated(lead: Lead) {
+  //   if (lead.stage !== 'new') return;
+  //   await this.createIfMissing(lead, 'Make first contact call', this.afterDays(1));
+  // }
 
   async onLeadUpdated(previous: Lead, current: Lead) {
     const stageChanged = previous.stage !== current.stage;

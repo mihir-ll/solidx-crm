@@ -261,12 +261,12 @@ export class RepLeaderboardProvider
     const rows = await (
       await this.query()
     )
-      .innerJoin('lead.owner', 'owner')
-      .select('owner.fullName', 'name')
+      .innerJoin('lead.owner', 'leadOwner')
+      .select('leadOwner.fullName', 'name')
       .addSelect('COUNT(lead.id)', 'value')
       .andWhere('lead.stage = :stage', { stage: 'opportunity_generated' })
-      .groupBy('owner.id')
-      .addGroupBy('owner.fullName')
+      .groupBy('leadOwner.id')
+      .addGroupBy('leadOwner.fullName')
       .orderBy('COUNT(lead.id)', 'DESC')
       .limit(10)
       .getRawMany();

@@ -23,8 +23,8 @@ export class LeadService extends CRUDService<Lead> {
     this.scopeCreateToActor(createDto, ctxt);
     if (!createDto.stage) createDto.stage = 'new';
     const created = await super.create(createDto, files, ctxt);
-    const lead = await this.loadLead(created.id);
-    await this.followUpAutomation.onLeadCreated(lead);
+    // const lead = await this.loadLead(created.id);
+    // await this.followUpAutomation.onLeadCreated(lead);
     return created;
   }
 
@@ -39,10 +39,11 @@ export class LeadService extends CRUDService<Lead> {
       if (!dto.stage) dto.stage = 'new';
     }
     const created = await super.insertMany(createDtos, files, ctxt);
-    for (const item of created) {
-      const lead = await this.loadLead(item.id);
-      await this.followUpAutomation.onLeadCreated(lead);
-    }
+    // Initial lead creation 
+    // for (const item of created) {
+    //   const lead = await this.loadLead(item.id);
+    //   await this.followUpAutomation.onLeadCreated(lead);
+    // }
     return created;
   }
 
@@ -73,7 +74,7 @@ export class LeadService extends CRUDService<Lead> {
   private async loadLead(id: number): Promise<Lead> {
     const query = await this.leadRepository.createSecurityRuleAwareQueryBuilder('lead');
     const lead = await query
-      .leftJoinAndSelect('lead.owner', 'owner')
+      .leftJoinAndSelect('lead.owner', 'leadOwner')
       .andWhere('lead.id = :id', { id })
       .getOne();
     if (!lead) throw new NotFoundException('The lead is not available to this user.');

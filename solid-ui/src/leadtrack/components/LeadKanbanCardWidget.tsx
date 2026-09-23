@@ -2,11 +2,30 @@ import {
   SolidIcon,
   type SolidKanbanCardWidgetProps,
 } from "@solidxai/core-ui";
+import { SolidMaterialSymbol } from "@solidxai/core-ui/dist/components/common/SolidMaterialSymbol";
 import "./lead-kanban-card.css";
 
 const displayText = (value: unknown, fallback = "Not set") =>
   typeof value === "string" && value.trim() ? value : fallback;
 
+const selectionDisplayText = (
+  value: unknown,
+  fieldMetadata: { selectionStaticValues?: unknown } | undefined,
+) => {
+  const rawValue = displayText(value, "");
+  if (!rawValue) return "";
+
+  const labelMap = Array.isArray(fieldMetadata?.selectionStaticValues)
+    ? fieldMetadata.selectionStaticValues.reduce<Record<string, string>>((map, entry) => {
+        const [raw, ...labelParts] = String(entry).split(":");
+        const key = raw.trim();
+        if (key) map[key] = labelParts.join(":").trim() || key;
+        return map;
+      }, {})
+    : {};
+
+  return labelMap[rawValue] ?? rawValue;
+};
 const formatDate = (value: unknown) => {
   if (!value) return "";
   const date = new Date(String(value));
@@ -21,12 +40,16 @@ const formatDate = (value: unknown) => {
 
 export default function LeadKanbanCardWidget({
   rowData,
+  solidFieldsMetadata,
 }: SolidKanbanCardWidgetProps) {
   const owner =
     rowData?.owner?.fullName ?? rowData?.owner?.email ?? "Unassigned";
   const leadName = displayText(rowData?.name, "Unnamed lead");
   const company = displayText(rowData?.company, "Independent");
-  const leadType = displayText(rowData?.leadType, "");
+  const leadType = selectionDisplayText(
+    rowData?.leadType,
+    solidFieldsMetadata?.leadType,
+  );
   const cardDate = formatDate(rowData?.updatedAt);
 
   return (
@@ -38,10 +61,13 @@ export default function LeadKanbanCardWidget({
           </div>
 
           <div className="lead-kanban-card__context">
-            <span title={company}>{company}</span>
+            <span className="lead-kanban-card__company" title={company}>
+              <SolidIcon name="si-objects-column" size={13} aria-hidden />
+              <span>{company}</span>
+            </span>
+
             {cardDate && (
               <>
-                <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
                 <time dateTime={String(rowData?.updatedAt)}>{cardDate}</time>
               </>
             )}
@@ -56,13 +82,6 @@ export default function LeadKanbanCardWidget({
               <span className="lead-kanban-card__lead-type">{leadType}</span>
             )}
           </div>
-
-          {updatedDate && (
-            <footer className="lead-kanban-card__footer">
-              <span>Updated</span>
-              <time dateTime={String(rowData?.updatedAt)}>{updatedDate}</time>
-            </footer>
-          )}
         </div>
       </article>
     </div>

@@ -52,6 +52,22 @@
   line-height: 1.2;
 }
 
+.lead-kanban-card__company {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: var(--solid-text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.lead-kanban-card__company svg {
+  flex: 0 0 auto;
+  color: var(--solid-interactive-bg);
+}
+
 .lead-kanban-card__owner svg {
   flex: 0 0 auto;
   color: var(--solid-interactive-bg);
@@ -66,6 +82,7 @@
 .lead-kanban-card__context {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 7px;
   min-width: 0;
   color: var(--solid-text-muted);

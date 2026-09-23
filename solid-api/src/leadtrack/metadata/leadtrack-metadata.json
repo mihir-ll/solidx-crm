@@ -424,15 +424,60 @@
     {
       "name": "Admin",
       "permissions": [
-        "LeadActivityReportController.getSummary",
-        "LeadActivityReportController.getActivity",
-        "LeadActivityReportController.exportCsv",
         "CrmUserController.create",
         "CrmUserController.update",
         "CrmUserController.partialUpdate",
         "CrmUserController.findMany",
         "CrmUserController.findOne",
-        "CrmUserController.delete"
+        "CrmUserController.delete",
+        "LeadController.create",
+        "LeadController.insertMany",
+        "LeadController.update",
+        "LeadController.partialUpdate",
+        "LeadController.findMany",
+        "LeadController.findOne",
+        "LeadController.deleteMany",
+        "LeadController.delete",
+        "LeadController.recoverMany",
+        "LeadController.recover",
+        "FollowUpTaskController.create",
+        "FollowUpTaskController.insertMany",
+        "FollowUpTaskController.update",
+        "FollowUpTaskController.partialUpdate",
+        "FollowUpTaskController.findMany",
+        "FollowUpTaskController.findOne",
+        "FollowUpTaskController.deleteMany",
+        "FollowUpTaskController.delete",
+        "FollowUpTaskController.recoverMany",
+        "FollowUpTaskController.recover",
+        "DashboardController.getDefinition",
+        "DashboardController.getWidgetData",
+        "DashboardController.getDashboardData",
+        "DashboardController.getVariableOptions",
+        "DashboardController.getLayout",
+        "DashboardController.saveLayout",
+        "dashboard:leadtrack-overview:*",
+        "LeadActivityReportController.getSummary",
+        "LeadActivityReportController.getActivity",
+        "LeadActivityReportController.exportCsv",
+        "CrmUserController.findMany",
+        "CrmUserController.findOne",
+        "ImportTransactionController.create",
+        "ImportTransactionController.partialUpdate",
+        "ImportTransactionController.deleteMany",
+        "ImportTransactionController.delete",
+        "ImportTransactionController.getImportTemplate",
+        "ImportTransactionController.getImportInstructions",
+        "ImportTransactionController.getImportMappingInfo",
+        "ImportTransactionController.startImportSync",
+        "ImportTransactionController.startImportAsync",
+        "ImportTransactionController.exportFailedImportedImports",
+        "ExportTemplateController.create",
+        "ExportTemplateController.findMany",
+        "ExportTemplateController.findOne",
+        "ExportTemplateController.delete",
+        "ExportTemplateController.startExportSync",
+        "ExportTemplateController.startExportAsync"
       ]
     },
     {
@@ -469,33 +514,7 @@
         "LeadActivityReportController.getActivity",
         "LeadActivityReportController.exportCsv",
         "CrmUserController.findMany",
-        "CrmUserController.findOne",
-        "ImportTransactionController.create",
-        "ImportTransactionController.insertMany",
-        "ImportTransactionController.update",
-        "ImportTransactionController.partialUpdate",
-        "ImportTransactionController.findMany",
-        "ImportTransactionController.findOne",
-        "ImportTransactionController.deleteMany",
-        "ImportTransactionController.delete",
-        "ImportTransactionController.recoverMany",
-        "ImportTransactionController.recover",
-        "ImportTransactionController.getImportTemplate",
-        "ImportTransactionController.getImportInstructions",
-        "ImportTransactionController.getImportMappingInfo",
-        "ImportTransactionController.startImportSync",
-        "ImportTransactionController.startImportAsync",
-        "ImportTransactionController.exportFailedImportedImports",
-        "ExportTemplateController.create",
-        "ExportTemplateController.insertMany",
-        "ExportTemplateController.update",
-        "ExportTemplateController.partialUpdate",
-        "ExportTemplateController.findMany",
-        "ExportTemplateController.findOne",
-        "ExportTemplateController.deleteMany",
-        "ExportTemplateController.delete",
-        "ExportTemplateController.startExportSync",
-        "ExportTemplateController.startExportAsync"
+        "CrmUserController.findOne"
       ]
     }
   ],
@@ -613,7 +632,11 @@
       "actionUserKey": "leadTrackOverview-dashboard-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
-      "iconName": "dashboard"
+      "iconName": "dashboard",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Sales",
@@ -622,7 +645,11 @@
       "actionUserKey": "",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
-      "iconName": "leaderboard"
+      "iconName": "leaderboard",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Reports",
@@ -658,7 +685,11 @@
       "actionUserKey": "lead-kanban-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
-      "iconName": "view_kanban"
+      "iconName": "view_kanban",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Leads",
@@ -667,7 +698,11 @@
       "actionUserKey": "lead-list-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
-      "iconName": "person_search"
+      "iconName": "person_search",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Follow-ups",
@@ -676,7 +711,11 @@
       "actionUserKey": "followUpTask-list-action",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackSales-menu-item",
-      "iconName": "event"
+      "iconName": "event",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     }
   ],
   "views": [
@@ -892,6 +931,7 @@
         "type": "form",
         "attrs": {
           "name": "form-1",
+          "label": "LeadTrack User",
           "className": "grid"
         },
         "children": [
@@ -902,77 +942,140 @@
             },
             "children": [
               {
-                "type": "row",
+                "type": "column",
                 "attrs": {
-                  "name": "user-row"
+                  "name": "basic-info-section",
+                  "label": "Basic Info",
+                  "className": "col-12"
                 },
                 "children": [
                   {
-                    "type": "column",
+                    "type": "row",
                     "attrs": {
-                      "name": "user-details",
-                      "className": "col-12"
+                      "name": "basic-info-identity-row"
                     },
                     "children": [
                       {
-                        "type": "row",
+                        "type": "column",
                         "attrs": {
-                          "name": "user-fields-row"
+                          "name": "full-name-column",
+                          "className": "col-12 md:col-6"
                         },
                         "children": [
                           {
-                            "type": "column",
+                            "type": "field",
                             "attrs": {
-                              "name": "user-fields-primary",
-                              "className": "col-12 sm:col-12 md:col-6 lg:col-6"
-                            },
-                            "children": [
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "fullName"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "email"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "password"
-                                }
-                              }
-                            ]
-                          },
+                              "name": "fullName"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "username-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
                           {
-                            "type": "column",
+                            "type": "field",
                             "attrs": {
-                              "name": "user-fields-secondary",
-                              "className": "col-12 sm:col-12 md:col-6 lg:col-6"
-                            },
-                            "children": [
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "username"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "mobile"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "userType"
-                                }
-                              }
-                            ]
+                              "name": "username"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "basic-info-contact-row"
+                    },
+                    "children": [
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "email-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "email"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "mobile-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "mobile"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "basic-info-password-row"
+                    },
+                    "children": [
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "password-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "password"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "column",
+                "attrs": {
+                  "name": "access-section",
+                  "label": "Access",
+                  "className": "col-12"
+                },
+                "children": [
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "access-row"
+                    },
+                    "children": [
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "user-type-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "userType"
+                            }
                           }
                         ]
                       }
