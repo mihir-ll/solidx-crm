@@ -1513,7 +1513,179 @@
                         "type": "field",
                         "attrs": {
                           "name": "tasks",
-                          "inlineCreate": false
+                          "inlineCreate": false,
+                          "inlineCreateLayout": {
+                            "type": "form",
+                            "attrs": {
+                              "name": "follow-up-inline-create",
+                              "label": "Create Follow-up Task",
+                              "className": "grid",
+                              "width": "min(48rem, 92vw)",
+                              "height": "auto"
+                            },
+                            "children": [
+                              {
+                                "type": "sheet",
+                                "attrs": {
+                                  "name": "follow-up-inline-create-sheet"
+                                },
+                                "children": [
+                                  {
+                                    "type": "field",
+                                    "attrs": {
+                                      "name": "lead"
+                                    }
+                                  },
+                                  {
+                                    "type": "group",
+                                    "attrs": {
+                                      "name": "follow-up-inline-create-details",
+                                      "label": "FOLLOW-UP DETAILS",
+                                      "className": "lead-form-section col-12"
+                                    },
+                                    "children": [
+                                      {
+                                        "type": "row",
+                                        "attrs": {
+                                          "name": "follow-up-inline-create-details-row"
+                                        },
+                                        "children": [
+                                          {
+                                            "type": "column",
+                                            "attrs": {
+                                              "name": "follow-up-inline-create-title-column",
+                                              "className": "col-12 md:col-6"
+                                            },
+                                            "children": [
+                                              {
+                                                "type": "field",
+                                                "attrs": {
+                                                  "name": "title"
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "column",
+                                            "attrs": {
+                                              "name": "follow-up-inline-create-channel-column",
+                                              "className": "col-12 md:col-6"
+                                            },
+                                            "children": [
+                                              {
+                                                "type": "field",
+                                                "attrs": {
+                                                  "name": "channel"
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "group",
+                                    "attrs": {
+                                      "name": "follow-up-inline-create-schedule",
+                                      "label": "SCHEDULE",
+                                      "className": "lead-form-section col-12 mt-2"
+                                    },
+                                    "children": [
+                                      {
+                                        "type": "row",
+                                        "attrs": {
+                                          "name": "follow-up-inline-create-schedule-row"
+                                        },
+                                        "children": [
+                                          {
+                                            "type": "column",
+                                            "attrs": {
+                                              "name": "follow-up-inline-create-due-date-column",
+                                              "className": "col-12 md:col-6"
+                                            },
+                                            "children": [
+                                              {
+                                                "type": "field",
+                                                "attrs": {
+                                                  "name": "dueDate"
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "column",
+                                            "attrs": {
+                                              "name": "follow-up-inline-create-assigned-to-column",
+                                              "className": "col-12 md:col-6"
+                                            },
+                                            "children": [
+                                              {
+                                                "type": "field",
+                                                "attrs": {
+                                                  "name": "assignedTo",
+                                                  "coModelFieldToDisplay": "fullName",
+                                                  "isSearchable": true
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "group",
+                                    "attrs": {
+                                      "name": "follow-up-inline-create-outcome",
+                                      "label": "OUTCOME",
+                                      "className": "lead-form-section col-12 mt-2"
+                                    },
+                                    "children": [
+                                      {
+                                        "type": "row",
+                                        "attrs": {
+                                          "name": "follow-up-inline-create-outcome-row"
+                                        },
+                                        "children": [
+                                          {
+                                            "type": "column",
+                                            "attrs": {
+                                              "name": "follow-up-inline-create-completed-column",
+                                              "className": "col-12 md:col-6"
+                                            },
+                                            "children": [
+                                              {
+                                                "type": "field",
+                                                "attrs": {
+                                                  "name": "isCompleted"
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": "column",
+                                            "attrs": {
+                                              "name": "follow-up-inline-create-outcome-notes-column",
+                                              "className": "col-12"
+                                            },
+                                            "children": [
+                                              {
+                                                "type": "field",
+                                                "attrs": {
+                                                  "name": "outcomeNotes"
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
                         }
                       }
                     ]
@@ -1561,7 +1733,8 @@
           {
             "type": "field",
             "attrs": {
-              "name": "channel"
+              "name": "channel",
+              "isSearchable": true
             }
           },
           {
