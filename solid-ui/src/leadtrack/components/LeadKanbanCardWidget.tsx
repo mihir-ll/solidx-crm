@@ -56,6 +56,13 @@ export default function LeadKanbanCardWidget({
               <span className="lead-kanban-card__lead-type">{leadType}</span>
             )}
           </div>
+
+          {updatedDate && (
+            <footer className="lead-kanban-card__footer">
+              <span>Updated</span>
+              <time dateTime={String(rowData?.updatedAt)}>{updatedDate}</time>
+            </footer>
+          )}
         </div>
       </article>
     </div>
