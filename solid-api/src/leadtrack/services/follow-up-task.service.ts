@@ -102,7 +102,7 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
   private async findAccessibleLead(leadId: number) {
     const query = await this.leadRepository.createSecurityRuleAwareQueryBuilder('lead');
     const lead = await query
-      .leftJoinAndSelect('lead.owner', 'owner')
+      .leftJoinAndSelect('lead.owner', 'leadOwner')
       .andWhere('lead.id = :leadId', { leadId })
       .getOne();
     if (!lead) throw new NotFoundException('The selected lead is not available to this user.');
@@ -113,7 +113,7 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
     const query = await this.taskRepository.createSecurityRuleAwareQueryBuilder('task');
     const task = await query
       .leftJoinAndSelect('task.lead', 'lead')
-      .leftJoinAndSelect('lead.owner', 'owner')
+      .leftJoinAndSelect('lead.owner', 'leadOwner')
       .leftJoinAndSelect('task.assignedTo', 'assignedTo')
       .andWhere('task.id = :id', { id })
       .getOne();

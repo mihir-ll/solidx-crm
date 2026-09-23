@@ -2,6 +2,7 @@ import {
   SolidIcon,
   type SolidKanbanCardWidgetProps,
 } from "@solidxai/core-ui";
+import { SolidMaterialSymbol } from "@solidxai/core-ui/dist/components/common/SolidMaterialSymbol";
 import "./lead-kanban-card.css";
 
 const displayText = (value: unknown, fallback = "Not set") =>
@@ -60,10 +61,13 @@ export default function LeadKanbanCardWidget({
           </div>
 
           <div className="lead-kanban-card__context">
-            <span title={company}>{company}</span>
+            <span className="lead-kanban-card__company" title={company}>
+              <SolidIcon name="si-objects-column" size={13} aria-hidden />
+              <span>{company}</span>
+            </span>
+
             {cardDate && (
               <>
-                <span className="lead-kanban-card__context-dot" aria-hidden>•</span>
                 <time dateTime={String(rowData?.updatedAt)}>{cardDate}</time>
               </>
             )}

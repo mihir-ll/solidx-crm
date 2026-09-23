@@ -892,6 +892,7 @@
         "type": "form",
         "attrs": {
           "name": "form-1",
+          "label": "LeadTrack User",
           "className": "grid"
         },
         "children": [
@@ -902,77 +903,140 @@
             },
             "children": [
               {
-                "type": "row",
+                "type": "column",
                 "attrs": {
-                  "name": "user-row"
+                  "name": "basic-info-section",
+                  "label": "Basic Info",
+                  "className": "col-12"
                 },
                 "children": [
                   {
-                    "type": "column",
+                    "type": "row",
                     "attrs": {
-                      "name": "user-details",
-                      "className": "col-12"
+                      "name": "basic-info-identity-row"
                     },
                     "children": [
                       {
-                        "type": "row",
+                        "type": "column",
                         "attrs": {
-                          "name": "user-fields-row"
+                          "name": "full-name-column",
+                          "className": "col-12 md:col-6"
                         },
                         "children": [
                           {
-                            "type": "column",
+                            "type": "field",
                             "attrs": {
-                              "name": "user-fields-primary",
-                              "className": "col-12 sm:col-12 md:col-6 lg:col-6"
-                            },
-                            "children": [
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "fullName"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "email"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "password"
-                                }
-                              }
-                            ]
-                          },
+                              "name": "fullName"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "username-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
                           {
-                            "type": "column",
+                            "type": "field",
                             "attrs": {
-                              "name": "user-fields-secondary",
-                              "className": "col-12 sm:col-12 md:col-6 lg:col-6"
-                            },
-                            "children": [
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "username"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "mobile"
-                                }
-                              },
-                              {
-                                "type": "field",
-                                "attrs": {
-                                  "name": "userType"
-                                }
-                              }
-                            ]
+                              "name": "username"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "basic-info-contact-row"
+                    },
+                    "children": [
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "email-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "email"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "mobile-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "mobile"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "basic-info-password-row"
+                    },
+                    "children": [
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "password-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "password"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "column",
+                "attrs": {
+                  "name": "access-section",
+                  "label": "Access",
+                  "className": "col-12"
+                },
+                "children": [
+                  {
+                    "type": "row",
+                    "attrs": {
+                      "name": "access-row"
+                    },
+                    "children": [
+                      {
+                        "type": "column",
+                        "attrs": {
+                          "name": "user-type-column",
+                          "className": "col-12 md:col-6"
+                        },
+                        "children": [
+                          {
+                            "type": "field",
+                            "attrs": {
+                              "name": "userType"
+                            }
                           }
                         ]
                       }
