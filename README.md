@@ -5,7 +5,7 @@ LeadTrack is a mobile-responsive SolidX sales application with an eight-stage pi
 ## Local setup
 
 1. Copy `solid-api/.env.example` to `solid-api/.env` and `solid-ui/.env.example` to `solid-ui/.env`; set Postgres, JWT and SMTP values.
-2. Install dependencies with `npm ci` in both `solid-api` and `solid-ui`.
+2. Install dependencies with `npm i` in both `solid-api` and `solid-ui`.
 3. From `solid-api`, seed metadata with `npx ts-node src/main-cli.ts seed --modules-to-seed leadtrack`.
 4. Optionally load the sample users and leads with `npx ts-node src/main-cli.ts test data --load --modules-to-test leadtrack`.
 5. Start the API with `npm run start:dev` and the UI with `npm run dev`.
