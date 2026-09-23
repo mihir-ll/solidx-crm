@@ -47,7 +47,10 @@ export class LeadActivityReportController {
     response
       .status(200)
       .setHeader('Content-Type', 'text/csv; charset=utf-8')
-      .setHeader('Content-Disposition', 'attachment; filename="leadtrack-activity-report.csv"')
+      .setHeader(
+        'Content-Disposition',
+        'attachment; filename="leadtrack-team-activity-report.csv"',
+      )
       .send(csv);
   }
 }
