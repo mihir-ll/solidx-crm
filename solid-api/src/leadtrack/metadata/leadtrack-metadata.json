@@ -1527,7 +1527,8 @@
                                   {
                                     "type": "field",
                                     "attrs": {
-                                      "name": "expectedCloseDate"
+                                      "name": "expectedCloseDate",
+                                      "editWidget": "LeadFutureDateFormWidget"
                                     }
                                   }
                                 ]
@@ -1542,7 +1543,8 @@
                                   {
                                     "type": "field",
                                     "attrs": {
-                                      "name": "meetingDate"
+                                      "name": "meetingDate",
+                                      "editWidget": "LeadFutureDateFormWidget"
                                     }
                                   }
                                 ]

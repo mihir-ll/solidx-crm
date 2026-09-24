@@ -1,0 +1,14 @@
+.lead-future-date-form__field-wrapper {
+  display: grid;
+  gap: 5px;
+}
+
+.lead-future-date-form__label {
+  color: var(--solid-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.lead-future-date-form__input {
+  width: 100%;
+}

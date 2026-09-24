@@ -1,5 +1,12 @@
 .solid-data-table-row:has(.follow-up-overdue-marker) > td {
   background-color: #fff1f2;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: #b91c1c;
+}
+
+.solid-data-table-row:has(.follow-up-overdue-marker) > td:last-child {
+  text-decoration: none;
 }
 
 .solid-data-table-row:has(.follow-up-overdue-marker):hover > td {
@@ -24,4 +31,9 @@ html.dark .solid-data-table-row:has(.follow-up-overdue-marker):hover > td,
 html.dark .follow-up-overdue-marker,
 [data-theme="dark"] .follow-up-overdue-marker {
   color: #fca5a5;
+}
+
+html.dark .solid-data-table-row:has(.follow-up-overdue-marker) > td,
+[data-theme="dark"] .solid-data-table-row:has(.follow-up-overdue-marker) > td {
+  text-decoration-color: #fca5a5;
 }

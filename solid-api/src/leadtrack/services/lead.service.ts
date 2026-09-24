@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { CRUDService } from '@solidxai/core';
@@ -19,6 +19,7 @@ export class LeadService extends CRUDService<Lead> {
   }
 
   async create(createDto: any, files: Express.Multer.File[] = [], ctxt: any = {}) {
+    this.assertLeadDatesAreCurrentOrFuture(createDto);
     this.normalizeLeadSource(createDto);
     this.scopeCreateToActor(createDto, ctxt);
     if (!createDto.stage) createDto.stage = 'new';
@@ -34,6 +35,7 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
   ) {
     for (const dto of createDtos) {
+      this.assertLeadDatesAreCurrentOrFuture(dto);
       this.normalizeLeadSource(dto);
       this.scopeCreateToActor(dto, ctxt);
       if (!dto.stage) dto.stage = 'new';
@@ -55,9 +57,10 @@ export class LeadService extends CRUDService<Lead> {
     ctxt: any = {},
     isUpdate = false,
   ) {
+    const previous = await this.loadLead(id);
+    this.assertLeadDatesAreCurrentOrFuture(updateDto, previous);
     this.normalizeLeadSource(updateDto);
     this.assertOwnerUpdateAllowed(updateDto, ctxt);
-    const previous = await this.loadLead(id);
     const updated = await super.update(
       id,
       updateDto,
@@ -86,6 +89,37 @@ export class LeadService extends CRUDService<Lead> {
     if (!actor?.sub || actor.roles?.includes('Admin')) return;
     dto.ownerId = Number(actor.sub);
     delete dto.ownerUserKey;
+  }
+
+  private assertLeadDatesAreCurrentOrFuture(dto: any, existing?: Lead) {
+    for (const field of ["expectedCloseDate", "meetingDate"]) {
+      const existingValue = field === "expectedCloseDate" ? existing?.expectedCloseDate : existing?.meetingDate;
+      const value = dto?.[field];
+      if (!value || this.isTodayOrFuture(value) || (existingValue && this.isSameLeadDate(field, value, existingValue))) continue;
+
+      throw new BadRequestException(field === 'expectedCloseDate' ? 'Expected close date cannot be earlier than today.' : 'Meeting date cannot be earlier than today.');
+    }
+  }
+
+  private isSameLeadDate(field: string, left: string | Date, right: string | Date) {
+    const leftDate = new Date(left);
+    const rightDate = new Date(right);
+    if (field === "expectedCloseDate") {
+      return leftDate.getFullYear() === rightDate.getFullYear()
+        && leftDate.getMonth() === rightDate.getMonth()
+        && leftDate.getDate() === rightDate.getDate();
+    }
+    return leftDate.getTime() === rightDate.getTime();
+  }
+
+  private isTodayOrFuture(value: string | Date) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return true;
+
+    const today = new Date();
+    const candidateDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return candidateDay >= todayDay;
   }
 
   private normalizeLeadSource(dto: any) {
