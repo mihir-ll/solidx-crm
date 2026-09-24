@@ -34,7 +34,7 @@ export default function LeadFutureDateFormWidget({
   const handleChange = (date: Date | null) => {
     fieldContext.onChange?.(
       { target: { name: fieldName, value: date } },
-      isDateTime ? "datetime-local" : "date",
+      "onFieldChange",
     );
   };
 
