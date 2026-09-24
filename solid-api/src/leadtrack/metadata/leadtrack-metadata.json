@@ -129,7 +129,7 @@
             "displayName": "Deal Value",
             "type": "decimal",
             "ormType": "decimal",
-            "min": 0,
+            "min": 1,
             "required": false,
             "unique": false,
             "index": false,
@@ -334,7 +334,7 @@
             "type": "boolean",
             "ormType": "boolean",
             "defaultValue": false,
-            "required": true,
+            "required": false,
             "unique": false,
             "index": true,
             "enableAuditTracking": true
@@ -517,7 +517,23 @@
         "LeadActivityReportController.getActivity",
         "LeadActivityReportController.exportCsv",
         "CrmUserController.findMany",
-        "CrmUserController.findOne"
+        "CrmUserController.findOne",
+        "ImportTransactionController.create",
+        "ImportTransactionController.partialUpdate",
+        "ImportTransactionController.deleteMany",
+        "ImportTransactionController.delete",
+        "ImportTransactionController.getImportTemplate",
+        "ImportTransactionController.getImportInstructions",
+        "ImportTransactionController.getImportMappingInfo",
+        "ImportTransactionController.startImportSync",
+        "ImportTransactionController.startImportAsync",
+        "ImportTransactionController.exportFailedImportedImports",
+        "ExportTemplateController.create",
+        "ExportTemplateController.findMany",
+        "ExportTemplateController.findOne",
+        "ExportTemplateController.delete",
+        "ExportTemplateController.startExportSync",
+        "ExportTemplateController.startExportAsync"
       ]
     }
   ],

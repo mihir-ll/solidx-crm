@@ -2,7 +2,6 @@ import {
   SolidIcon,
   type SolidKanbanCardWidgetProps,
 } from "@solidxai/core-ui";
-import { SolidMaterialSymbol } from "@solidxai/core-ui/dist/components/common/SolidMaterialSymbol";
 import "./lead-kanban-card.css";
 
 const displayText = (value: unknown, fallback = "Not set") =>
