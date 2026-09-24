@@ -224,8 +224,8 @@
             "ormType": "integer",
             "relationType": "many-to-one",
             "relationCreateInverse": false,
-            "relationCoModelSingularName": "crmUser",
-            "relationModelModuleName": "leadtrack",
+            "relationCoModelSingularName": "user",
+            "relationModelModuleName": "solid-core",
             "relationCascade": null,
             "required": true,
             "unique": false,
@@ -367,8 +367,8 @@
             "ormType": "integer",
             "relationType": "many-to-one",
             "relationCreateInverse": false,
-            "relationCoModelSingularName": "crmUser",
-            "relationModelModuleName": "leadtrack",
+            "relationCoModelSingularName": "user",
+            "relationModelModuleName": "solid-core",
             "required": false,
             "unique": false,
             "index": true,
@@ -386,38 +386,6 @@
             "enableAuditTracking": true
           }
         ]
-      },
-      {
-        "singularName": "crmUser",
-        "pluralName": "crmUsers",
-        "displayName": "LeadTrack User",
-        "description": "LeadTrack profile linked to a SolidX user.",
-        "dataSource": "default",
-        "dataSourceType": "postgres",
-        "isChild": true,
-        "parentModelUserKey": "user",
-        "userKeyFieldUserKey": "username",
-        "enableAuditTracking": true,
-        "enableSoftDelete": false,
-        "draftPublishWorkflow": false,
-        "internationalisation": false,
-        "fields": [
-          {
-            "name": "userType",
-            "displayName": "User Type",
-            "type": "selectionStatic",
-            "ormType": "varchar",
-            "selectionStaticValues": [
-              "Admin:Admin",
-              "SalesRepresentative:Sales Representative"
-            ],
-            "selectionValueType": "string",
-            "required": true,
-            "unique": false,
-            "index": true,
-            "enableAuditTracking": true
-          }
-        ]
       }
     ]
   },
@@ -428,12 +396,6 @@
         "LeadActivityReportController.getSummary",
         "LeadActivityReportController.getActivity",
         "LeadActivityReportController.exportCsv",
-        "CrmUserController.create",
-        "CrmUserController.update",
-        "CrmUserController.partialUpdate",
-        "CrmUserController.findMany",
-        "CrmUserController.findOne",
-        "CrmUserController.delete",
         "LeadController.create",
         "LeadController.insertMany",
         "LeadController.update",
@@ -464,8 +426,6 @@
         "LeadActivityReportController.getSummary",
         "LeadActivityReportController.getActivity",
         "LeadActivityReportController.exportCsv",
-        "CrmUserController.findMany",
-        "CrmUserController.findOne",
         "ImportTransactionController.create",
         "ImportTransactionController.partialUpdate",
         "ImportTransactionController.deleteMany",
@@ -517,8 +477,6 @@
         "LeadActivityReportController.getSummary",
         "LeadActivityReportController.getActivity",
         "LeadActivityReportController.exportCsv",
-        "CrmUserController.findMany",
-        "CrmUserController.findOne",
         "ImportTransactionController.create",
         "ImportTransactionController.partialUpdate",
         "ImportTransactionController.deleteMany",
@@ -564,19 +522,6 @@
       "viewUserKey": "",
       "moduleUserKey": "leadtrack",
       "modelUserKey": ""
-    },
-    {
-      "displayName": "Users",
-      "name": "crmUser-list-action",
-      "type": "solid",
-      "domain": "",
-      "context": "",
-      "customComponent": "",
-      "customIsModal": false,
-      "serverEndpoint": "",
-      "viewUserKey": "crmUser-list-view",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "crmUser"
     },
     {
       "displayName": "Leads",
@@ -693,8 +638,8 @@
       "displayName": "Users",
       "name": "crmUsers-menu-item",
       "sequenceNumber": 1,
-      "actionUserKey": "crmUser-list-action",
-      "moduleUserKey": "leadtrack",
+      "actionUserKey": "user-list-action",
+      "moduleUserKey": "solid-core",
       "parentMenuItemUserKey": "leadTrackUsers-menu-item",
       "iconName": "group"
     },
@@ -876,234 +821,6 @@
               "isSearchable": false,
               "sortable": true
             }
-          }
-        ]
-      }
-    },
-    {
-      "name": "crmUser-list-view",
-      "displayName": "Users",
-      "type": "list",
-      "context": "{}",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "crmUser",
-      "layout": {
-        "type": "list",
-        "attrs": {
-          "pagination": true,
-          "pageSizeOptions": [
-            10,
-            25,
-            50
-          ],
-          "enableGlobalSearch": true,
-          "create": true,
-          "edit": true,
-          "delete": true
-        },
-        "children": [
-          {
-            "type": "field",
-            "attrs": {
-              "name": "fullName",
-              "isSearchable": true
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "email",
-              "isSearchable": true
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "username",
-              "isSearchable": true
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "userType",
-              "isSearchable": true
-            }
-          },
-          {
-            "type": "field",
-            "attrs": {
-              "name": "active",
-              "isSearchable": true
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "crmUser-form-view",
-      "displayName": "LeadTrack User",
-      "type": "form",
-      "context": "{}",
-      "moduleUserKey": "leadtrack",
-      "modelUserKey": "crmUser",
-      "layout": {
-        "type": "form",
-        "attrs": {
-          "name": "form-1",
-          "label": "LeadTrack User",
-          "className": "grid"
-        },
-        "children": [
-          {
-            "type": "sheet",
-            "attrs": {
-              "name": "sheet-1"
-            },
-            "children": [
-              {
-                "type": "column",
-                "attrs": {
-                  "name": "basic-info-section",
-                  "label": "Basic Info",
-                  "className": "col-12"
-                },
-                "children": [
-                  {
-                    "type": "row",
-                    "attrs": {
-                      "name": "basic-info-identity-row"
-                    },
-                    "children": [
-                      {
-                        "type": "column",
-                        "attrs": {
-                          "name": "full-name-column",
-                          "className": "col-12 md:col-6"
-                        },
-                        "children": [
-                          {
-                            "type": "field",
-                            "attrs": {
-                              "name": "fullName"
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "type": "column",
-                        "attrs": {
-                          "name": "username-column",
-                          "className": "col-12 md:col-6"
-                        },
-                        "children": [
-                          {
-                            "type": "field",
-                            "attrs": {
-                              "name": "username"
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "type": "row",
-                    "attrs": {
-                      "name": "basic-info-contact-row"
-                    },
-                    "children": [
-                      {
-                        "type": "column",
-                        "attrs": {
-                          "name": "email-column",
-                          "className": "col-12 md:col-6"
-                        },
-                        "children": [
-                          {
-                            "type": "field",
-                            "attrs": {
-                              "name": "email"
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "type": "column",
-                        "attrs": {
-                          "name": "mobile-column",
-                          "className": "col-12 md:col-6"
-                        },
-                        "children": [
-                          {
-                            "type": "field",
-                            "attrs": {
-                              "name": "mobile"
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "type": "row",
-                    "attrs": {
-                      "name": "basic-info-password-row"
-                    },
-                    "children": [
-                      {
-                        "type": "column",
-                        "attrs": {
-                          "name": "password-column",
-                          "className": "col-12 md:col-6"
-                        },
-                        "children": [
-                          {
-                            "type": "field",
-                            "attrs": {
-                              "name": "password"
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "column",
-                "attrs": {
-                  "name": "access-section",
-                  "label": "Access",
-                  "className": "col-12"
-                },
-                "children": [
-                  {
-                    "type": "row",
-                    "attrs": {
-                      "name": "access-row"
-                    },
-                    "children": [
-                      {
-                        "type": "column",
-                        "attrs": {
-                          "name": "user-type-column",
-                          "className": "col-12 md:col-6"
-                        },
-                        "children": [
-                          {
-                            "type": "field",
-                            "attrs": {
-                              "name": "userType"
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
           }
         ]
       }
@@ -2585,13 +2302,7 @@
     "dashboard:leadtrack-overview:*",
     "LeadActivityReportController.getSummary",
     "LeadActivityReportController.getActivity",
-    "LeadActivityReportController.exportCsv",
-    "CrmUserController.create",
-    "CrmUserController.update",
-    "CrmUserController.partialUpdate",
-    "CrmUserController.findMany",
-    "CrmUserController.findOne",
-    "CrmUserController.delete"
+    "LeadActivityReportController.exportCsv"
   ],
   "securityRules": [
     {
@@ -2651,34 +2362,6 @@
                 "$eq": "$activeUserId"
               }
             }
-          }
-        }
-      },
-      "securityRuleConfigProvider": null
-    },
-    {
-      "name": "model:crmUser:role:Admin",
-      "description": "Admins can access all LeadTrack user profiles.",
-      "roleUserKey": "Admin",
-      "modelMetadataUserKey": "crmUser",
-      "securityRuleConfig": {
-        "filters": {
-          "id": {
-            "$ne": "0"
-          }
-        }
-      },
-      "securityRuleConfigProvider": null
-    },
-    {
-      "name": "model:crmUser:role:SalesRepresentative",
-      "description": "Sales representatives can access only their own profile.",
-      "roleUserKey": "SalesRepresentative",
-      "modelMetadataUserKey": "crmUser",
-      "securityRuleConfig": {
-        "filters": {
-          "id": {
-            "$eq": "$activeUserId"
           }
         }
       },

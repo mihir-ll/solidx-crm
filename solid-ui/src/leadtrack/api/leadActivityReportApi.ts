@@ -122,7 +122,7 @@ export const leadActivityReportApi = createApi({
       ) => unwrapResponse<ActivityResponse>(response),
     }),
     getUsers: builder.query<ReportUser[], void>({
-      query: () => "/crm-user?limit=100&offset=0&sort=fullName",
+      query: () => "/user?limit=100&offset=0&sort=fullName",
       transformResponse: (
         response: UserListResponse | { data?: UserListResponse },
       ) => unwrapResponse<UserListResponse>(response).records ?? [],

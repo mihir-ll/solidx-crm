@@ -1,4 +1,4 @@
-import { CommonEntity } from '@solidxai/core';
+import { CommonEntity, User } from '@solidxai/core';
 import {
   Column,
   Entity,
@@ -8,7 +8,6 @@ import {
   OneToMany,
 } from 'typeorm';
 import { FollowUpTask } from './follow-up-task.entity';
-import { CrmUser } from './crm-user.entity';
 
 @Entity('leadtrack_lead')
 export class Lead extends CommonEntity {
@@ -63,9 +62,9 @@ export class Lead extends CommonEntity {
     stage: string = "new";
 
     @Index()
-    @ManyToOne(() => CrmUser, { nullable: false, onDelete: 'RESTRICT' })
+    @ManyToOne(() => User, { nullable: false, onDelete: 'RESTRICT' })
     @JoinColumn()
-    owner: CrmUser;
+    owner: User;
 
     @Column({ type: "text", nullable: true })
     remarks?: string;
