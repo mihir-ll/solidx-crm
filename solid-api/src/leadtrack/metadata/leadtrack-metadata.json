@@ -129,7 +129,7 @@
             "displayName": "Deal Value",
             "type": "decimal",
             "ormType": "decimal",
-            "min": 0,
+            "min": 1,
             "required": false,
             "unique": false,
             "index": false,
@@ -211,8 +211,7 @@
               "meeting_pending:Meeting Pending",
               "opportunity_generated:Opportunity Generated",
               "dead:Dead",
-              "wrong_lead_info:Wrong Lead Info",
-              "rejected:Rejected"
+              "wrong_lead_info:Wrong Lead Info"
             ],
             "selectionValueType": "string",
             "defaultValue": "new"
@@ -335,7 +334,7 @@
             "type": "boolean",
             "ormType": "boolean",
             "defaultValue": false,
-            "required": true,
+            "required": false,
             "unique": false,
             "index": true,
             "enableAuditTracking": true
