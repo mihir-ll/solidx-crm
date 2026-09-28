@@ -54,7 +54,7 @@
 
 .lead-kanban-card__company {
   display: inline-flex;
-  align-items: center;
+  /* align-items: center; */
   gap: 5px;
   min-width: 0;
   color: var(--solid-text-muted);

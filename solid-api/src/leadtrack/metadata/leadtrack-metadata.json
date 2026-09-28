@@ -647,8 +647,7 @@
       "parentMenuItemUserKey": "",
       "iconName": "manage_accounts",
       "roles": [
-        "Admin",
-        "SalesRepresentative"
+        "Admin"
       ]
     },
     {
@@ -660,8 +659,7 @@
       "parentMenuItemUserKey": "leadTrackUsers-menu-item",
       "iconName": "group",
       "roles": [
-        "Admin",
-        "SalesRepresentative"
+        "Admin"
       ]
     },
     {
