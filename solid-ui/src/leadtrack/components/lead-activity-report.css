@@ -52,6 +52,17 @@
 .lead-activity-report__presets button.is-selected { color: var(--solid-interactive-bg); background: var(--solid-surface-2); border-color: var(--solid-interactive-bg); }
 .lead-activity-report__filters label { display: grid; min-width: 180px; gap: 5px; color: var(--solid-text-muted); font-size: .72rem; font-weight: 700; }
 .lead-activity-report__user-filter { min-width: 230px; }
+.lead-activity-report__user-filter .solid-select-wrap {
+  width: 100%;
+}
+.lead-activity-report__user-filter .solid-select {
+  width: 100%;
+}
+.lead-activity-report__user-filter .solid-select-menu {
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 .lead-activity-report__user-filter select { min-height: 36px; padding: 0 10px; color: var(--solid-text-primary); background: var(--solid-surface-1); border: 1px solid var(--solid-border-default); border-radius: 6px; }
 .lead-activity-report__validation,
 .lead-activity-report__error { color: var(--solid-danger); font-size: .8rem; }
@@ -59,9 +70,25 @@
 .lead-activity-report__panel { flex: 0 0 auto; min-width: 0; padding: 16px; background: var(--solid-surface-1); border: 1px solid var(--solid-border-default); border-radius: 9px; }
 .lead-activity-report__detail-panel { min-height: 240px; }
 .lead-activity-report__section-heading { align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--solid-border-default); }
-.lead-activity-report__table-wrap { overflow-x: auto; }
+.lead-activity-report__table-wrap {
+  max-height: 320px;
+  overflow: auto;
+  border-bottom: 1px solid var(--solid-border-default);
+}
 .lead-activity-report__table { width: 100%; min-width: 950px; border-collapse: collapse; font-size: .76rem; }
-.lead-activity-report__table th { padding: 11px 9px; color: var(--solid-text-muted); font-size: .68rem; font-weight: 750; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--solid-border-default); }
+.lead-activity-report__table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 11px 9px;
+  color: var(--solid-text-muted);
+  font-size: .68rem;
+  font-weight: 750;
+  text-align: left;
+  white-space: nowrap;
+  background: var(--solid-surface-1);
+  border-bottom: 1px solid var(--solid-border-default);
+}
 .lead-activity-report__table td { padding: 10px 9px; vertical-align: top; border-bottom: 1px solid var(--solid-border-default); }
 .lead-activity-report__table tbody tr:hover,
 .lead-activity-report__table tbody tr.is-selected { background: var(--solid-surface-2); }

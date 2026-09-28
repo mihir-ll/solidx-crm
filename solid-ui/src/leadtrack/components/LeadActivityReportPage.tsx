@@ -320,6 +320,8 @@ export default function LeadActivityReportPage() {
           ).map((value) => (
             <SolidButton
               variant={preset === value ? "primary" : "outline"}
+              className={preset === value ? "is-selected" : undefined}
+              aria-pressed={preset === value}
               size="sm"
               key={value}
               type="button"
@@ -341,6 +343,8 @@ export default function LeadActivityReportPage() {
           ))}
           <SolidButton
             variant={preset === "custom" ? "primary" : "outline"}
+            className={preset === "custom" ? "is-selected" : undefined}
+            aria-pressed={preset === "custom"}
             size="sm"
             type="button"
             label="Custom"
@@ -357,6 +361,8 @@ export default function LeadActivityReportPage() {
             optionLabel="label"
             optionValue="value"
             placeholder="All representatives"
+            native={false}
+            className="lead-activity-report__representative-select"
             disabled={users.isLoading}
             onChange={(event) => {
               setSelectedUserId(String(event.value ?? ""));

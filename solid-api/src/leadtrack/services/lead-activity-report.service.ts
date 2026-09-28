@@ -7,6 +7,7 @@ import {
   ActiveUserData,
   ChatterMessage,
   ChatterMessageRepository,
+  User,
 } from '@solidxai/core';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
@@ -96,12 +97,17 @@ export class LeadActivityReportService {
   ) {
     this.ensureAdmin(activeUser);
     const range = this.resolveDateRange(query);
-    const [auditMessages, noteMessages, leads, tasks] = await Promise.all([
-      this.loadMessages(range, 'audit', AUDIT_SUBTYPES, query.actorId),
-      this.loadMessages(range, 'custom', [NOTE_SUBTYPE], query.actorId),
-      this.loadLeads(),
-      this.loadTasks(),
-    ]);
+    const [auditMessages, noteMessages, leads, tasks, users] =
+      await Promise.all([
+        this.loadMessages(range, 'audit', AUDIT_SUBTYPES, query.actorId),
+        this.loadMessages(range, 'custom', [NOTE_SUBTYPE], query.actorId),
+        this.loadLeads(),
+        this.loadTasks(),
+        this.manager.getRepository(User).find({
+          select: { id: true, fullName: true, email: true },
+          order: { fullName: 'ASC' },
+        }),
+      ]);
     const leadMap = new Map(leads.map((lead) => [lead.id, lead]));
     const taskMap = new Map(tasks.map((task) => [task.id, task]));
     const leadChannelMap = this.buildLeadChannelMap(leads, tasks);
@@ -117,6 +123,11 @@ export class LeadActivityReportService {
       string,
       { actor: ActivityActor; metrics: MetricSummary }
     >();
+
+    for (const user of users) {
+      if (query.actorId !== undefined && user.id !== query.actorId) continue;
+      this.getGroup(groups, this.actorFromUser(user));
+    }
 
     for (const event of events) {
       const group = this.getGroup(groups, event.actor);
@@ -291,13 +302,23 @@ export class LeadActivityReportService {
   }
 
   private async loadLeads() {
-    return this.manager.getRepository(Lead).find({ relations: ['owner'] });
+    return this.manager
+      .getRepository(Lead)
+      .createQueryBuilder('lead')
+      .leftJoinAndSelect('lead.owner', 'owner')
+      .where('lead.deletedAt IS NULL')
+      .getMany();
   }
 
   private async loadTasks() {
     return this.manager
       .getRepository(FollowUpTask)
-      .find({ relations: ['lead', 'lead.owner'] });
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.lead', 'lead')
+      .leftJoinAndSelect('lead.owner', 'owner')
+      .where('task.deletedAt IS NULL')
+      .andWhere('lead.deletedAt IS NULL')
+      .getMany();
   }
 
   private buildLeadChannelMap(leads: Lead[], tasks: FollowUpTask[]) {
@@ -351,7 +372,7 @@ export class LeadActivityReportService {
         !this.isTaskCompletion(message)
       )
         continue;
-      if (!lead && message.coModelName === 'followUpTask') continue;
+      if (!lead) continue;
 
       events.push({
         id: message.id,
@@ -385,7 +406,7 @@ export class LeadActivityReportService {
         message.coModelName === 'lead'
           ? leadMap.get(message.coModelEntityId)
           : task?.lead;
-      if (!lead && message.coModelName === 'followUpTask') continue;
+      if (!lead) continue;
       events.push({
         id: message.id,
         actor: this.actorFromUser(message.user),
