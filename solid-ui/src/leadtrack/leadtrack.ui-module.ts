@@ -4,6 +4,7 @@ import LeadKanbanCardWidget from "./components/LeadKanbanCardWidget";
 import LeadActivityReportPage from "./components/LeadActivityReportPage";
 import FollowUpDueDateListWidget from "./components/FollowUpDueDateListWidget";
 import LeadFutureDateFormWidget from "./components/LeadFutureDateFormWidget";
+import LeadSourceListWidget from "./components/LeadSourceListWidget";
 import { leadActivityReportApi } from "./api/leadActivityReportApi";
 
 const leadTrackUiModule = {
@@ -20,6 +21,7 @@ const leadTrackUiModule = {
     { name: "LeadKanbanCardWidget", component: LeadKanbanCardWidget, type: ExtensionComponentTypes.kanbanCardWidget },
     { name: "FollowUpDueDateListWidget", component: FollowUpDueDateListWidget, type: ExtensionComponentTypes.listFieldWidget },
     { name: "LeadFutureDateFormWidget", component: LeadFutureDateFormWidget, type: ExtensionComponentTypes.formFieldEditWidget },
+    { name: "LeadSourceListWidget", component: LeadSourceListWidget, type: ExtensionComponentTypes.listFieldWidget },
   ],
   extensionFunctions: [],
   reducers: { [leadActivityReportApi.reducerPath]: leadActivityReportApi.reducer },

@@ -1,7 +1,8 @@
 import {
   SolidButton,
+  SolidDatePicker,
   SolidIcon,
-  SolidInput,
+  SolidSelect,
   SolidSpinner,
 } from "@solidxai/core-ui";
 import { useMemo, useState } from "react";
@@ -48,6 +49,12 @@ const toInputDate = (date: Date) => {
 
 const toLocalDate = (value: string, endOfDay = false) =>
   new Date(`${value}T${endOfDay ? "23:59:59.999" : "00:00:00"}`).toISOString();
+
+const toDatePickerValue = (value: string) =>
+  value ? new Date(`${value}T00:00:00`) : undefined;
+
+const selectedDateValue = (value: Date | [Date | null, Date | null] | null) =>
+  Array.isArray(value) ? value[0] : value;
 
 const currentMonthRange = (): DateRange => {
   const now = new Date();
@@ -111,6 +118,7 @@ const eventLabel: Record<ActivityRecord["type"], string> = {
   task_completed: "Task completed",
   note_posted: "Note posted",
 };
+
 
 const eventDescription = (record: ActivityRecord) => {
   if (record.type === "lead_added") return "New lead added";
@@ -219,6 +227,14 @@ export default function LeadActivityReportPage() {
     username?: string | null;
   }) => user.fullName || user.email || user.username || "Unnamed user";
 
+  const representativeOptions = [
+    { value: "", label: "All representatives" },
+    ...(users.data ?? []).map((user) => ({
+      value: String(user.id),
+      label: userLabel(user),
+    })),
+  ];
+
   return (
     <main className="solid-list-page-wrapper">
       <div className="solid-list-content">
@@ -270,8 +286,9 @@ export default function LeadActivityReportPage() {
               "lastMonth",
             ] as const
           ).map((value) => (
-            <button
-              className={preset === value ? "is-selected" : ""}
+            <SolidButton
+              variant={preset === value ? "primary" : "outline"}
+              size="sm"
               key={value}
               type="button"
               onClick={() => {
@@ -288,54 +305,59 @@ export default function LeadActivityReportPage() {
                     : value === "lastMonth"
                       ? "Last month"
                       : value[0].toUpperCase() + value.slice(1)}
-            </button>
+            </SolidButton>
           ))}
-          <button
-            className={preset === "custom" ? "is-selected" : ""}
+          <SolidButton
+            variant={preset === "custom" ? "primary" : "outline"}
+            size="sm"
             type="button"
+            label="Custom"
             onClick={() => setPreset("custom")}
           >
             Custom
-          </button>
+          </SolidButton>
         </div>
         <label className="lead-activity-report__user-filter">
           Representative
-          <select
+          <SolidSelect
             value={selectedUserId}
-            onChange={(event) => {
-              setSelectedUserId(event.target.value);
-              setActivityActorId(undefined);
-            }}
+            options={representativeOptions}
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All representatives"
             disabled={users.isLoading}
-          >
-            <option value="">All representatives</option>
-            {(users.data ?? []).map((user) => (
-              <option value={user.id} key={user.id}>
-                {userLabel(user)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          From
-          <SolidInput
-            type="date"
-            value={startDate}
             onChange={(event) => {
-              setPreset("custom");
-              setStartDate(event.target.value);
+              setSelectedUserId(String(event.value ?? ""));
+              setActivityActorId(undefined);
             }}
           />
         </label>
         <label>
-          To
-          <SolidInput
-            type="date"
-            value={endDate}
-            onChange={(event) => {
+          From
+          <SolidDatePicker
+            selected={toDatePickerValue(startDate)}
+            onChange={(date) => {
+              const nextDate = selectedDateValue(date);
               setPreset("custom");
-              setEndDate(event.target.value);
+              setStartDate(nextDate ? toInputDate(nextDate) : "");
             }}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="Select start date"
+            inputClassName="lead-activity-report__control"
+          />
+        </label>
+        <label>
+          To
+          <SolidDatePicker
+            selected={toDatePickerValue(endDate)}
+            onChange={(date) => {
+              const nextDate = selectedDateValue(date);
+              setPreset("custom");
+              setEndDate(nextDate ? toInputDate(nextDate) : "");
+            }}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="Select end date"
+            inputClassName="lead-activity-report__control"
           />
         </label>
         <SolidButton
@@ -541,7 +563,9 @@ export default function LeadActivityReportPage() {
                                         {eventLabel[record.type]}
                                       </span>
                                     </td>
-                                    <td>{record.channel ?? "—"}</td>
+                                    <td>
+                                      {record.channel ?? "—"}
+                                    </td>
                                     <td>
                                       <p className="lead-activity-report__event-message">
                                         {eventDescription(record)}
