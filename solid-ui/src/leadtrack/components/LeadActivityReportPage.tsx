@@ -4,6 +4,7 @@ import {
   SolidIcon,
   SolidSelect,
   SolidSpinner,
+  useGetModelsQuery,
 } from "@solidxai/core-ui";
 import { useMemo, useState } from "react";
 import {
@@ -119,8 +120,30 @@ const eventLabel: Record<ActivityRecord["type"], string> = {
   note_posted: "Note posted",
 };
 
+type StageFieldMetadata = {
+  selectionStaticValues?: unknown[];
+};
 
-const eventDescription = (record: ActivityRecord) => {
+const formatStage = (
+  value: string | null | undefined,
+  fieldMetadata?: StageFieldMetadata,
+) => {
+  if (!value) return "empty";
+
+  const option = fieldMetadata?.selectionStaticValues?.find((entry) => {
+    const [code] = String(entry).split(":", 1);
+    return code.trim() === value;
+  });
+
+  if (!option) return value;
+  const [, ...labelParts] = String(option).split(":");
+  return labelParts.join(":").trim() || value;
+};
+
+const eventDescription = (
+  record: ActivityRecord,
+  stageFieldMetadata?: StageFieldMetadata,
+) => {
   if (record.type === "lead_added") return "New lead added";
   if (record.type === "task_completed") {
     return `Follow-up completed${record.channel ? ` via ${record.channel}` : ""}`;
@@ -130,7 +153,7 @@ const eventDescription = (record: ActivityRecord) => {
     (change) => change.fieldName === "stage",
   );
   if (stageChange) {
-    return `Stage moved from ${stageChange.oldValueDisplay ?? stageChange.oldValue ?? "empty"} to ${stageChange.newValueDisplay ?? stageChange.newValue ?? "empty"}`;
+    return `Stage moved from ${formatStage(stageChange.oldValueDisplay ?? stageChange.oldValue, stageFieldMetadata)} to ${formatStage(stageChange.newValueDisplay ?? stageChange.newValue, stageFieldMetadata)}`;
   }
   return "Lead details updated";
 };
@@ -150,6 +173,15 @@ export default function LeadActivityReportPage() {
     useState<Set<string>>(() => new Set());
 
   const users = useGetUsersQuery();
+  const leadMetadata = useGetModelsQuery(
+    "filters[singularName][\x24eq]=lead&populate[0]=fields",
+  );
+  const stageFieldMetadata = useMemo<StageFieldMetadata | undefined>(() => {
+    const fields = leadMetadata.data?.records?.[0]?.fields;
+    return Array.isArray(fields)
+      ? fields.find((field: { name?: string }) => field.name === "stage")
+      : undefined;
+  }, [leadMetadata.data]);
   const summary = useGetSummaryQuery(submittedRange, {
     refetchOnMountOrArgChange: true,
   });
@@ -568,7 +600,7 @@ export default function LeadActivityReportPage() {
                                     </td>
                                     <td>
                                       <p className="lead-activity-report__event-message">
-                                        {eventDescription(record)}
+                                        {eventDescription(record, stageFieldMetadata)}
                                       </p>
                                     </td>
                                   </tr>
