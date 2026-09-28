@@ -134,11 +134,12 @@ export class LeadActivityReportService {
       this.applyEventMetric(group.metrics, event);
     }
 
+    const now = new Date();
     for (const task of tasks) {
       if (
         task.isCompleted ||
         !task.dueDate ||
-        new Date(task.dueDate) > range.end
+        new Date(task.dueDate) >= now
       )
         continue;
       if (!task.lead?.owner) continue;
