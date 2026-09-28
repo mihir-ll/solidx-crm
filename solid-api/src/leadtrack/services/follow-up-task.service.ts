@@ -112,8 +112,8 @@ export class FollowUpTaskService extends CRUDService<FollowUpTask> {
   private async loadTask(id: number) {
     const query = await this.taskRepository.createSecurityRuleAwareQueryBuilder('task');
     const task = await query
-      .leftJoinAndSelect('task.lead', 'lead')
-      .leftJoinAndSelect('lead.owner', 'leadOwner')
+      .leftJoinAndSelect('task.lead', 'taskLead')
+      .leftJoinAndSelect('taskLead.owner', 'taskLeadOwner')
       .leftJoinAndSelect('task.assignedTo', 'assignedTo')
       .andWhere('task.id = :id', { id })
       .getOne();
