@@ -496,7 +496,9 @@
         "ExportTemplateController.findOne",
         "ExportTemplateController.delete",
         "ExportTemplateController.startExportSync",
-        "ExportTemplateController.startExportAsync"
+        "ExportTemplateController.startExportAsync",
+        "UserViewMetadataController.create",
+        "SavedFiltersController.create"
       ]
     }
   ],
