@@ -808,6 +808,7 @@
             "type": "field",
             "attrs": {
               "name": "source",
+              "viewWidget": "LeadSourceListWidget",
               "sortable": true,
               "isSearchable": true
             }

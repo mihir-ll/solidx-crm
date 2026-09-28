@@ -104,12 +104,15 @@ export class LeadActivityReportService {
     ]);
     const leadMap = new Map(leads.map((lead) => [lead.id, lead]));
     const taskMap = new Map(tasks.map((task) => [task.id, task]));
+    const leadChannelMap = this.buildLeadChannelMap(leads, tasks);
     const events = this.buildEvents(
       auditMessages,
       noteMessages,
       leadMap,
       taskMap,
+      leadChannelMap,
     );
+
     const groups = new Map<
       string,
       { actor: ActivityActor; metrics: MetricSummary }
@@ -171,11 +174,13 @@ export class LeadActivityReportService {
     ]);
     const leadMap = new Map(leads.map((lead) => [lead.id, lead]));
     const taskMap = new Map(tasks.map((task) => [task.id, task]));
+    const leadChannelMap = this.buildLeadChannelMap(leads, tasks);
     const records = this.buildEvents(
       auditMessages,
       noteMessages,
       leadMap,
       taskMap,
+      leadChannelMap,
     ).sort(
       (left, right) => right.occurredAt.getTime() - left.occurredAt.getTime(),
     );
@@ -205,11 +210,13 @@ export class LeadActivityReportService {
     ]);
     const leadMap = new Map(leads.map((lead) => [lead.id, lead]));
     const taskMap = new Map(tasks.map((task) => [task.id, task]));
+    const leadChannelMap = this.buildLeadChannelMap(leads, tasks);
     const records = this.buildEvents(
       auditMessages,
       noteMessages,
       leadMap,
       taskMap,
+      leadChannelMap,
     ).sort(
       (left, right) => right.occurredAt.getTime() - left.occurredAt.getTime(),
     );
@@ -293,11 +300,40 @@ export class LeadActivityReportService {
       .find({ relations: ['lead', 'lead.owner'] });
   }
 
+  private buildLeadChannelMap(leads: Lead[], tasks: FollowUpTask[]) {
+    const channels = new Map<number, string>();
+
+    for (const lead of leads) {
+      const sourceValues = this.parseChannelValues(lead.source);
+      if (sourceValues.length > 0) channels.set(lead.id, sourceValues.join(", "));
+    }
+
+    for (const task of tasks) {
+      if (!task.lead?.id || !task.channel || channels.has(task.lead.id)) continue;
+      const values = this.parseChannelValues(task.channel);
+      if (values.length > 0) channels.set(task.lead.id, values.join(", "));
+    }
+
+    return channels;
+  }
+
+  private parseChannelValues(value?: string | null) {
+    if (!value?.trim()) return [];
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed.map(String).filter(Boolean);
+    } catch {
+      // Keep compatibility with legacy comma-separated values.
+    }
+    return value.split(",").map((item) => item.trim()).filter(Boolean);
+  }
+
   private buildEvents(
     auditMessages: ChatterMessage[],
     noteMessages: ChatterMessage[],
     leadMap: Map<number, Lead>,
     taskMap: Map<number, FollowUpTask>,
+    leadChannelMap: Map<number, string>,
   ): ReportEvent[] {
     const events: ReportEvent[] = [];
 
@@ -333,7 +369,9 @@ export class LeadActivityReportService {
         entityId: message.coModelEntityId,
         lead: this.leadSummary(lead, message),
         message: message.messageBody ?? '',
-        channel: task?.channel,
+        channel: task?.channel ??
+          leadChannelMap.get(lead?.id ?? -1) ??
+          this.channelFromChanges(message),
         changes: this.mapChanges(message),
       });
     }
@@ -442,6 +480,13 @@ export class LeadActivityReportService {
 
   private booleanValue(value?: string | null) {
     return value === 'true' || value === '1';
+  }
+
+  private channelFromChanges(message: ChatterMessage): string | null {
+    const channelChange = this.mapChanges(message).find(
+      (change) => change.fieldName === "channel",
+    );
+    return channelChange?.newValueDisplay ?? channelChange?.newValue ?? null;
   }
 
   private normalizeChannel(channel?: string | null): Channel {
