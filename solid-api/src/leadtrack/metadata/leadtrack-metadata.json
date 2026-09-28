@@ -587,6 +587,19 @@
       "viewUserKey": "followUpTask-tree-view",
       "moduleUserKey": "leadtrack",
       "modelUserKey": "followUpTask"
+    },
+    {
+      "displayName": "LeadTrack IAM User List",
+      "name": "leadTrack-iam-user-list-action",
+      "type": "custom",
+      "domain": "",
+      "context": "",
+      "customComponent": "/admin/core/solid-core/user/list",
+      "customIsModal": false,
+      "serverEndpoint": "",
+      "viewUserKey": "",
+      "moduleUserKey": "leadtrack",
+      "modelUserKey": "user"
     }
   ],
   "menus": [
@@ -632,16 +645,24 @@
       "actionUserKey": "",
       "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "",
-      "iconName": "manage_accounts"
+      "iconName": "manage_accounts",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
-      "displayName": "Users",
+      "displayName": "User",
       "name": "crmUsers-menu-item",
       "sequenceNumber": 1,
-      "actionUserKey": "user-list-action",
-      "moduleUserKey": "solid-core",
+      "actionUserKey": "leadTrack-iam-user-list-action",
+      "moduleUserKey": "leadtrack",
       "parentMenuItemUserKey": "leadTrackUsers-menu-item",
-      "iconName": "group"
+      "iconName": "group",
+      "roles": [
+        "Admin",
+        "SalesRepresentative"
+      ]
     },
     {
       "displayName": "Pipeline",
