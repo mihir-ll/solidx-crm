@@ -29,7 +29,9 @@
             "required": true,
             "unique": false,
             "index": true,
-            "enableAuditTracking": true
+            "enableAuditTracking": true,
+            "regexPattern": "^[A-Za-z]+(?: [A-Za-z]+)*$",
+            "regexPatternNotMatchingErrorMsg": "Please enter a valid contact name."
           },
           {
             "name": "company",
@@ -122,7 +124,9 @@
             "unique": false,
             "index": false,
             "isUserKey": true,
-            "enableAuditTracking": true
+            "enableAuditTracking": true,
+            "regexPattern": "^\\+?[0-9]{7,15}$",
+            "regexPatternNotMatchingErrorMsg": "Please enter a valid phone number"
           },
           {
             "name": "dealValue",
@@ -524,7 +528,7 @@
       "modelUserKey": ""
     },
     {
-      "displayName": "Leads",
+      "displayName": "Lead List View",
       "name": "lead-list-action",
       "type": "solid",
       "domain": "",
@@ -550,7 +554,7 @@
       "modelUserKey": "lead"
     },
     {
-      "displayName": "Follow-ups",
+      "displayName": "Follow-ups List View",
       "name": "followUpTask-list-action",
       "type": "solid",
       "domain": "",
@@ -589,7 +593,7 @@
       "modelUserKey": "followUpTask"
     },
     {
-      "displayName": "LeadTrack IAM User List",
+      "displayName": "User List",
       "name": "leadTrack-iam-user-list-action",
       "type": "custom",
       "domain": "",
@@ -705,7 +709,7 @@
   "views": [
     {
       "name": "lead-list-view",
-      "displayName": "Leads",
+      "displayName": "Lead List View",
       "type": "list",
       "context": "{}",
       "moduleUserKey": "leadtrack",
@@ -1523,7 +1527,7 @@
     },
     {
       "name": "followUpTask-list-view",
-      "displayName": "Follow-ups",
+      "displayName": "Follow-up List View",
       "type": "list",
       "context": "{}",
       "moduleUserKey": "leadtrack",
@@ -1782,7 +1786,7 @@
     },
     {
       "name": "lead-tree-view",
-      "displayName": "Lead",
+      "displayName": "Lead Tree View",
       "type": "tree",
       "context": "{}",
       "moduleUserKey": "leadtrack",
