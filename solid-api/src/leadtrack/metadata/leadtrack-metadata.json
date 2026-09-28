@@ -2069,7 +2069,16 @@
           "name": "Pipeline Value",
           "type": "table",
           "dataProvider": "PipelineValueProvider",
-          "providerContext": {}
+          "providerContext": {
+            "sort": {
+              "field": "value",
+              "order": "desc"
+            },
+            "columns": [
+              "currency",
+              "value"
+            ]
+          }
         },
         {
           "id": "leads-by-source",
@@ -2090,7 +2099,17 @@
           "name": "Overdue Follow-ups",
           "type": "table",
           "dataProvider": "OverdueFollowUpsProvider",
-          "providerContext": {}
+          "providerContext": {
+            "sort": {
+              "field": "dueDate",
+              "order": "asc"
+            },
+            "columns": [
+              "title",
+              "lead",
+              "dueDate"
+            ]
+          }
         },
         {
           "id": "leads-created-trend",

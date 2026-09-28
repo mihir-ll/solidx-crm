@@ -35,6 +35,74 @@ const STAGE_LABELS: Record<string, string> = {
   wrong_lead_info: 'Wrong Lead Info',
 };
 
+const TABLE_COLUMN_LABELS: Record<string, string> = {
+  currency: 'Currency',
+  value: 'Value',
+  title: 'Title',
+  lead: 'Lead',
+  dueDate: 'Due date',
+};
+
+const tableColumns = (
+  providerContext: Record<string, any> | undefined,
+  fallbackFields: readonly string[],
+) => {
+  const requestedFields = Array.isArray(providerContext?.columns)
+    ? providerContext.columns.filter(
+        (field: unknown): field is string => typeof field === 'string',
+      )
+    : [];
+  const fields = requestedFields.filter((field) => fallbackFields.includes(field));
+  const selectedFields = fields.length > 0 ? fields : [...fallbackFields];
+
+  return selectedFields.map((field) => ({
+    field,
+    header: TABLE_COLUMN_LABELS[field] ?? field,
+  }));
+};
+
+const formatDashboardDateTime = (value: unknown): string => {
+  if (value === null || value === undefined || value === '') return '';
+  const date = value instanceof Date ? value : new Date(String(value));
+  if (Number.isNaN(date.getTime())) return String(value);
+
+  return new Intl.DateTimeFormat('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'Asia/Kolkata',
+  }).format(date);
+};
+
+const sortTableRecords = <T extends Record<string, any>>(
+  records: T[],
+  providerContext: Record<string, any> | undefined,
+  allowedFields: readonly string[],
+  fallbackField: string,
+): T[] => {
+  const requestedField = providerContext?.sort?.field;
+  const field = allowedFields.includes(requestedField)
+    ? requestedField
+    : fallbackField;
+  const direction = providerContext?.sort?.order === 'desc' ? -1 : 1;
+
+  return [...records].sort((left, right) => {
+    const leftValue = left[field];
+    const rightValue = right[field];
+    if (leftValue === rightValue) return 0;
+    if (leftValue === null || leftValue === undefined || leftValue === '') {
+      return -1 * direction;
+    }
+    if (rightValue === null || rightValue === undefined || rightValue === '') {
+      return 1 * direction;
+    }
+    return (leftValue < rightValue ? -1 : 1) * direction;
+  });
+};
+
 abstract class LeadDashboardProvider {
   constructor(protected readonly leads: LeadRepository) {}
   protected async query(alias = 'lead') {
@@ -184,12 +252,18 @@ export class PipelineValueProvider
       })
       .groupBy('lead.currency')
       .getRawMany();
+    const records = rows.map((row) => ({
+      currency: row.currency,
+      value: Number(row.value),
+    }));
     return this.envelope(ctxt.widgetName, {
-      columns: ['currency', 'value'],
-      records: rows.map((row) => ({
-        currency: row.currency,
-        value: Number(row.value),
-      })),
+      columns: tableColumns(ctxt.providerContext, ['currency', 'value']),
+      records: sortTableRecords(
+        records,
+        ctxt.providerContext,
+        ['currency', 'value'],
+        'value',
+      ),
     });
   }
 }
@@ -311,9 +385,18 @@ export class OverdueFollowUpsProvider
       .orderBy('task.dueDate', 'ASC')
       .limit(20)
       .getRawMany();
+    const sortedRows = sortTableRecords(
+      rows,
+      ctxt.providerContext,
+      ['title', 'lead', 'dueDate'],
+      'dueDate',
+    );
     return this.envelope(ctxt.widgetName, {
-      columns: ['title', 'lead', 'dueDate'],
-      records: rows,
+      columns: tableColumns(ctxt.providerContext, ['title', 'lead', 'dueDate']),
+      records: sortedRows.map((row) => ({
+        ...row,
+        dueDate: formatDashboardDateTime(row.dueDate),
+      })),
     });
   }
 }
