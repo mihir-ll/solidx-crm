@@ -16,7 +16,7 @@
         "dataSource": "default",
         "dataSourceType": "postgres",
         "tableName": "leadtrack_lead",
-        "userKeyFieldUserKey": "phone",
+        "userKeyFieldUserKey": "name",
         "enableAuditTracking": true,
         "enableSoftDelete": true,
         "fields": [
@@ -29,9 +29,10 @@
             "required": true,
             "unique": false,
             "index": true,
+            "isUserKey": true,
             "enableAuditTracking": true,
-            "regexPattern": "^[A-Za-z]+(?: [A-Za-z]+)*$",
-            "regexPatternNotMatchingErrorMsg": "Please enter a valid contact name."
+            "regexPattern": "^[A-Za-z][A-Za-z.]*(?: [A-Za-z][A-Za-z.]*)*$",
+            "regexPatternNotMatchingErrorMsg": "Please enter a valid contact name using letters, spaces, and periods."
           },
           {
             "name": "company",
@@ -121,9 +122,8 @@
             "ormType": "varchar",
             "max": 20,
             "required": true,
-            "unique": false,
+            "unique": true,
             "index": false,
-            "isUserKey": true,
             "enableAuditTracking": true,
             "regexPattern": "^\\+?[0-9]{7,15}$",
             "regexPatternNotMatchingErrorMsg": "Please enter a valid phone number"

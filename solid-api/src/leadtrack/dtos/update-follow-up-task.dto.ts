@@ -28,7 +28,6 @@ export class UpdateFollowUpTaskDto extends PartialType(CreateFollowUpTaskDto) {
     @ApiProperty()
     dueDate: Date;
 
-    @IsNotEmpty()
     @IsOptional()
     @IsBoolean()
     @ApiProperty()
@@ -54,11 +53,9 @@ export class UpdateFollowUpTaskDto extends PartialType(CreateFollowUpTaskDto) {
     @ApiProperty()
     assignedToUserKey: string;
 
-
-@IsNotEmpty()
-@IsOptional()
-@IsBoolean()
-@ApiProperty()
-autoCreated: boolean;
-
+    @IsNotEmpty()
+    @IsOptional()
+    @IsBoolean()
+    @ApiProperty()
+    autoCreated: boolean;
 }

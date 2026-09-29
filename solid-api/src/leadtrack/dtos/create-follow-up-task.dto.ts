@@ -37,7 +37,7 @@ export class CreateFollowUpTaskDto {
     dueDate: Date;
 
     @ApiPropertyOptional({ default: false })
-    @IsNotEmpty()
+    @IsOptional()
     @IsBoolean()
     @ApiProperty()
     isCompleted: boolean = false;
@@ -51,7 +51,7 @@ export class CreateFollowUpTaskDto {
 
     @ApiPropertyOptional()
     @ValidateIf((task) => task.isCompleted === true || task.isCompleted === 'true')
-    @IsNotEmpty({ message: 'Outcome notes are required when a follow-up task is completed.' })
+    @IsOptional()
     @IsString()
     @ApiProperty()
     outcomeNotes?: string;
@@ -68,10 +68,8 @@ export class CreateFollowUpTaskDto {
     @ApiProperty()
     assignedToUserKey: string;
 
-
-@IsNotEmpty()
-@IsBoolean()
-@ApiProperty()
-autoCreated: boolean = false;
-
+    @IsNotEmpty()
+    @IsBoolean()
+    @ApiProperty()
+    autoCreated: boolean = false;
 }

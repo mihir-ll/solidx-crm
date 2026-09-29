@@ -31,7 +31,7 @@ export class FollowUpTask extends CommonEntity {
     dueDate: Date;
 
     @Index()
-    @Column({ type: "boolean", default: false })
+    @Column({ type: "boolean", nullable: true, default: false })
     isCompleted: boolean = false;
 
     @Column({ type: "timestamptz", nullable: true })
