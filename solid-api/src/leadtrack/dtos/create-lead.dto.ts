@@ -10,7 +10,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
-  Min, ValidateNested, IsArray, IsUrl,
+  Min, ValidateNested, IsArray, IsUrl, Matches,
 } from 'class-validator';
 import { emptyStringToNullTransformer } from '@solidxai/core';
 import { UpdateFollowUpTaskDto } from './update-follow-up-task.dto';
@@ -18,6 +18,7 @@ import { UpdateFollowUpTaskDto } from './update-follow-up-task.dto';
 export class CreateLeadDto {
     @MaxLength(120)
     @IsNotEmpty()
+    @Matches(/^[A-Za-z][A-Za-z.]*(?: [A-Za-z][A-Za-z.]*)*$/, { message: "Please enter a valid contact name using letters, spaces, and periods." })
     @IsString()
     @ApiProperty()
     name: string;
@@ -36,28 +37,32 @@ export class CreateLeadDto {
     industry?: string;
 
     @ApiPropertyOptional()
-    @MaxLength(80)
     @IsOptional()
     @IsString()
+    @ApiProperty()
     leadType?: string;
 
     @ApiPropertyOptional()
     @MaxLength(120)
     @IsOptional()
     @IsString()
+    @ApiProperty()
     city?: string;
 
     @ApiPropertyOptional()
     @MaxLength(120)
     @IsOptional()
     @IsString()
+    @ApiProperty()
     designation?: string;
 
     @ApiPropertyOptional({ description: 'LinkedIn profile URL' })
-    @MaxLength(500)
     @Transform(emptyStringToNullTransformer)
-    @IsOptional()
     @IsUrl({ require_protocol: true })
+    @MaxLength(500)
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
     linkedIn?: string;
 
     @ApiPropertyOptional()
@@ -71,6 +76,7 @@ export class CreateLeadDto {
 
     @MaxLength(20)
     @IsNotEmpty()
+    @Matches(/^\+?[0-9]{7,15}$/, { message: "Please enter a valid phone number" })
     @IsString()
     @ApiProperty()
     phone: string;
@@ -93,7 +99,6 @@ export class CreateLeadDto {
     @IsString()
     @ApiProperty()
     source: string;
-
 
     @ApiPropertyOptional()
     @Type(() => Date)
@@ -127,26 +132,25 @@ export class CreateLeadDto {
     @ApiProperty()
     remarks?: string;
 
+    @IsOptional()
+    @ApiProperty()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => UpdateFollowUpTaskDto)
+    tasks: UpdateFollowUpTaskDto[];
 
-@IsOptional()
-@ApiProperty()
-@IsArray()
-@ValidateNested({ each : true })
-@Type(() => UpdateFollowUpTaskDto)
-tasks: UpdateFollowUpTaskDto[];
+    @IsOptional()
+    @IsArray()
+    @ApiProperty()
+    tasksIds: number[];
 
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    tasksCommand: string;
 
-
-@IsOptional()
-@IsArray()
-@ApiProperty()
-tasksIds: number[];
-
-
-
-@IsString()
-@IsOptional()
-@ApiProperty()
-tasksCommand: string;
-
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    ownerUserKey: string;
 }

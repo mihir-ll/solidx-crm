@@ -10,6 +10,7 @@ import {
 import { FollowUpTask } from './follow-up-task.entity';
 
 @Entity('leadtrack_lead')
+@Index(["phone", "deletedTracker"], { unique: true })
 export class Lead extends CommonEntity {
     @Index()
     @Column({ type: "varchar", length: 120 })
@@ -22,7 +23,7 @@ export class Lead extends CommonEntity {
     @Column({ type: "varchar", nullable: true })
     industry?: string;
 
-    @Column({ type: "varchar", nullable: true, length: 80 })
+    @Column({ type: "varchar", nullable: true })
     leadType?: string;
 
     @Column({ type: "varchar", nullable: true, length: 120 })

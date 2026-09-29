@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 import { IsOptional } from 'class-validator';
 import { IsNotEmpty } from 'class-validator';
-import { MaxLength, IsEmail, IsNumber, IsDate, IsInt, ValidateNested, IsArray } from 'class-validator';
+import { MaxLength, IsEmail, IsNumber, IsDate, IsInt, ValidateNested, IsArray, Matches } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { emptyStringToNullTransformer } from '@solidxai/core';
 import { UpdateFollowUpTaskDto } from './update-follow-up-task.dto';
@@ -110,4 +110,27 @@ export class UpdateLeadDto extends PartialType(CreateLeadDto) {
     @IsString()
     @ApiProperty()
     stage: string;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    leadType: string;
+
+    @MaxLength(120)
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    city: string;
+
+    @MaxLength(120)
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    designation: string;
+
+    @MaxLength(500)
+    @IsOptional()
+    @IsString()
+    @ApiProperty()
+    linkedIn: string;
 }
