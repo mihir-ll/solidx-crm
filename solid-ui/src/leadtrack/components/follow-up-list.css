@@ -17,6 +17,24 @@
   font-weight: 700;
 }
 
+.solid-datatable-wrapper .solid-data-table-row-action-cell:has(.retrieve-button) {
+  vertical-align: middle;
+}
+
+.solid-datatable-wrapper .solid-data-table-row-action-cell:has(.retrieve-button) > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 100%;
+}
+
+.solid-datatable-wrapper .solid-data-table-row-action-cell .retrieve-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
 html.dark .solid-data-table-row:has(.follow-up-overdue-marker) > td,
 [data-theme="dark"] .solid-data-table-row:has(.follow-up-overdue-marker) > td {
   background-color: color-mix(in srgb, #dc2626 14%, var(--solid-surface-1));
