@@ -4,6 +4,10 @@ import {
   IDashboardWidgetDataProvider,
   IDashboardWidgetDataProviderContext,
   IDashboardWidgetDataResponseEnvelope,
+  ISelectionProvider,
+  ISelectionProviderContext,
+  ISelectionProviderValues,
+  SelectionProvider,
 } from '@solidxai/core';
 import { LeadRepository } from '../repositories/lead.repository';
 
@@ -34,6 +38,7 @@ const STAGE_LABELS: Record<string, string> = {
   dead: 'Dead',
   wrong_lead_info: 'Wrong Lead Info',
 };
+
 
 const TABLE_COLUMN_LABELS: Record<string, string> = {
   currency: 'Currency',
@@ -108,6 +113,39 @@ abstract class LeadDashboardProvider {
   protected async query(alias = 'lead') {
     return this.leads.createSecurityRuleAwareQueryBuilder(alias);
   }
+  protected async filteredQuery(
+    ctxt: IDashboardWidgetDataProviderContext,
+    alias = 'lead',
+  ) {
+    const query = await this.query(alias);
+    const variables = ctxt?.variables ?? {};
+    const asArray = (value: unknown): string[] => {
+      if (Array.isArray(value)) return value.filter((item): item is string => typeof item === 'string' && item.length > 0);
+      return typeof value === 'string' && value.length > 0 ? [value] : [];
+    };
+    const owners = asArray(variables.representative);
+    const leadTypes = asArray(variables.leadType);
+    const stages = asArray(variables.stage);
+
+    if (variables.date?.from) {
+      query.andWhere(`${alias}.createdAt >= :dashboardFrom`, { dashboardFrom: variables.date.from });
+    }
+    if (variables.date?.to) {
+      query.andWhere(`${alias}.createdAt <= :dashboardTo`, { dashboardTo: variables.date.to });
+    }
+    if (owners.length > 0) {
+      query.innerJoin(`${alias}.owner`, 'dashboardOwner');
+      query.andWhere('dashboardOwner.id IN (:...dashboardOwners)', { dashboardOwners: owners });
+    }
+    if (leadTypes.length > 0) {
+      query.andWhere(`${alias}.leadType IN (:...dashboardLeadTypes)`, { dashboardLeadTypes: leadTypes });
+    }
+    if (stages.length > 0) {
+      query.andWhere(`${alias}.stage IN (:...dashboardStages)`, { dashboardStages: stages });
+    }
+
+    return query;
+  }
   protected envelope(widgetName: string, data: any) {
     return { meta: meta(this.constructor.name, widgetName), data };
   }
@@ -142,7 +180,7 @@ export class LeadOverviewKpiProvider
     ctxt: IDashboardWidgetDataProviderContext,
   ): Promise<IDashboardWidgetDataResponseEnvelope<{ value: number; label: string }>> {
     const metric = ctxt?.providerContext?.metric as LeadOverviewMetric;
-    const query = await this.query();
+    const query = await this.filteredQuery(ctxt);
     let value = 0;
 
     switch (metric) {
@@ -200,7 +238,7 @@ export class PipelineFunnelProvider
     ctxt: IDashboardWidgetDataProviderContext,
   ): Promise<IDashboardWidgetDataResponseEnvelope<any>> {
     const rows = await (
-      await this.query()
+      await this.filteredQuery(ctxt)
     )
       .select('lead.stage', 'stage')
       .addSelect('COUNT(lead.id)', 'value')
@@ -287,7 +325,7 @@ export class LeadsBySourceProvider
     _definition: Record<string, any>,
     ctxt: IDashboardWidgetDataProviderContext,
   ): Promise<IDashboardWidgetDataResponseEnvelope<any>> {
-    const rows = await (await this.query())
+    const rows = await (await this.filteredQuery(ctxt))
       .select('lead.source', 'source')
       .getRawMany();
     const counts = new Map<string, number>();
@@ -398,6 +436,68 @@ export class OverdueFollowUpsProvider
         dueDate: formatDashboardDateTime(row.dueDate),
       })),
     });
+  }
+}
+
+@SelectionProvider()
+@Injectable()
+export class LeadOwnerDashboardOptionsProvider
+  implements ISelectionProvider<ISelectionProviderContext>
+{
+  constructor(private readonly leads: LeadRepository) {}
+
+  name() {
+    return 'LeadOwnerDashboardOptionsProvider';
+  }
+
+  help() {
+    return 'Provides representative options from accessible lead owners.';
+  }
+
+  async value(
+    optionValue: string,
+    _ctxt: ISelectionProviderContext,
+  ): Promise<ISelectionProviderValues | null> {
+    const row = await (
+      await this.leads.createSecurityRuleAwareQueryBuilder('lead')
+    )
+      .innerJoin('lead.owner', 'owner')
+      .select('owner.id', 'value')
+      .addSelect('owner.fullName', 'label')
+      .andWhere('owner.id = :ownerId', { ownerId: optionValue })
+      .getRawOne();
+
+    return row
+      ? { value: String(row.value), label: row.label }
+      : { value: optionValue, label: optionValue };
+  }
+
+  async values(
+    query: string,
+    ctxt: ISelectionProviderContext,
+  ): Promise<readonly ISelectionProviderValues[]> {
+    const builder = await this.leads.createSecurityRuleAwareQueryBuilder('lead');
+    builder
+      .innerJoin('lead.owner', 'owner')
+      .select('owner.id', 'value')
+      .addSelect('owner.fullName', 'label')
+      .groupBy('owner.id')
+      .addGroupBy('owner.fullName')
+      .orderBy('owner.fullName', 'ASC')
+      .limit(Math.min(Math.max(ctxt?.limit ?? 50, 1), 200))
+      .offset(Math.max(ctxt?.offset ?? 0, 0));
+
+    if (query?.trim()) {
+      builder.andWhere('owner.fullName ILIKE :ownerQuery', {
+        ownerQuery: `%${query.trim()}%`,
+      });
+    }
+
+    const rows = await builder.getRawMany();
+    return rows.map((row) => ({
+      value: String(row.value),
+      label: row.label,
+    }));
   }
 }
 

@@ -7,6 +7,7 @@ import { FollowUpTask } from './entities/follow-up-task.entity';
 import { Lead } from './entities/lead.entity';
 import {
   LeadOverviewKpiProvider,
+  LeadOwnerDashboardOptionsProvider,
   LeadsBySourceProvider,
   LeadsCreatedTrendProvider,
   OverdueFollowUpsProvider,
@@ -38,6 +39,7 @@ import { LeadService } from './services/lead.service';
     FollowUpTaskService,
     LeadActivityReportService,
     LeadOverviewKpiProvider,
+    LeadOwnerDashboardOptionsProvider,
     PipelineFunnelProvider,
     PipelineValueProvider,
     LeadsBySourceProvider,

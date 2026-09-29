@@ -2021,7 +2021,51 @@
       "displayName": "LeadTrack Overview",
       "description": "A live overview of lead volume, pipeline progress, ownership and follow-up health.",
       "moduleUserKey": "leadtrack",
-      "variables": [],
+      "variables": [
+        {
+          "name": "representative",
+          "label": "Representative",
+          "type": "selectionDynamic",
+          "required": false,
+          "isMultiSelect": true,
+          "selectionConfig": {
+            "providerName": "LeadOwnerDashboardOptionsProvider",
+            "providerContext": {
+              "labelField": "label",
+              "valueField": "value"
+            }
+          }
+        },
+        {
+          "name": "leadType",
+          "label": "Lead Type",
+          "type": "selectionStatic",
+          "required": false,
+          "isMultiSelect": true,
+          "selectionStaticValues": [
+            "SolidX:SolidX",
+            "Staffing:Staffing",
+            "Testing Hub:Testing Hub"
+          ]
+        },
+        {
+          "name": "stage",
+          "label": "Pipeline Stage",
+          "type": "selectionStatic",
+          "required": false,
+          "isMultiSelect": true,
+          "selectionStaticValues": [
+            "new:New",
+            "first_contact_pending:First Contact Pending",
+            "follow_up:Follow up",
+            "meeting_set:Meeting Set",
+            "meeting_pending:Meeting Pending",
+            "opportunity_generated:Opportunity Generated",
+            "dead:Dead",
+            "wrong_lead_info:Wrong Lead Info"
+          ]
+        }
+      ],
       "widgets": [
         {
           "id": "kpi-total-leads",
@@ -2232,109 +2276,8 @@
   "testing": {
     "roles": [],
     "users": [
-      {
-        "username": "leadtrackAdmin",
-        "email": "admin@leadtrack.local",
-        "password": "Test@1234",
-        "fullName": "LeadTrack Admin",
-        "isExtensionUser": true,
-        "userType": "Admin"
-      },
-      {
-        "username": "leadtrackSales",
-        "email": "sales@leadtrack.local",
-        "password": "Test@1234",
-        "fullName": "Sales Representative",
-        "isExtensionUser": true,
-        "userType": "SalesRepresentative"
-      }
     ],
     "data": [
-      {
-        "modelUserKey": "lead",
-        "recUserKeyValue": "+919810000001",
-        "data": {
-          "name": "Aarav Mehta",
-          "company": "Northstar Labs",
-          "industry": "Technology",
-          "leadType": "SolidX",
-          "city": "Bengaluru",
-          "designation": "Operations Manager",
-          "linkedIn": "https://www.linkedin.com/in/aarav-mehta",
-          "email": "aarav@example.test",
-          "phone": "+919810000001",
-          "dealValue": 850000,
-          "currency": "INR",
-          "source": "[\"Call\"]",
-          "ownerUserKey": "leadtrackSales",
-          "remarks": "Requested a product overview.",
-          "stage": "new"
-        }
-      },
-      {
-        "modelUserKey": "lead",
-        "recUserKeyValue": "+919810000002",
-        "data": {
-          "name": "Diya Shah",
-          "company": "Juniper Retail",
-          "industry": "Retail",
-          "leadType": "Staffing",
-          "city": "Mumbai",
-          "designation": "Retail Director",
-          "linkedIn": "https://www.linkedin.com/in/diya-shah",
-          "email": "diya@example.test",
-          "phone": "+919810000002",
-          "dealValue": 420000,
-          "currency": "INR",
-          "source": "[\"Email\"]",
-          "ownerUserKey": "leadtrackSales",
-          "remarks": "Pricing follow-up due.",
-          "stage": "follow_up"
-        }
-      },
-      {
-        "modelUserKey": "lead",
-        "recUserKeyValue": "+919810000003",
-        "data": {
-          "name": "Kabir Rao",
-          "company": "Atlas Logistics",
-          "industry": "Logistics",
-          "leadType": "SolidX",
-          "city": "Delhi",
-          "designation": "Logistics Head",
-          "linkedIn": "https://www.linkedin.com/in/kabir-rao",
-          "email": "kabir@example.test",
-          "phone": "+919810000003",
-          "dealValue": 1250000,
-          "currency": "INR",
-          "source": "[\"Referral\"]",
-          "ownerUserKey": "leadtrackSales",
-          "remarks": "Decision-maker meeting scheduled.",
-          "stage": "meeting_pending"
-        }
-      },
-      {
-        "modelUserKey": "followUpTask",
-        "recUserKeyValue": "Call Aarav re product overview",
-        "data": {
-          "leadUserKey": "+919810000001",
-          "title": "Call Aarav re product overview",
-          "channel": "Call",
-          "dueDate": "2026-09-18T05:30:00.000Z",
-          "assignedToUserKey": "leadtrackSales"
-        }
-      },
-      {
-        "modelUserKey": "followUpTask",
-        "recUserKeyValue": "Send Diya revised pricing",
-        "data": {
-          "leadUserKey": "+919810000002",
-          "title": "Send Diya revised pricing",
-          "channel": "Email",
-          "dueDate": "2026-09-17T09:30:00.000Z",
-          "assignedToUserKey": "leadtrackSales"
-        }
-      }
     ]
   },
   "permissions": [
